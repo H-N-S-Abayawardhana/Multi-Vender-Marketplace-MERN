@@ -12,7 +12,7 @@
     background-position: center;
     clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
 }
-
+/*
 .register-left::before {
     content: '';
     position: absolute;
@@ -22,7 +22,7 @@
     bottom: 0;
     background: linear-gradient(135deg, rgba(0, 123, 255, 0.9), rgba(0, 123, 255, 0.7));
     clip-path: inherit;
-}
+}*/
 
 .register-left-content {
     position: absolute;
@@ -30,8 +30,9 @@
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    color: white;
+    color: rgb(255, 255, 255);
     z-index: 1;
+    margin-top: -220px;
 }
 
 .register-left-content h2 {
