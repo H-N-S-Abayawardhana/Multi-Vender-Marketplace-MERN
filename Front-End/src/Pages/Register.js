@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import Footer from '../components/Footer';
 import '../css/register.css'
 
 const Register = () => {
@@ -200,9 +201,12 @@ const Register = () => {
                         Already have an account? <Link to="/login">Sign In</Link>
                     </p>
                 </div>
-            </div>
+            </div>     
+                   
         </div>
+        
     );
+    
 };
 
 export default Register;

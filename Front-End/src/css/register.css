@@ -12,17 +12,7 @@
     background-position: center;
     clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
 }
-/*
-.register-left::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(0, 123, 255, 0.9), rgba(0, 123, 255, 0.7));
-    clip-path: inherit;
-}*/
+
 
 .register-left-content {
     position: absolute;
