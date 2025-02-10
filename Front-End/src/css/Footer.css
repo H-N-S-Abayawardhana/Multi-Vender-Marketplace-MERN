@@ -1,0 +1,47 @@
+/* Footer Styles */
+.social-icon {
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .social-icon:hover {
+    background-color: var(--bs-primary);
+    transform: translateY(-3px);
+  }
+  
+  .hover-link {
+    transition: all 0.3s ease;
+  }
+  
+  .hover-link:hover {
+    color: var(--bs-primary) !important;
+    text-decoration: none !important;
+    padding-left: 5px;
+  }
+  
+  .trust-badge {
+    transition: all 0.3s ease;
+  }
+  
+  .trust-badge:hover {
+    transform: translateY(-5px);
+  }
+  
+  .newsletter-form input {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+  }
+  
+  .newsletter-form input:focus {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: var(--bs-primary) !important;
+    box-shadow: none;
+  }
+  
+  .payment-methods svg {
+    transition: all 0.3s ease;
+  }
+  
+  .payment-methods svg:hover {
+    color: var(--bs-primary) !important;
+    transform: translateY(-3px);
+  }
