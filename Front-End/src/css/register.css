@@ -1,10 +1,10 @@
-.register-container {
+.register-page-container {
     display: flex;
     min-height: 100vh;
     background-color: #fff;
 }
 
-.register-left {
+.register-page-left {
     flex: 1;
     position: relative;
     background-image: url('../assets/images/registerbg.jpg');
@@ -13,8 +13,7 @@
     clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
 }
 
-
-.register-left-content {
+.register-page-left-content {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -25,17 +24,17 @@
     margin-top: -220px;
 }
 
-.register-left-content h2 {
+.register-page-left-content h2 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
 }
 
-.register-left-content p {
+.register-page-left-content p {
     font-size: 1.2rem;
     opacity: 0.9;
 }
 
-.register-right {
+.register-page-right {
     flex: 1;
     display: flex;
     align-items: center;
@@ -43,25 +42,25 @@
     padding: 2rem;
 }
 
-.register-form-container {
+.register-page-form-container {
     width: 100%;
     max-width: 450px;
     padding: 2rem;
 }
 
-.register-form-container h2 {
+.register-page-form-container h2 {
     text-align: center;
     color: #333;
     margin-bottom: 2rem;
     font-size: 2rem;
 }
 
-.form-group {
+.register-page-form-group {
     margin-bottom: 1.5rem;
     position: relative;
 }
 
-.form-group input {
+.register-page-form-group input {
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid #ddd;
@@ -70,27 +69,27 @@
     transition: border-color 0.3s ease;
 }
 
-.form-group input:focus {
+.register-page-form-group input:focus {
     outline: none;
     border-color: #007bff;
 }
 
-.form-group input.error {
+.register-page-form-group input.register-page-error {
     border-color: #dc3545;
 }
 
-.error-message {
+.register-page-error-message {
     color: #dc3545;
     font-size: 0.875rem;
     margin-top: 0.25rem;
     display: block;
 }
 
-.password-input {
+.register-page-password-input {
     position: relative;
 }
 
-.toggle-password {
+.register-page-toggle-password {
     position: absolute;
     right: 1rem;
     top: 50%;
@@ -102,7 +101,7 @@
     padding: 0;
 }
 
-.submit-button {
+.register-page-submit-button {
     width: 100%;
     padding: 1rem;
     background-color: #007bff;
@@ -114,47 +113,47 @@
     transition: background-color 0.3s ease;
 }
 
-.submit-button:hover {
+.register-page-submit-button:hover {
     background-color: #0056b3;
 }
 
-.submit-button:disabled {
+.register-page-submit-button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
 
-.login-link {
+.register-page-login-link {
     text-align: center;
     margin-top: 1.5rem;
     color: #666;
 }
 
-.login-link a {
+.register-page-login-link a {
     color: #007bff;
     text-decoration: none;
     font-weight: 500;
 }
 
-.login-link a:hover {
+.register-page-login-link a:hover {
     text-decoration: underline;
 }
 
-.submit-error {
+.register-page-submit-error {
     text-align: center;
     margin-bottom: 1rem;
 }
 
 @media (max-width: 768px) {
-    .register-container {
+    .register-page-container {
         flex-direction: column;
     }
 
-    .register-left {
+    .register-page-left {
         min-height: 200px;
         clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
     }
 
-    .register-right {
+    .register-page-right {
         padding: 1rem;
     }
 }

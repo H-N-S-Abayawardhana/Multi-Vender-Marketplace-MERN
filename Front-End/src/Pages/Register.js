@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import Footer from '../components/Footer';
 import '../css/register.css'
 
 const Register = () => {
@@ -63,7 +64,6 @@ const Register = () => {
             ...prev,
             [name]: value
         }));
-        // Clear error when user starts typing
         if (errors[name]) {
             setErrors(prev => ({
                 ...prev,
@@ -74,7 +74,10 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!validateForm()) return;
+        if (!validateForm()) {
+            toast.error('Please correct the form errors');
+            return;
+        }
 
         setIsLoading(true);
         try {
@@ -86,127 +89,136 @@ const Register = () => {
             });
             
             if (response.data) {
-                // You might want to store the token and user data in context/localStorage here
-                navigate('/login');
+                toast.success('Registration successful!');
+                setTimeout(() => {
+                    navigate('/login');
+                }, 2000);
             }
         } catch (error) {
-            setErrors({
-                submit: error.response?.data?.message || 'Registration failed. Please try again.'
-            });
+            const errorMsg = error.response?.data?.message || 'Registration failed. Please try again.';
+            toast.error(errorMsg);
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="register-container">
-            <div className="register-left">
-                <div className="overlay"></div>
-                <div className="register-left-content">
+        <div className="register-page-container">
+            <ToastContainer 
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
+            <div className="register-page-left">
+                <div className="register-page-overlay"></div>
+                <div className="register-page-left-content">
                     <h2>New here?</h2>
                     <p>Sign up and start shopping!</p>
                 </div>
             </div>
             
-            <div className="register-right">
-                <div className="register-form-container">
+            <div className="register-page-right">
+                <div className="register-page-form-container">
                     <h2>Sign Up</h2>
                     <form onSubmit={handleSubmit}>
-                        <div className="form-group">
+                        <div className="register-page-form-group">
                             <input
                                 type="text"
                                 name="name"
                                 placeholder="Name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                className={errors.name ? 'error' : ''}
+                                className={errors.name ? 'register-page-error' : ''}
                             />
-                            {errors.name && <span className="error-message">{errors.name}</span>}
+                            {errors.name && <span className="register-page-error-message">{errors.name}</span>}
                         </div>
 
-                        <div className="form-group">
+                        <div className="register-page-form-group">
                             <input
                                 type="email"
                                 name="email"
                                 placeholder="Email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className={errors.email ? 'error' : ''}
+                                className={errors.email ? 'register-page-error' : ''}
                             />
-                            {errors.email && <span className="error-message">{errors.email}</span>}
+                            {errors.email && <span className="register-page-error-message">{errors.email}</span>}
                         </div>
 
-                        <div className="form-group">
+                        <div className="register-page-form-group">
                             <input
                                 type="tel"
                                 name="mobile"
                                 placeholder="Mobile Number"
                                 value={formData.mobile}
                                 onChange={handleChange}
-                                className={errors.mobile ? 'error' : ''}
+                                className={errors.mobile ? 'register-page-error' : ''}
                             />
-                            {errors.mobile && <span className="error-message">{errors.mobile}</span>}
+                            {errors.mobile && <span className="register-page-error-message">{errors.mobile}</span>}
                         </div>
 
-                        <div className="form-group password-input">
+                        <div className="register-page-form-group register-page-password-input">
                             <input
                                 type={showPassword ? "text" : "password"}
                                 name="password"
                                 placeholder="Password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className={errors.password ? 'error' : ''}
+                                className={errors.password ? 'register-page-error' : ''}
                             />
                             <button 
                                 type="button" 
-                                className="toggle-password"
+                                className="register-page-toggle-password"
                                 onClick={() => setShowPassword(!showPassword)}
                             >
                                 {showPassword ? <FaEyeSlash /> : <FaEye />}
                             </button>
-                            {errors.password && <span className="error-message">{errors.password}</span>}
+                            {errors.password && <span className="register-page-error-message">{errors.password}</span>}
                         </div>
 
-                        <div className="form-group password-input">
+                        <div className="register-page-form-group register-page-password-input">
                             <input
                                 type={showConfirmPassword ? "text" : "password"}
                                 name="confirmPassword"
                                 placeholder="Confirm Password"
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
-                                className={errors.confirmPassword ? 'error' : ''}
+                                className={errors.confirmPassword ? 'register-page-error' : ''}
                             />
                             <button 
                                 type="button" 
-                                className="toggle-password"
+                                className="register-page-toggle-password"
                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                             >
                                 {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                             </button>
-                            {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+                            {errors.confirmPassword && <span className="register-page-error-message">{errors.confirmPassword}</span>}
                         </div>
 
-                        {errors.submit && <div className="error-message submit-error">{errors.submit}</div>}
+                        {errors.submit && <div className="register-page-error-message register-page-submit-error">{errors.submit}</div>}
 
                         <button 
                             type="submit" 
-                            className="submit-button"
+                            className="register-page-submit-button"
                             disabled={isLoading}
                         >
                             {isLoading ? 'Signing up...' : 'Sign Up'}
                         </button>
                     </form>
 
-                    <p className="login-link">
+                    <p className="register-page-login-link">
                         Already have an account? <Link to="/login">Sign In</Link>
                     </p>
                 </div>
             </div>     
-                   
         </div>
-        
     );
-    
 };
 
 export default Register;
