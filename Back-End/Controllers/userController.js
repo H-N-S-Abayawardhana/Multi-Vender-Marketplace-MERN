@@ -13,45 +13,81 @@ const USER_LEVELS = {
     BUYER: 3
 };
 
-// Input validation helper
-const validateInput = ({ name, email, password }) => {
-    const errors = [];
+// Enhanced input validation helper
+const validateInput = ({ name, email, password, mobile, confirmPassword }) => {
+    const errors = {};
     
-    if (email && !/\S+@\S+\.\S+/.test(email)) {
-        errors.push('Invalid email format');
+    // Name validation
+    if (!name || name.trim().length < 2) {
+        errors.name = 'Name must be at least 2 characters long';
     }
     
-    if (password && password.length < 6) {
-        errors.push('Password must be at least 6 characters long');
+    // Email validation
+    if (!email) {
+        errors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+        errors.email = 'Invalid email format';
     }
     
-    if (name && name.length < 2) {
-        errors.push('Name must be at least 2 characters long');
+    // Password validation
+    if (!password) {
+        errors.password = 'Password is required';
+    } else if (password.length < 6) {
+        errors.password = 'Password must be at least 6 characters long';
+    }
+
+    // Confirm password validation
+    if (confirmPassword !== undefined && password !== confirmPassword) {
+        errors.confirmPassword = 'Passwords do not match';
     }
     
-    return errors;
+    // Mobile validation
+    if (mobile) {
+        if (!/^\d{10}$/.test(mobile)) {
+            errors.mobile = 'Mobile number must be 10 digits';
+        }
+    }
+    
+    return {
+        isValid: Object.keys(errors).length === 0,
+        errors
+    };
 };
 
 // 📌 Register a new user
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, mobile, confirmPassword } = req.body;
 
-        // Validate input
-        const validationErrors = validateInput({ name, email, password });
-        if (validationErrors.length > 0) {
+        // Enhanced validation
+        const validation = validateInput({ 
+            name, 
+            email, 
+            password, 
+            mobile, 
+            confirmPassword 
+        });
+
+        if (!validation.isValid) {
             return res.status(400).json({ 
                 message: "Validation failed", 
-                errors: validationErrors 
+                errors: validation.errors 
             });
         }
 
         // Check if user already exists
-        const existingUser = await User.findOne({ email: email.toLowerCase() });
+        const existingUser = await User.findOne({ 
+            $or: [
+                { email: email.toLowerCase() },
+                { mobile: mobile }
+            ]
+        });
+
         if (existingUser) {
+            const field = existingUser.email === email.toLowerCase() ? 'email' : 'mobile';
             return res.status(400).json({ 
-                message: "User already exists",
-                field: "email"
+                message: `User with this ${field} already exists`,
+                field: field
             });
         }
 
@@ -63,6 +99,7 @@ const registerUser = async (req, res) => {
         const newUser = new User({
             name: name.trim(),
             email: email.toLowerCase(),
+            mobile: mobile,
             password: hashedPassword,
             userLevel: USER_LEVELS.BUYER,
             createdAt: new Date(),
@@ -89,6 +126,7 @@ const registerUser = async (req, res) => {
                 id: newUser._id,
                 name: newUser.name,
                 email: newUser.email,
+                mobile: newUser.mobile,
                 userLevel: newUser.userLevel
             }
         });
@@ -102,8 +140,7 @@ const registerUser = async (req, res) => {
     }
 };
 
-// 📌 Login user
-// Update loginUser function
+// 📌 Login user function (rest remains the same)
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -114,8 +151,13 @@ const loginUser = async (req, res) => {
             });
         }
 
-        const user = await User.findOne({ email: email.toLowerCase() })
-            .select('+password +lastLogin +loginAttempts');
+        // Check if login is with email or mobile
+        const user = await User.findOne({
+            $or: [
+                { email: email.toLowerCase() },
+                { mobile: email } // Allow login with mobile number
+            ]
+        }).select('+password +lastLogin +loginAttempts');
 
         if (!user) {
             return res.status(401).json({ 
@@ -155,7 +197,7 @@ const loginUser = async (req, res) => {
         user.lastLogin = new Date();
         await user.save();
 
-        // Generate token with 60-minute expiration
+        // Generate token
         const token = jwt.sign(
             { 
                 id: user._id, 
@@ -178,11 +220,12 @@ const loginUser = async (req, res) => {
             message: "Login successful",
             token,
             expiresIn: 3600,
-            sessionId: sessionLog._id, // Add sessionId to response
+            sessionId: sessionLog._id,
             user: {
                 id: user._id,
                 name: user.name,
                 email: user.email,
+                mobile: user.mobile,
                 userLevel: user.userLevel,
                 lastLogin: user.lastLogin
             }
@@ -197,7 +240,7 @@ const loginUser = async (req, res) => {
     }
 };
 
-// Add logout handler
+// Logout handler remains the same
 const logoutUser = async (req, res) => {
     try {
         const { sessionId } = req.body;
@@ -224,7 +267,6 @@ const logoutUser = async (req, res) => {
         });
     }
 };
-
 
 module.exports = {
     registerUser,
