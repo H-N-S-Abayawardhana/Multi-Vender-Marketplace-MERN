@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../css/login.css';
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Handle cleanup of previous session
         const cleanup = async () => {
             const sessionId = localStorage.getItem('sessionId');
             if (sessionId) {
                 try {
                     await axios.post('http://localhost:9000/api/users/logout', { sessionId });
+                    toast.info('Previous session cleared.', { position: 'top-right' });
                 } catch (error) {
-                    console.error('Cleanup error:', error);
+                    toast.error('Error clearing previous session.', { position: 'top-right' });
                 }
                 localStorage.clear();
             }
@@ -27,13 +28,12 @@ const Login = () => {
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        if (error) setError('');
     };
 
     const handleUserNavigation = (userLevel) => {
         switch (userLevel) {
             case 3:
-                navigate('/');
+                navigate('/');                
                 break;
             case 2:
                 navigate('/seller-dashboard');
@@ -42,7 +42,7 @@ const Login = () => {
                 navigate('/admin-dashboard');
                 break;
             default:
-                setError('Invalid user level');
+                toast.error('Invalid user level.', { position: 'top-right' });
                 break;
         }
     };
@@ -50,13 +50,11 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        setError('');
 
         try {
             const response = await axios.post('http://localhost:9000/api/users/login', formData);
             const { user, token, sessionId, expiresIn } = response.data;
 
-            // Save session details
             localStorage.setItem('token', token);
             localStorage.setItem('sessionId', sessionId);
             localStorage.setItem('userLevel', user.userLevel);
@@ -67,16 +65,16 @@ const Login = () => {
                 userLevel: user.userLevel
             }));
 
-            // Set session timeout
             setTimeout(() => {
                 handleLogout();
             }, expiresIn * 1000);
 
+            toast.success('Login successful!', { position: 'top-center' });
             handleUserNavigation(user.userLevel);
 
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Login failed. Please try again.';
-            setError(errorMessage);
+            toast.error(errorMessage, { position: 'top-center' });
         } finally {
             setIsLoading(false);
         }
@@ -87,8 +85,9 @@ const Login = () => {
         if (sessionId) {
             try {
                 await axios.post('http://localhost:9000/api/users/logout', { sessionId });
+                toast.info('Logged out successfully.', { position: 'top-center' });
             } catch (error) {
-                console.error('Logout error:', error);
+                toast.error('Logout error.', { position: 'top-right' });
             }
         }
         localStorage.clear();
@@ -96,11 +95,10 @@ const Login = () => {
     };
 
     return (
-        <div className="login-container">
+        <div className="login-page-container">
             <h2>Login</h2>
-            {error && <div className="error-message">{error}</div>}
             <form onSubmit={handleSubmit}>
-                <div className="form-group">
+                <div className="login-page-form-group">
                     <input
                         type="email"
                         name="email"
@@ -111,7 +109,7 @@ const Login = () => {
                         required
                     />
                 </div>
-                <div className="form-group">
+                <div className="login-page-form-group">
                     <input
                         type="password"
                         name="password"
@@ -125,7 +123,7 @@ const Login = () => {
                 <button 
                     type="submit" 
                     disabled={isLoading}
-                    className={isLoading ? 'loading' : ''}
+                    className={isLoading ? 'login-page-loading' : ''}
                 >
                     {isLoading ? 'Logging in...' : 'Login'}
                 </button>

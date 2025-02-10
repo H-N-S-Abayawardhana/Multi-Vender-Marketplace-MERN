@@ -1,4 +1,4 @@
-.login-container {
+.login-page-container {
     max-width: 400px;
     margin: 2rem auto;
     padding: 2rem;
@@ -6,11 +6,11 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.form-group {
+.login-page-form-group {
     margin-bottom: 1rem;
 }
 
-.form-group input {
+.login-page-form-group input {
     width: 100%;
     padding: 0.8rem;
     border: 1px solid #ddd;
@@ -18,7 +18,7 @@
     font-size: 1rem;
 }
 
-.error-message {
+.login-page-error-message {
     color: #dc3545;
     background-color: #f8d7da;
     padding: 0.75rem;
@@ -44,7 +44,7 @@ button:disabled {
     cursor: not-allowed;
 }
 
-button.loading {
+button.login-page-loading {
     opacity: 0.8;
 }
 
