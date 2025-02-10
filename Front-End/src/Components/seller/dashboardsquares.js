@@ -1,22 +1,25 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 import '../../css/seller/sellerdashboard.css';
 
-const dashboardsquares = () => {
+const DashboardSquares = () => {
+    const navigate = useNavigate();
+
     return (
         <div>
-
             <h1 className="s-dash-title">Seller Dashboard</h1>
             <div className="s-dash-grid">
-                <button className="s-dash-box">Create a Store</button>
+                <button className="s-dash-box" onClick={() => navigate("/add-store")}>  Create a Store  </button>
+                   
+               
                 <button className="s-dash-box">My Stores</button>
                 <button className="s-dash-box">Sales</button>
                 <button className="s-dash-box">Customers</button>
                 <button className="s-dash-box">Messages</button>
                 <button className="s-dash-box">Analytics</button>
             </div>
-            </div>
-  
+        </div>
     );
 };
 
-export default dashboardsquares;
+export default DashboardSquares;

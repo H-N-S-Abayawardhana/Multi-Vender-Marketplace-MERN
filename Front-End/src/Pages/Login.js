@@ -56,6 +56,7 @@ const Login = () => {
             const { user, token, sessionId, expiresIn } = response.data;
 
             localStorage.setItem('token', token);
+            localStorage.setItem('email', user.email);            
             localStorage.setItem('sessionId', sessionId);
             localStorage.setItem('userLevel', user.userLevel);
             localStorage.setItem('userData', JSON.stringify({

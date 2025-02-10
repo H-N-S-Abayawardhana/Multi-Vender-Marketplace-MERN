@@ -59,16 +59,7 @@ const NavBar = () => {
         <div className="collapse navbar-collapse" id="navbarContent">
           {/* All items aligned to the right */}
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-            {/* Notification Icon */}
-            <li className="nav-item mx-3">
-              <a className="nav-link position-relative" href="#" onClick={handleNotificationClick}>
-                <FaBell size={20} />
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  0
-                  <span className="visually-hidden">unread notifications</span>
-                </span>
-              </a>
-            </li>
+           
 
             {/* Cart Icon */}
             <li className="nav-item mx-3">
@@ -77,6 +68,17 @@ const NavBar = () => {
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   0
                   <span className="visually-hidden">items in cart</span>
+                </span>
+              </a>
+            </li>
+
+             {/* Notification Icon */}
+             <li className="nav-item mx-3">
+              <a className="nav-link position-relative" href="#" onClick={handleNotificationClick}>
+                <FaBell size={20} />
+                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  0
+                  <span className="visually-hidden">unread notifications</span>
                 </span>
               </a>
             </li>
