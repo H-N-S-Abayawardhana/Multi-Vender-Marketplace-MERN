@@ -1,9 +1,10 @@
-const User = require('../models/userModel');
+const User = require('../Models/userModel');
+const SessionLog = require('../Models/sessionLogModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // Use environment variable for JWT secret
-const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key"; // Make sure to set this in .env
+const JWT_SECRET = process.env.JWT_SECRET || "EDCVFRTGBNHY"; 
 
 // User Levels
 const USER_LEVELS = {
@@ -102,18 +103,17 @@ const registerUser = async (req, res) => {
 };
 
 // 📌 Login user
+// Update loginUser function
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Input validation
         if (!email || !password) {
             return res.status(400).json({ 
                 message: "Email and password are required" 
             });
         }
 
-        // Find user and select additional fields needed
         const user = await User.findOne({ email: email.toLowerCase() })
             .select('+password +lastLogin +loginAttempts');
 
@@ -125,7 +125,7 @@ const loginUser = async (req, res) => {
 
         // Check for too many login attempts
         if (user.loginAttempts >= 5) {
-            const lockoutTime = 15 * 60 * 1000; // 15 minutes
+            const lockoutTime = 15 * 60 * 1000;
             const timeSinceLastAttempt = Date.now() - user.lastLoginAttempt;
             
             if (timeSinceLastAttempt < lockoutTime) {
@@ -133,12 +133,10 @@ const loginUser = async (req, res) => {
                     message: "Too many login attempts. Please try again later." 
                 });
             } else {
-                // Reset attempts after lockout period
                 user.loginAttempts = 0;
             }
         }
 
-        // Verify password
         const isPasswordValid = await bcrypt.compare(password, user.password);
         
         if (!isPasswordValid) {
@@ -151,13 +149,13 @@ const loginUser = async (req, res) => {
             });
         }
 
-        // Reset login attempts on successful login
+        // Reset login attempts and update last login
         user.loginAttempts = 0;
         user.lastLoginAttempt = null;
         user.lastLogin = new Date();
         await user.save();
 
-        // Generate JWT token
+        // Generate token with 60-minute expiration
         const token = jwt.sign(
             { 
                 id: user._id, 
@@ -165,12 +163,22 @@ const loginUser = async (req, res) => {
                 email: user.email
             },
             JWT_SECRET,
-            { expiresIn: '24h' }
+            { expiresIn: '60m' }
         );
+
+        // Create session log
+        const sessionLog = new SessionLog({
+            email: user.email,
+            token: token,
+            loginTime: new Date()
+        });
+        await sessionLog.save();
 
         res.json({
             message: "Login successful",
             token,
+            expiresIn: 3600,
+            sessionId: sessionLog._id, // Add sessionId to response
             user: {
                 id: user._id,
                 name: user.name,
@@ -189,8 +197,38 @@ const loginUser = async (req, res) => {
     }
 };
 
+// Add logout handler
+const logoutUser = async (req, res) => {
+    try {
+        const { sessionId } = req.body;
+        
+        if (!sessionId) {
+            return res.status(400).json({
+                message: "Session ID is required"
+            });
+        }
+
+        const sessionLog = await SessionLog.findById(sessionId);
+        if (sessionLog && sessionLog.isActive) {
+            sessionLog.logoutTime = new Date();
+            sessionLog.isActive = false;
+            await sessionLog.save();
+        }
+
+        res.json({ message: "Logged out successfully" });
+    } catch (error) {
+        console.error('Logout error:', error);
+        res.status(500).json({
+            message: "Logout failed",
+            error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+        });
+    }
+};
+
+
 module.exports = {
     registerUser,
     loginUser,
+    logoutUser,
     USER_LEVELS
 };

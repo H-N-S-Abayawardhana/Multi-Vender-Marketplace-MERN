@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/login.css';
@@ -9,21 +9,36 @@ const Login = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    useEffect(() => {
+        // Handle cleanup of previous session
+        const cleanup = async () => {
+            const sessionId = localStorage.getItem('sessionId');
+            if (sessionId) {
+                try {
+                    await axios.post('http://localhost:9000/api/users/logout', { sessionId });
+                } catch (error) {
+                    console.error('Cleanup error:', error);
+                }
+                localStorage.clear();
+            }
+        };
+        cleanup();
+    }, []);
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        // Clear error when user starts typing
         if (error) setError('');
     };
 
     const handleUserNavigation = (userLevel) => {
         switch (userLevel) {
-            case 3: // Buyer
+            case 3:
                 navigate('/');
                 break;
-            case 2: // Seller
+            case 2:
                 navigate('/seller-dashboard');
                 break;
-            case 1: // Admin
+            case 1:
                 navigate('/admin-dashboard');
                 break;
             default:
@@ -39,10 +54,11 @@ const Login = () => {
 
         try {
             const response = await axios.post('http://localhost:9000/api/users/login', formData);
-            const { user, token } = response.data;
+            const { user, token, sessionId, expiresIn } = response.data;
 
-            // Save token & user details in localStorage
+            // Save session details
             localStorage.setItem('token', token);
+            localStorage.setItem('sessionId', sessionId);
             localStorage.setItem('userLevel', user.userLevel);
             localStorage.setItem('userData', JSON.stringify({
                 id: user.id,
@@ -51,7 +67,11 @@ const Login = () => {
                 userLevel: user.userLevel
             }));
 
-            // Navigate based on user level
+            // Set session timeout
+            setTimeout(() => {
+                handleLogout();
+            }, expiresIn * 1000);
+
             handleUserNavigation(user.userLevel);
 
         } catch (error) {
@@ -60,6 +80,19 @@ const Login = () => {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleLogout = async () => {
+        const sessionId = localStorage.getItem('sessionId');
+        if (sessionId) {
+            try {
+                await axios.post('http://localhost:9000/api/users/logout', { sessionId });
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+        localStorage.clear();
+        navigate('/login');
     };
 
     return (

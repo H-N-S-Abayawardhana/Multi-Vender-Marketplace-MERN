@@ -52,7 +52,7 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-// Removed duplicate index since we already have unique: true on email field
+
 
 const User = mongoose.model('User', userSchema);
 
