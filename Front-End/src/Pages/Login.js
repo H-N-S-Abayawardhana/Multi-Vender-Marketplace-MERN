@@ -1,7 +1,8 @@
+// Login.js
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../css/login.css';
 
@@ -97,38 +98,62 @@ const Login = () => {
 
     return (
         <div className="login-page-container">
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="login-page-form-group">
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        disabled={isLoading}
-                        required
-                    />
+            <ToastContainer 
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
+            <div className="login-page-left">
+                <div className="login-page-form-container">
+                    <h2>Sign In</h2>
+                    <form onSubmit={handleSubmit}>
+                        <div className="login-page-form-group">
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                disabled={isLoading}
+                                required
+                            />
+                        </div>
+                        <div className="login-page-form-group">
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="Password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                disabled={isLoading}
+                                required
+                            />
+                        </div>
+                        <button 
+                            type="submit" 
+                            className="login-page-submit-button"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? 'Signing in...' : 'Sign In'}
+                        </button>
+                    </form>
+                    <p className="login-page-register-link">
+                        Don't have an account? <Link to="/register">Sign Up</Link>
+                    </p>
                 </div>
-                <div className="login-page-form-group">
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        disabled={isLoading}
-                        required
-                    />
+            </div>
+            <div className="login-page-right">
+                <div className="login-page-right-content">
+                    <h2>Welcome Back!</h2>
+                    <p>Sign in to continue your shopping journey!</p>
                 </div>
-                <button 
-                    type="submit" 
-                    disabled={isLoading}
-                    className={isLoading ? 'login-page-loading' : ''}
-                >
-                    {isLoading ? 'Logging in...' : 'Login'}
-                </button>
-            </form>
+            </div>
         </div>
     );
 };

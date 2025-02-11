@@ -1,53 +1,128 @@
+/* login.css */
 .login-page-container {
-    max-width: 400px;
-    margin: 2rem auto;
+    display: flex;
+    min-height: 100vh;
+    background-color: #fff;
+}
+
+.login-page-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-page-right {
+    flex: 1;
+    position: relative;
+    background-image: url('../assets/images/loginbg.jpg');
+    background-size: cover;
+    background-position: center;
+    clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.login-page-right-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: rgb(255, 255, 255);
+    z-index: 1;
+    margin-top: -220px;
+}
+
+.login-page-right-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.login-page-right-content p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.login-page-form-container {
+    width: 100%;
+    max-width: 450px;
+    padding: 2rem;
+}
+
+.login-page-form-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 2rem;
+    font-size: 2rem;
 }
 
 .login-page-form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
 }
 
 .login-page-form-group input {
     width: 100%;
-    padding: 0.8rem;
+    padding: 0.75rem 1rem;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 1rem;
+    transition: border-color 0.3s ease;
 }
 
-.login-page-error-message {
-    color: #dc3545;
-    background-color: #f8d7da;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border-radius: 4px;
-    text-align: center;
+.login-page-form-group input:focus {
+    outline: none;
+    border-color: #007bff;
 }
 
-button {
+.login-page-submit-button {
     width: 100%;
-    padding: 0.8rem;
+    padding: 1rem;
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
-button:disabled {
+.login-page-submit-button:hover {
+    background-color: #0056b3;
+}
+
+.login-page-submit-button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
 
-button.login-page-loading {
-    opacity: 0.8;
+.login-page-register-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #666;
 }
 
-button:hover:not(:disabled) {
-    background-color: #0056b3;
+.login-page-register-link a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-page-register-link a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .login-page-container {
+        flex-direction: column-reverse;
+    }
+
+    .login-page-right {
+        min-height: 200px;
+        clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+    }
+
+    .login-page-left {
+        padding: 1rem;
+    }
 }

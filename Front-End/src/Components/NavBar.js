@@ -1,10 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaUser, FaBell } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import logo from '../assets/images/logo.png';
 
 const NavBar = () => {
+  const navigate = useNavigate();
+
   // Handler for cart click
   const handleCartClick = (e) => {
     e.preventDefault();
@@ -27,6 +29,53 @@ const NavBar = () => {
       confirmButtonColor: '#3085d6',
       confirmButtonText: 'Ok'
     });
+  };
+
+  // Logout handler
+  const handleLogout = async () => {
+    try {
+      const sessionId = localStorage.getItem('sessionId');
+      
+      const response = await fetch('http://localhost:9000/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ sessionId }),
+      });
+
+      if (response.ok) {
+        // Clear ALL localStorage items
+        localStorage.removeItem('token');
+        localStorage.removeItem('sessionId');
+        localStorage.removeItem('email');
+        localStorage.removeItem('userLevel');
+        localStorage.removeItem('userData');
+        localStorage.clear();
+
+        // Show success message
+        Swal.fire({
+          title: 'Logged Out!',
+          text: 'You have been successfully logged out',
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+          timer: 1500
+        });
+
+        // Redirect to login page
+        navigate('/');
+      } else {
+        throw new Error('Logout failed');
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to logout. Please try again.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6'
+      });
+    }
   };
 
   return (
@@ -60,7 +109,6 @@ const NavBar = () => {
           {/* All items aligned to the right */}
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
            
-
             {/* Cart Icon */}
             <li className="nav-item mx-3">
               <a className="nav-link position-relative" href="#" onClick={handleCartClick}>
@@ -103,9 +151,12 @@ const NavBar = () => {
                 </li>
                 <li><hr className="dropdown-divider" /></li>
                 <li>
-                  <Link className="dropdown-item" to="/logout">
+                  <button 
+                    className="dropdown-item" 
+                    onClick={handleLogout}
+                  >
                     Logout
-                  </Link>
+                  </button>
                 </li>
               </ul>
             </li>
