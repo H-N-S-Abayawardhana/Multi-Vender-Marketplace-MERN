@@ -1,16 +1,13 @@
 import React from 'react';
-import NavBar from '../../components/NavBar';
+import SellerNavBar from '../../components/seller/sellerNavBar.js';  // Uppercase S and N
 import Footer from '../../components/Footer';
-import DashSquares from '../../components/seller/dashboardsquares'
-
+import DashSquares from '../../components/seller/dashboardsquares';
 
 const SellerDashboard = () => {
     return (
         <div className="s-dash-container">
-            <NavBar />
-            
-            <DashSquares/>
-
+            <SellerNavBar />  
+            <DashSquares />
             <Footer />
         </div>
     );
