@@ -116,7 +116,7 @@ const registerUser = async (req, res) => {
                 email: newUser.email
             },
             JWT_SECRET,
-            { expiresIn: '24h' }
+            { expiresIn: '1h' }
         );
 
         res.status(201).json({ 
@@ -140,7 +140,7 @@ const registerUser = async (req, res) => {
     }
 };
 
-// 📌 Login user function (rest remains the same)
+// 📌 Login user function 
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
