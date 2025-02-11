@@ -138,3 +138,65 @@ exports.getUserStores = async (req, res) => {
       });
     }
   };
+
+  exports.updateStore = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updateData = {
+        storeName: req.body.storeName,
+        phone: req.body.phone,
+        address: req.body.address,
+        description: req.body.description,
+      };
+  
+      const store = await Store.findByIdAndUpdate(
+        id,
+        updateData,
+        { new: true }
+      );
+  
+      if (!store) {
+        return res.status(404).json({
+          success: false,
+          message: 'Store not found'
+        });
+      }
+  
+      res.status(200).json({
+        success: true,
+        store,
+        message: 'Store updated successfully'
+      });
+    } catch (error) {
+      console.error('Error in updateStore:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error'
+      });
+    }
+  };
+  
+  exports.deleteStore = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const store = await Store.findByIdAndDelete(id);
+  
+      if (!store) {
+        return res.status(404).json({
+          success: false,
+          message: 'Store not found'
+        });
+      }
+  
+      res.status(200).json({
+        success: true,
+        message: 'Store deleted successfully'
+      });
+    } catch (error) {
+      console.error('Error in deleteStore:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error'
+      });
+    }
+  };
