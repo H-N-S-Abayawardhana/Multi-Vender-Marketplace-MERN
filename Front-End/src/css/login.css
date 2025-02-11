@@ -21,7 +21,7 @@
     background-position: center;
     clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%);
 }
-
+/*
 .login-page-right-content {
     position: absolute;
     top: 50%;
@@ -31,7 +31,7 @@
     color: rgb(255, 255, 255);
     z-index: 1;
     margin-top: -220px;
-}
+}*/
 
 .login-page-right-content h2 {
     font-size: 2.5rem;

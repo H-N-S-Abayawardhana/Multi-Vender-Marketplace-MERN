@@ -149,10 +149,12 @@ const Login = () => {
                 </div>
             </div>
             <div className="login-page-right">
-                <div className="login-page-right-content">
-                    <h2>Welcome Back!</h2>
-                    <p>Sign in to continue your shopping journey!</p>
-                </div>
+               {/* 
+    <div className="login-page-right-content">
+        <h2>Welcome Back!</h2>
+        <p>Sign in to continue your shopping journey!</p>
+    </div>
+*/}
             </div>
         </div>
     );
