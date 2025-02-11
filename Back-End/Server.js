@@ -5,6 +5,8 @@ const cors = require('cors');
 
 const userRoutes = require('./routes/userRoutes');
 const storeRoutes = require('./routes/storeRoutes');
+const sellerRoutes = require('./routes/sellerRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.use(express.json());
 // ✅ Routes
 app.use('/api/users', userRoutes);
 app.use('/api/stores', storeRoutes);
+app.use('/api/seller', sellerRoutes);
+app.use('/api/admin',adminRoutes);
 app.use('/uploads', express.static('uploads'));
 
 // ✅ Health check route
