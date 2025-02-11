@@ -1,4 +1,3 @@
-// Frontend - components/StoreList.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -64,22 +63,6 @@ const StoreList = () => {
     );
   }
 
-  if (stores.length === 0) {
-    return (
-      <div className="container mx-auto p-4">
-        <div className="text-center">
-          <p className="text-gray-600 mb-4">You haven't created any stores yet.</p>
-          <Link 
-            to="/add-store" 
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            Create Your First Store
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
@@ -92,49 +75,68 @@ const StoreList = () => {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {stores.map((store) => (
-          <div 
-            key={store._id} 
-            className="border rounded-lg shadow-lg overflow-hidden"
+      {stores.length === 0 ? (
+        <div className="text-center py-8">
+          <p className="text-gray-600 mb-4">You haven't created any stores yet.</p>
+          <Link 
+            to="/add-store" 
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           >
-            {store.banner && (
-              <div className="h-48 overflow-hidden">
-                <img 
-                  src={`http://localhost:9000${store.banner}`}
-                  alt={store.storeName}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
-            
-            <div className="p-4">
-              <div className="flex items-center mb-4">
-                {store.logo && (
-                  <img 
-                    src={`http://localhost:9000${store.logo}`}
-                    alt={`${store.storeName} logo`}
-                    className="w-12 h-12 rounded-full object-cover mr-3"
+            Create Your First Store
+          </Link>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {stores.map((store) => (
+            <Link
+              to={`/store/${store._id}`}
+              key={store._id}
+              className="block h-[500px] border rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+            >
+              <div className="h-1/2 relative">
+                {store.banner ? (
+                  <img
+                    src={`http://localhost:9000${store.banner}`}
+                    alt={store.storeName}
+                    className="w-full h-full object-cover"
                   />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400">No Banner Image</span>
+                  </div>
                 )}
-                <h3 className="text-xl font-semibold">{store.storeName}</h3>
               </div>
               
-              <p className="text-gray-600 mb-2">{store.description}</p>
-              
-              <div className="text-sm text-gray-500">
-                <p><strong>Email:</strong> {store.email}</p>
-                <p><strong>Phone:</strong> {store.phone}</p>
-                <p><strong>Address:</strong> {store.address}</p>
+              <div className="p-6 h-1/2">
+                <div className="flex items-center mb-4">
+                  <div className="w-16 h-16 rounded-full overflow-hidden mr-4">
+                    {store.logo ? (
+                      <img
+                        src={`http://localhost:9000${store.logo}`}
+                        alt={`${store.storeName} logo`}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <span className="text-xs text-gray-400">No Logo</span>
+                      </div>
+                    )}
+                  </div>
+                  <h3 className="text-xl font-semibold">{store.storeName}</h3>
+                </div>
+                
+                <p className="text-gray-600 mb-4 line-clamp-2">{store.description}</p>
+                
+                <div className="text-sm text-gray-500">
+                  <p className="mb-1"><strong>Email:</strong> {store.email}</p>
+                  <p className="mb-1"><strong>Phone:</strong> {store.phone}</p>
+                  <p className="mb-1"><strong>Address:</strong> {store.address}</p>
+                </div>
               </div>
-              
-              <div className="mt-4 text-sm text-gray-400">
-                Created on: {new Date(store.createdAt).toLocaleDateString()}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

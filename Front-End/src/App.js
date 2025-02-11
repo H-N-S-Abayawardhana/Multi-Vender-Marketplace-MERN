@@ -18,6 +18,7 @@ import AdminDashboard from './Pages/admin/AdminDashboard';
 import SellerProtectedRoute from './components/SellerProtectedRoute';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
 import StoreList from './Pages/seller/StoreList';
+import StoreDetails from './Pages/seller/StoreDetails';
 
 
 
@@ -32,6 +33,7 @@ function App() {
         <Route path="/seller-dashboard" element={<SellerProtectedRoute><SellerDashboard /></SellerProtectedRoute>} />
         <Route path="/add-store" element={<SellerProtectedRoute><AddStore /></SellerProtectedRoute>} />
         <Route path="/stores" element={<SellerProtectedRoute><StoreList /></SellerProtectedRoute>} />
+        <Route path="/store/:id" element={<SellerProtectedRoute><StoreDetails /></SellerProtectedRoute>} />
         <Route path="/admin-dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
       </Routes>
       </div>

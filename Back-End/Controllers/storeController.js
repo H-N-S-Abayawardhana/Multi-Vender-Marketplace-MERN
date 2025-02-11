@@ -114,3 +114,27 @@ exports.getUserStores = async (req, res) => {
       });
     }
   };
+
+  exports.getStoreById = async (req, res) => {
+    try {
+      const store = await Store.findById(req.params.id);
+      
+      if (!store) {
+        return res.status(404).json({
+          success: false,
+          message: 'Store not found'
+        });
+      }
+  
+      res.status(200).json({
+        success: true,
+        store
+      });
+    } catch (error) {
+      console.error('Error in getStoreById:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error'
+      });
+    }
+  };
