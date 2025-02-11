@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const userRoutes = require('./routes/userRoutes');
+const storeRoutes = require('./routes/storeRoutes');
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 
 // ✅ Routes
 app.use('/api/users', userRoutes);
+app.use('/api/stores', storeRoutes);
 
 // ✅ Health check route
 app.get('/health', (req, res) => {

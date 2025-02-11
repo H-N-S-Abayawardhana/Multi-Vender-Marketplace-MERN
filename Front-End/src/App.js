@@ -9,6 +9,7 @@ import Home from './Pages/Home';
 import Register from './Pages/Register';
 import Login from './Pages/Login';
 import SellerDashboard from './Pages/seller/SellerDashboard';
+import AddStore from './Pages/seller/AddStore';
 import AdminDashboard from './Pages/admin/AdminDashboard';
 
 // Import protected routes
@@ -28,6 +29,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/seller-dashboard" element={<SellerProtectedRoute><SellerDashboard /></SellerProtectedRoute>} />
+        <Route path="/add-store" element={<SellerProtectedRoute><AddStore /></SellerProtectedRoute>} />
         <Route path="/admin-dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
       </Routes>
       </div>
