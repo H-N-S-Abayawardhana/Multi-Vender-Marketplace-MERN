@@ -22,6 +22,7 @@ app.use(express.json());
 // ✅ Routes
 app.use('/api/users', userRoutes);
 app.use('/api/stores', storeRoutes);
+app.use('/uploads', express.static('uploads'));
 
 // ✅ Health check route
 app.get('/health', (req, res) => {

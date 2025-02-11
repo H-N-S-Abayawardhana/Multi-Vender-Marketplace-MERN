@@ -1,3 +1,4 @@
+// Backend - models/Store.js
 const mongoose = require('mongoose');
 
 const storeSchema = new mongoose.Schema({
@@ -27,6 +28,14 @@ const storeSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true
+  },
+  logo: {
+    type: String,
+    default: null
+  },
+  banner: {
+    type: String,
+    default: null
   },
   owner: {
     type: String,
