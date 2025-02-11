@@ -87,3 +87,30 @@ exports.addStore = async (req, res) => {
     }
   });
 };
+
+exports.getUserStores = async (req, res) => {
+    try {
+      const { userEmail } = req.query;
+  
+      if (!userEmail) {
+        return res.status(400).json({
+          success: false,
+          message: 'User email is required'
+        });
+      }
+  
+      const stores = await Store.find({ owner: userEmail })
+        .sort({ createdAt: -1 }); // Sort by newest first
+  
+      res.status(200).json({
+        success: true,
+        stores
+      });
+    } catch (error) {
+      console.error('Error in getUserStores:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error'
+      });
+    }
+  };
