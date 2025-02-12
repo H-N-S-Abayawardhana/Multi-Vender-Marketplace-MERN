@@ -1,0 +1,230 @@
+.storelist-sell-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.storelist-sell-loading {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.storelist-sell-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.storelist-sell-error {
+    background-color: #fee2e2;
+    border: 1px solid #ef4444;
+    color: #dc2626;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.storelist-sell-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.storelist-sell-header h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.storelist-sell-add-button {
+    background-color: #3b82f6;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.storelist-sell-add-button:hover {
+    background-color: #2563eb;
+}
+
+.storelist-sell-empty {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.storelist-sell-empty p {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.storelist-sell-create-button {
+    background-color: #3b82f6;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.storelist-sell-create-button:hover {
+    background-color: #2563eb;
+}
+
+.storelist-sell-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.storelist-sell-card {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+}
+
+.storelist-sell-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.storelist-sell-banner {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+}
+
+.storelist-sell-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.storelist-sell-no-banner {
+    width: 100%;
+    height: 100%;
+    background-color: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+}
+
+.storelist-sell-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.storelist-sell-store-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.storelist-sell-logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #e5e7eb;
+}
+
+.storelist-sell-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.storelist-sell-no-logo {
+    width: 100%;
+    height: 100%;
+    background-color: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    font-size: 0.75rem;
+}
+
+.storelist-sell-store-header h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.storelist-sell-description {
+    color: #4b5563;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.storelist-sell-details {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.storelist-sell-detail-item {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.storelist-sell-detail-label {
+    color: #6b7280;
+    font-weight: 500;
+    min-width: 70px;
+}
+
+.storelist-sell-detail-value {
+    color: #374151;
+}
+
+@media (max-width: 768px) {
+    .storelist-sell-container {
+        padding: 1rem;
+    }
+
+    .storelist-sell-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .storelist-sell-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .storelist-sell-banner {
+        height: 150px;
+    }
+}

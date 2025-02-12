@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import '../../css/seller/storedetails.css';
+import SellerNavBar from '../../components/seller/sellerNavBar.js'; 
+import Footer from '../../components/Footer';
 
 const StoreDetails = () => {
   const { id } = useParams();
@@ -127,10 +130,10 @@ const StoreDetails = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-4">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-2">Loading store details...</p>
+      <div className="storedetails-sell-container">
+        <div className="storedetails-sell-loading">
+          <div className="storedetails-sell-spinner"></div>
+          <p>Loading store details...</p>
         </div>
       </div>
     );
@@ -138,8 +141,8 @@ const StoreDetails = () => {
 
   if (error) {
     return (
-      <div className="container mx-auto p-4">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <div className="storedetails-sell-container">
+        <div className="storedetails-sell-error">
           {error}
         </div>
       </div>
@@ -148,12 +151,12 @@ const StoreDetails = () => {
 
   if (!store) {
     return (
-      <div className="container mx-auto p-4">
-        <div className="text-center">
-          <p className="text-gray-600 mb-4">Store not found</p>
+      <div className="storedetails-sell-container">
+        <div className="storedetails-sell-error">
+          <p>Store not found</p>
           <Link 
             to="/stores" 
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="storedetails-sell-btn storedetails-sell-btn-primary"
           >
             Back to Stores
           </Link>
@@ -163,25 +166,27 @@ const StoreDetails = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="mb-6 flex justify-between items-center">
+    <>
+    <SellerNavBar />
+    <div className="storedetails-sell-container">
+      <div className="storedetails-sell-header">
         <Link 
           to="/stores" 
-          className="text-blue-500 hover:text-blue-600"
+          className="storedetails-sell-back-link"
         >
           ← Back to Stores
         </Link>
-        <div className="space-x-4">
+        <div className="storedetails-sell-action-buttons">
           <button
             onClick={handleEdit}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="storedetails-sell-btn storedetails-sell-btn-primary"
             disabled={isEditing}
           >
             Edit Store
           </button>
           <button
             onClick={handleDelete}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            className="storedetails-sell-btn storedetails-sell-btn-danger"
           >
             Delete Store
           </button>
@@ -189,130 +194,136 @@ const StoreDetails = () => {
       </div>
 
       {isEditing ? (
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">Edit Store</h2>
-          <form onSubmit={handleUpdateStore}>
-            <div className="space-y-4">
-              <div>
-                <label className="block mb-1">Store Name</label>
+        <div className="storedetails-sell-card">
+          <div className="storedetails-sell-form">
+            <h2 className="storedetails-sell-store-name">Edit Store</h2>
+            <form onSubmit={handleUpdateStore}>
+              <div className="storedetails-sell-form-group">
+                <label className="storedetails-sell-label">Store Name</label>
                 <input
                   type="text"
                   name="storeName"
                   value={editForm.storeName}
                   onChange={handleEditChange}
-                  className="w-full p-2 border rounded"
+                  className="storedetails-sell-input"
                   required
                 />
               </div>
               
-              <div>
-                <label className="block mb-1">Phone</label>
+              <div className="storedetails-sell-form-group">
+                <label className="storedetails-sell-label">Phone</label>
                 <input
                   type="tel"
                   name="phone"
                   value={editForm.phone}
                   onChange={handleEditChange}
-                  className="w-full p-2 border rounded"
+                  className="storedetails-sell-input"
                   required
                 />
               </div>
 
-              <div>
-                <label className="block mb-1">Address</label>
+              <div className="storedetails-sell-form-group">
+                <label className="storedetails-sell-label">Address</label>
                 <textarea
                   name="address"
                   value={editForm.address}
                   onChange={handleEditChange}
-                  className="w-full p-2 border rounded"
+                  className="storedetails-sell-textarea"
                   required
                 />
               </div>
 
-              <div>
-                <label className="block mb-1">Description</label>
+              <div className="storedetails-sell-form-group">
+                <label className="storedetails-sell-label">Description</label>
                 <textarea
                   name="description"
                   value={editForm.description}
                   onChange={handleEditChange}
-                  className="w-full p-2 border rounded"
+                  className="storedetails-sell-textarea"
                   required
                 />
               </div>
 
-              <div className="flex space-x-4">
+              <div className="storedetails-sell-form-buttons">
                 <button
                   type="submit"
-                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                  className="storedetails-sell-btn storedetails-sell-btn-primary"
                 >
                   Save Changes
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                  className="storedetails-sell-btn storedetails-sell-btn-secondary"
                 >
                   Cancel
                 </button>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="h-80 relative">
+        <div className="storedetails-sell-card">
+          <div className="storedetails-sell-banner">
             {store.banner ? (
               <img
                 src={`http://localhost:9000${store.banner}`}
                 alt={store.storeName}
-                className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                <span className="text-gray-400">No Banner Image</span>
+              <div className="storedetails-sell-banner-placeholder">
+                <span>No Banner Image</span>
               </div>
             )}
           </div>
 
-          <div className="p-8">
-            <div className="flex items-center mb-6">
-              <div className="w-24 h-24 rounded-full overflow-hidden mr-6">
+          <div className="storedetails-sell-content">
+            <div className="storedetails-sell-profile">
+              <div className="storedetails-sell-logo">
                 {store.logo ? (
                   <img
                     src={`http://localhost:9000${store.logo}`}
                     alt={`${store.storeName} logo`}
-                    className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-400">No Logo</span>
+                  <div className="storedetails-sell-banner-placeholder">
+                    <span>No Logo</span>
                   </div>
                 )}
               </div>
               <div>
-                <h1 className="text-3xl font-bold mb-2">{store.storeName}</h1>
-                <p className="text-gray-500">Created on: {new Date(store.createdAt).toLocaleDateString()}</p>
+                <h1 className="storedetails-sell-store-name">{store.storeName}</h1>
+                <p className="storedetails-sell-date">
+                  Created on: {new Date(store.createdAt).toLocaleDateString()}
+                </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Store Information</h2>
-                <div className="space-y-3">
-                  <p><strong>Email:</strong> {store.email}</p>
-                  <p><strong>Phone:</strong> {store.phone}</p>
-                  <p><strong>Address:</strong> {store.address}</p>
+            <div className="storedetails-sell-info-grid">
+              <div className="storedetails-sell-info-section">
+                <h2>Store Information</h2>
+                <div className="storedetails-sell-info-item">
+                  <strong>Email:</strong> {store.email}
+                </div>
+                <div className="storedetails-sell-info-item">
+                  <strong>Phone:</strong> {store.phone}
+                </div>
+                <div className="storedetails-sell-info-item">
+                  <strong>Address:</strong> {store.address}
                 </div>
               </div>
 
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Description</h2>
-                <p className="text-gray-600">{store.description}</p>
+              <div className="storedetails-sell-info-section">
+                <h2>Description</h2>
+                <p className="storedetails-sell-description">{store.description}</p>
               </div>
             </div>
           </div>
         </div>
       )}
     </div>
+    <Footer />
+    </>
   );
 };
 

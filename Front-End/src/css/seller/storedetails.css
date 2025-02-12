@@ -1,0 +1,229 @@
+.storedetails-sell-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .storedetails-sell-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .storedetails-sell-back-link {
+    color: #3b82f6;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  
+  .storedetails-sell-back-link:hover {
+    color: #2563eb;
+  }
+  
+  .storedetails-sell-action-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .storedetails-sell-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    outline: none;
+  }
+  
+  .storedetails-sell-btn-primary {
+    background-color: #3b82f6;
+    color: white;
+  }
+  
+  .storedetails-sell-btn-primary:hover {
+    background-color: #2563eb;
+  }
+  
+  .storedetails-sell-btn-danger {
+    background-color: #ef4444;
+    color: white;
+  }
+  
+  .storedetails-sell-btn-danger:hover {
+    background-color: #dc2626;
+  }
+  
+  .storedetails-sell-btn-secondary {
+    background-color: #6b7280;
+    color: white;
+  }
+  
+  .storedetails-sell-btn-secondary:hover {
+    background-color: #4b5563;
+  }
+  
+  .storedetails-sell-card {
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+  }
+  
+  .storedetails-sell-banner {
+    height: 320px;
+    position: relative;
+    background-color: #f3f4f6;
+  }
+  
+  .storedetails-sell-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .storedetails-sell-banner-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+  }
+  
+  .storedetails-sell-content {
+    padding: 2rem;
+  }
+  
+  .storedetails-sell-profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1.5rem;
+  }
+  
+  .storedetails-sell-logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #f3f4f6;
+  }
+  
+  .storedetails-sell-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .storedetails-sell-store-name {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+  }
+  
+  .storedetails-sell-date {
+    color: #6b7280;
+    font-size: 0.875rem;
+  }
+  
+  .storedetails-sell-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  
+  .storedetails-sell-info-section h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1rem;
+  }
+  
+  .storedetails-sell-info-item {
+    margin-bottom: 0.75rem;
+    color: #4b5563;
+  }
+  
+  .storedetails-sell-info-item strong {
+    color: #1f2937;
+    margin-right: 0.5rem;
+  }
+  
+  .storedetails-sell-description {
+    color: #4b5563;
+    line-height: 1.6;
+  }
+  
+  .storedetails-sell-form {
+    padding: 2rem;
+  }
+  
+  .storedetails-sell-form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .storedetails-sell-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #1f2937;
+  }
+  
+  .storedetails-sell-input,
+  .storedetails-sell-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    margin-top: 0.25rem;
+    font-size: 1rem;
+  }
+  
+  .storedetails-sell-textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .storedetails-sell-form-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .storedetails-sell-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  
+  .storedetails-sell-spinner {
+    border: 4px solid #f3f4f6;
+    border-top: 4px solid #3b82f6;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .storedetails-sell-error {
+    background-color: #fee2e2;
+    border: 1px solid #ef4444;
+    color: #b91c1c;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+  }
