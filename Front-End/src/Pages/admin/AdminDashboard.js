@@ -1,5 +1,5 @@
 import React from 'react';
-import NavBar from '../../components/NavBar';
+import AdminNavBar from '../../components/admin/adminNavBar.js';
 import Footer from '../../components/Footer';
 import DashSquares from '../../components/admin/dashboardsquares'
 
@@ -7,7 +7,7 @@ import DashSquares from '../../components/admin/dashboardsquares'
 const AdminDashboard = () => {
     return (
         <div className="a-dash-container">
-            <NavBar />
+            <AdminNavBar />
             
             <DashSquares/>
 
