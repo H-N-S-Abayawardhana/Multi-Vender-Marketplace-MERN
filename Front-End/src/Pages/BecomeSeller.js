@@ -1,5 +1,7 @@
 // becomeseller.js
 import React, { useState, useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import '../css/becomeseller.css';
@@ -52,17 +54,51 @@ const BecomeSeller = () => {
                 }),
             });
 
+            const data = await response.json();
+
             if (response.ok) {
-                // Handle successful submission
-                alert('Seller registration submitted successfully!');
-                // Redirect or show success message
+                toast.success('Seller registration submitted successfully!', {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+                
+                // Optional: Reset form after successful submission
+                setFormData({
+                    fullName: '',
+                    mobileNumber: '',
+                    dob: '',
+                    businessName: '',
+                    businessType: '',
+                    businessRegistrationNumber: '',
+                    taxIdentificationNumber: '',
+                    businessAddress: '',
+                    businessContactNumber: '',
+                    businessEmail: ''
+                });
             } else {
-                // Handle errors
-                alert('Failed to submit seller registration');
+                toast.error(data.message || 'Failed to submit seller registration', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('An error occurred while submitting the form');
+            toast.error('An error occurred while submitting the form. Please try again later.', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
         }
     };
 
@@ -223,6 +259,7 @@ const BecomeSeller = () => {
                     </button>
                 </form>
             </div>
+            <ToastContainer />
             <Footer />
         </div>
     );

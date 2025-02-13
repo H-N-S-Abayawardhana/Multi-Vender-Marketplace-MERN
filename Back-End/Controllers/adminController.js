@@ -34,10 +34,6 @@ const adminController = {
     },
 
     updateSellerStatus: async (req, res) => {
-        // Start a session for the transaction
-        const session = await mongoose.startSession();
-        session.startTransaction();
-
         try {
             const { email, status } = req.body;
 
@@ -49,31 +45,19 @@ const adminController = {
                 });
             }
 
-            // Update seller status
-            const seller = await Seller.findOneAndUpdate(
-                { 'personalInfo.email': email },
-                { status },
-                { new: true, session }
-            );
-            
-            if (!seller) {
-                await session.abortTransaction();
+            // First, check if the seller exists
+            const existingSeller = await Seller.findOne({ 'personalInfo.email': email });
+            if (!existingSeller) {
                 return res.status(404).json({
                     success: false,
                     message: 'Seller not found'
                 });
             }
 
-            // If status is approved, update user level
+            // If we're approving the seller, check if the user exists first
             if (status === 'approved') {
-                const user = await User.findOneAndUpdate(
-                    { email: email },
-                    { userLevel: 2 },
-                    { new: true, session }
-                );
-
-                if (!user) {
-                    await session.abortTransaction();
+                const existingUser = await User.findOne({ email: email });
+                if (!existingUser) {
                     return res.status(404).json({
                         success: false,
                         message: 'User not found'
@@ -81,8 +65,21 @@ const adminController = {
                 }
             }
 
-            // Commit the transaction
-            await session.commitTransaction();
+            // Update seller status
+            const seller = await Seller.findOneAndUpdate(
+                { 'personalInfo.email': email },
+                { status },
+                { new: true }
+            );
+
+            // If status is approved, update user level
+            if (status === 'approved') {
+                await User.findOneAndUpdate(
+                    { email: email },
+                    { userLevel: 2 },
+                    { new: true }
+                );
+            }
 
             res.status(200).json({
                 success: true,
@@ -91,17 +88,12 @@ const adminController = {
             });
 
         } catch (error) {
-            // If error occurs, abort transaction
-            await session.abortTransaction();
             console.error('Error updating seller status:', error);
             res.status(500).json({
                 success: false,
                 message: 'Error updating seller status',
                 error: error.message
             });
-        } finally {
-            // End the session
-            session.endSession();
         }
     }
 };
