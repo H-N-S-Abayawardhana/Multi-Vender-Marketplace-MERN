@@ -84,10 +84,102 @@
     font-weight: 500;
 }
 
-.userprofile-loading {
-    text-align: center;
-    font-size: 1.2rem;
+/* Edit mode styles */
+.edit-button {
+    background: transparent;
+    border: 1px solid #007bff;
+    color: #007bff;
+    border-radius: 8px;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.edit-button:hover {
+    background: #007bff;
+    color: white;
+}
+
+.edit-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.edit-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #333;
+    transition: border-color 0.3s ease;
+}
+
+.edit-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+/* Button group styles */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.save-button, .cancel-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.save-button {
+    background: #007bff;
+    color: white;
+    border: none;
+}
+
+.save-button:hover {
+    background: #0056b3;
+}
+
+.cancel-button {
+    background: white;
     color: #666;
+    border: 1px solid #ddd;
+}
+
+.cancel-button:hover {
+    background: #f8f9fa;
+    border-color: #999;
+}
+
+.button-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* Status message styles */
+.success-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
 }
 
 .userprofile-error {
@@ -100,6 +192,13 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.userprofile-loading {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+/* Responsive styles */
 @media (max-width: 768px) {
     .userprofile-container {
         padding: 1rem;
@@ -112,4 +211,30 @@
     .userprofile-header h1 {
         font-size: 1.5rem;
     }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .save-button, .cancel-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Hover effects */
+.userprofile-field:hover .userprofile-icon {
+    color: #0056b3;
+}
+
+.edit-input:hover {
+    border-color: #999;
+}
+
+/* Focus styles */
+.edit-button:focus,
+.save-button:focus,
+.cancel-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }

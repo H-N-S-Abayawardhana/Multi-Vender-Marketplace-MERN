@@ -52,7 +52,9 @@ const validateInput = ({ name, email, password, mobile, confirmPassword }) => {
         isValid: Object.keys(errors).length === 0,
         errors
     };
-};const getUserProfile = async (req, res) => {
+};
+
+const getUserProfile = async (req, res) => {
     try {
         // Get token from Authorization header
         const authHeader = req.headers.authorization;
@@ -91,6 +93,86 @@ const validateInput = ({ name, email, password, mobile, confirmPassword }) => {
         });
     }
 };
+
+    // Update user profile
+    const updateProfile = async (req, res) => {
+        try {
+            // Get token from Authorization header
+            const authHeader = req.headers.authorization;
+            if (!authHeader || !authHeader.startsWith('Bearer ')) {
+                return res.status(401).json({ 
+                    message: 'Authentication required. Please provide valid token.' 
+                });
+            }
+    
+            const token = authHeader.split(' ')[1];
+            
+            // Verify token
+            const decoded = jwt.verify(token, JWT_SECRET);
+            
+            // Find user using decoded email
+            const user = await User.findOne({ email: decoded.email });
+            
+            if (!user) {
+                return res.status(404).json({ 
+                    message: 'User not found' 
+                });
+            }
+    
+            const { name, mobile } = req.body;
+    
+            // Validation
+            if (!name && !mobile) {
+                return res.status(400).json({ message: 'No update data provided' });
+            }
+    
+            // Validate input
+            const validation = validateInput({ 
+                name: name || user.name, 
+                email: user.email,
+                password: 'dummypass', // password validation is skipped for update
+                mobile: mobile || user.mobile
+            });
+    
+            if (!validation.isValid) {
+                return res.status(400).json({ 
+                    message: "Validation failed", 
+                    errors: validation.errors 
+                });
+            }
+    
+            // Build update object
+            const updateFields = {};
+            if (name) updateFields.name = name.trim();
+            if (mobile) updateFields.mobile = mobile;
+    
+            // Update user
+            const updatedUser = await User.findOneAndUpdate(
+                { email: decoded.email },
+                { $set: updateFields },
+                { new: true, runValidators: true }
+            ).select('-password');
+    
+            res.status(200).json({
+                message: "Profile updated successfully",
+                user: {
+                    name: updatedUser.name,
+                    email: updatedUser.email,
+                    mobile: updatedUser.mobile,
+                    userLevel: updatedUser.userLevel
+                }
+            });
+        } catch (error) {
+            console.error('Update profile error:', error);
+            if (error.name === 'ValidationError') {
+                return res.status(400).json({ message: error.message });
+            }
+            res.status(500).json({ 
+                message: "Profile update failed", 
+                error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+            });
+        }
+    };
 
 // 📌 Register a new user
 const registerUser = async (req, res) => {
@@ -308,6 +390,7 @@ const logoutUser = async (req, res) => {
 
 module.exports = {
     getUserProfile,
+    updateProfile,
     registerUser,
     loginUser,
     logoutUser,

@@ -5,11 +5,16 @@ import DashSquares from '../../components/seller/dashboardsquares';
 
 const SellerDashboard = () => {
     return (
+        <>
+        <SellerNavBar /> 
         <div className="s-dash-container">
-            <SellerNavBar />  
+             
             <DashSquares />
-            <Footer />
+            
+            
         </div>
+        <Footer />
+        </>
     );
 };
 

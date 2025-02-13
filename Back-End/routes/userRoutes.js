@@ -5,7 +5,8 @@ const {
     registerUser, 
     loginUser, 
     logoutUser, 
-    getUserProfile  // Add this import
+    getUserProfile,
+    updateProfile
 } = require('../Controllers/userController');
 
 // Auth routes
@@ -15,5 +16,6 @@ router.post('/logout', logoutUser);
 
 // Change this line to use the imported function directly
 router.get('/profile', getUserProfile);  
+router.put('/profile', updateProfile);
 
 module.exports = router;
