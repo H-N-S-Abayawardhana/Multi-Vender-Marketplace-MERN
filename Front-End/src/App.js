@@ -8,6 +8,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import Home from './Pages/Home';
 import Register from './Pages/Register';
 import Login from './Pages/Login';
+import UserProfile from './Pages/UserProfile';
+import SellerProfile from './Pages/UserProfile';
+import AdminProfile from './Pages/UserProfile';
 import BecomeSeller from './Pages/BecomeSeller';
 import SellerDashboard from './Pages/seller/SellerDashboard';
 import AddStore from './Pages/seller/AddStore';
@@ -32,13 +35,16 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/user-profile" element={<BuyerProtectedRoute><UserProfile /></BuyerProtectedRoute>} />
         <Route path="/become-seller" element={<BuyerProtectedRoute><BecomeSeller /></BuyerProtectedRoute>} />
         <Route path="/seller-dashboard" element={<SellerProtectedRoute><SellerDashboard /></SellerProtectedRoute>} />
         <Route path="/add-store" element={<SellerProtectedRoute><AddStore /></SellerProtectedRoute>} />
         <Route path="/stores" element={<SellerProtectedRoute><StoreList /></SellerProtectedRoute>} />
         <Route path="/store/:id" element={<SellerProtectedRoute><StoreDetails /></SellerProtectedRoute>} />
+        <Route path="/seller-profile" element={<SellerProtectedRoute><SellerProfile /></SellerProtectedRoute>} />
         <Route path="/admin-dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
         <Route path="/seller-requests" element={<AdminProtectedRoute><SellerRequests /></AdminProtectedRoute>} />
+        <Route path="/admin-profile" element={<AdminProtectedRoute><SellerProfile /></AdminProtectedRoute>} />
       </Routes>
       </div>
     </Router>

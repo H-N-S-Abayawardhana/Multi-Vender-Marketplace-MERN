@@ -52,6 +52,44 @@ const validateInput = ({ name, email, password, mobile, confirmPassword }) => {
         isValid: Object.keys(errors).length === 0,
         errors
     };
+};const getUserProfile = async (req, res) => {
+    try {
+        // Get token from Authorization header
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ 
+                message: 'Authentication required. Please provide valid token.' 
+            });
+        }
+
+        const token = authHeader.split(' ')[1];
+        
+        // Verify token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        // Find user using decoded email
+        const user = await User.findOne({ email: decoded.email });
+        
+        if (!user) {
+            return res.status(404).json({ 
+                message: 'User not found' 
+            });
+        }
+
+        res.status(200).json({
+            name: user.name,
+            email: user.email,
+            mobile: user.mobile,
+            userLevel: user.userLevel,
+            lastLogin: user.lastLogin
+        });
+    } catch (error) {
+        console.error('Profile fetch error:', error);
+        res.status(500).json({ 
+            message: 'Error fetching user profile', 
+            error: error.message 
+        });
+    }
 };
 
 // 📌 Register a new user
@@ -269,6 +307,7 @@ const logoutUser = async (req, res) => {
 };
 
 module.exports = {
+    getUserProfile,
     registerUser,
     loginUser,
     logoutUser,
