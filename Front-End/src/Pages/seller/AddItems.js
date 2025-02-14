@@ -41,6 +41,7 @@ const AddItem = () => {
       conditions: ''
     }
   });
+
   useEffect(() => {
     const userEmail = localStorage.getItem('email');
     if (userEmail) {
@@ -56,50 +57,38 @@ const AddItem = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    if (name.includes('.')) {
+      const [parent, child] = name.split('.');
+      setFormData(prev => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [child]: value
+        }
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handleImageChange = (e) => {
     if (e.target.files.length > 3) {
-      toast.error('Maximum 3 images allowed', {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true
-      });
+      toast.error('Maximum 3 images allowed');
       return;
     }
     setImages([...e.target.files]);
-    toast.success('Images uploaded successfully', {
-      position: "top-center",
-      autoClose: 2000
-    });
+    toast.success('Images uploaded successfully');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    // Validation checks
-    if (!formData.title.trim()) {
-      toast.error('Please enter a title', {
-        position: "top-center",
-        autoClose: 3000
-      });
-      setLoading(false);
-      return;
-    }
-
-    if (!formData.category) {
-      toast.error('Please select a category', {
-        position: "top-center",
-        autoClose: 3000
-      });
+    if (!formData.title.trim() || !formData.category) {
+      toast.error('Please fill in all required fields');
       setLoading(false);
       return;
     }
@@ -127,21 +116,11 @@ const AddItem = () => {
 
       if (response.data) {
         toast.success('Item added successfully!', {
-          position: "top-center",
-          autoClose: 2000,
-          onClose: () => navigate(`/store`)
+          onClose: () => navigate('/stores')
         });
       }
     } catch (err) {
-      const errorMessage = err.response?.data?.error || 'An error occurred while adding the item';
-      toast.error(errorMessage, {
-        position: "top-center",
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true
-      });
+      toast.error(err.response?.data?.error || 'An error occurred while adding the item');
     } finally {
       setLoading(false);
     }
@@ -157,62 +136,116 @@ const AddItem = () => {
         <section className="additems-section">
           <h2 className="additems-section-title">Basic Information</h2>
           <div className="additems-input-group">
-             {/* Add this new email field */}
-             <div className="additems-input-group">
-              <label className="additems-label">Seller Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                className="additems-input"
-                readOnly
-                disabled
-                style={{ backgroundColor: '#f0f0f0', cursor: 'not-allowed' }}
-              />
-            </div>
-            <div className="additems-input-group">
-              <label className="additems-label">Title</label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                className="additems-input"
-                required
-              />
-            </div>
-            
-            <div className="additems-input-group">
-              <label className="additems-label">Category</label>
-              <select
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                className="additems-select"
-                required
-              >
-                <option value="">Select Category</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Clothing">Clothing</option>
-                <option value="Home">Home</option>
-              </select>
-            </div>
+            <label className="additems-label">Seller Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              className="additems-input"
+              readOnly
+              disabled
+              style={{ backgroundColor: '#f0f0f0' }}
+            />
+          </div>
 
-            <div className="additems-input-group">
-              <label className="additems-label">Condition</label>
-              <select
-                name="condition"
-                value={formData.condition}
-                onChange={handleChange}
-                className="additems-select"
-                required
-              >
-                <option value="New">New</option>
-                <option value="Used">Used</option>
-                <option value="Refurbished">Refurbished</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
+          <div className="additems-input-group">
+            <label className="additems-label">Title*</label>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              className="additems-input"
+              required
+            />
+          </div>
+
+          <div className="additems-input-group">
+            <label className="additems-label">Description*</label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="additems-input"
+              rows="4"
+              required
+            />
+          </div>
+
+          <div className="additems-input-group">
+            <label className="additems-label">Category*</label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              className="additems-select"
+              required
+            >
+              <option value="">Select Category</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Home">Home</option>
+            </select>
+          </div>
+
+          <div className="additems-input-group">
+            <label className="additems-label">Brand</label>
+            <input
+              type="text"
+              name="brand"
+              value={formData.brand}
+              onChange={handleChange}
+              className="additems-input"
+            />
+          </div>
+
+          <div className="additems-input-group">
+            <label className="additems-label">Model</label>
+            <input
+              type="text"
+              name="model"
+              value={formData.model}
+              onChange={handleChange}
+              className="additems-input"
+            />
+          </div>
+
+          <div className="additems-input-group">
+            <label className="additems-label">Color (Optional)</label>
+            <input
+              type="text"
+              name="color"
+              value={formData.color}
+              onChange={handleChange}
+              className="additems-input"
+            />
+          </div>
+
+          <div className="additems-input-group">
+            <label className="additems-label">Material (Optional)</label>
+            <input
+              type="text"
+              name="material"
+              value={formData.material}
+              onChange={handleChange}
+              className="additems-input"
+            />
+          </div>
+
+          <div className="additems-input-group">
+            <label className="additems-label">Condition*</label>
+            <select
+              name="condition"
+              value={formData.condition}
+              onChange={handleChange}
+              className="additems-select"
+              required
+            >
+              <option value="New">New</option>
+              <option value="Used">Used</option>
+              <option value="Refurbished">Refurbished</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
         </section>
 
@@ -220,9 +253,7 @@ const AddItem = () => {
         <section className="additems-section">
           <h2 className="additems-section-title">Images</h2>
           <div className="additems-input-group">
-            <label className="additems-label">
-              Upload Images (Maximum 3)
-            </label>
+            <label className="additems-label">Upload Images* (Maximum 3)</label>
             <input
               type="file"
               multiple
@@ -234,36 +265,93 @@ const AddItem = () => {
           </div>
         </section>
 
+        {/* Shipping Details */}
+        <section className="additems-section">
+          <h2 className="additems-section-title">Shipping Details</h2>
+          <div className="additems-input-group">
+            <label className="additems-label">Shipping Method*</label>
+            <select
+              name="shippingDetails.method"
+              value={formData.shippingDetails.method}
+              onChange={handleChange}
+              className="additems-select"
+              required
+            >
+              <option value="Standard">Standard</option>
+              <option value="Express">Express</option>
+              <option value="Priority">Priority</option>
+            </select>
+          </div>
+
+          <div className="additems-input-group">
+            <label className="additems-label">Shipping Cost*</label>
+            <input
+              type="number"
+              name="shippingDetails.cost"
+              value={formData.shippingDetails.cost}
+              onChange={handleChange}
+              className="additems-input"
+              required
+            />
+          </div>
+
+          <div className="additems-input-group">
+            <label className="additems-label">Handling Time (days)*</label>
+            <input
+              type="number"
+              name="shippingDetails.handlingTime"
+              value={formData.shippingDetails.handlingTime}
+              onChange={handleChange}
+              className="additems-input"
+              required
+            />
+          </div>
+
+          <div className="additems-input-group">
+            <label className="additems-label">
+              <input
+                type="checkbox"
+                name="shippingDetails.internationalShipping"
+                checked={formData.shippingDetails.internationalShipping}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  shippingDetails: {
+                    ...prev.shippingDetails,
+                    internationalShipping: e.target.checked
+                  }
+                }))}
+              />
+              International Shipping Available
+            </label>
+          </div>
+        </section>
+
         {/* Price Information */}
         <section className="additems-section">
           <h2 className="additems-section-title">Pricing</h2>
           <div className="additems-input-group">
-            <div className="additems-input-group">
-              <label className="additems-label">Price</label>
-              <div className="additems-price-input">
-                <input
-                  type="number"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleChange}
-                  className="additems-input"
-                  required
-                />
-              </div>
-            </div>
+            <label className="additems-label">Price*</label>
+            <input
+              type="number"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              className="additems-input"
+              required
+            />
+          </div>
 
-            <div className="additems-input-group">
-              <label className="additems-label">Quantity</label>
-              <input
-                type="number"
-                name="quantity"
-                value={formData.quantity}
-                onChange={handleChange}
-                className="additems-input"
-                required
-                min="1"
-              />
-            </div>
+          <div className="additems-input-group">
+            <label className="additems-label">Quantity*</label>
+            <input
+              type="number"
+              name="quantity"
+              value={formData.quantity}
+              onChange={handleChange}
+              className="additems-input"
+              required
+              min="1"
+            />
           </div>
         </section>
 
