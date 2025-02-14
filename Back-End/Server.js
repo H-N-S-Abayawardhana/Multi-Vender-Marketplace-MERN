@@ -6,8 +6,11 @@ const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const storeRoutes = require('./routes/storeRoutes');
+const itemRoutes = require('./routes/itemRoutes');
 const sellerRoutes = require('./routes/sellerRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+
+
 
 const app = express();
 
@@ -26,8 +29,10 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/stores', storeRoutes);
+app.use('/api/items', itemRoutes);
 app.use('/api/seller', sellerRoutes);
 app.use('/api/admin',adminRoutes);
+
 app.use('/uploads', express.static('uploads'));
 
 // ✅ Health check route

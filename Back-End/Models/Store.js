@@ -1,7 +1,19 @@
 // Backend - models/Store.js
 const mongoose = require('mongoose');
 
+// Function to generate store ID
+function generateStoreId() {
+  // Generate a random 6-digit number
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
 const storeSchema = new mongoose.Schema({
+  storeId: {
+    type: String,
+    unique: true,
+    required: true,
+    default: generateStoreId
+  },
   storeName: {
     type: String,
     required: true,

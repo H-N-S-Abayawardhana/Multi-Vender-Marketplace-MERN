@@ -17,9 +17,9 @@ const Login = () => {
             if (sessionId) {
                 try {
                     await axios.post('http://localhost:9000/api/users/logout', { sessionId });
-                    toast.info('Previous session cleared.', { position: 'top-right' });
+                    toast.info('Previous session cleared.', { position: 'top-center' });
                 } catch (error) {
-                    toast.error('Error clearing previous session.', { position: 'top-right' });
+                    toast.error('Error clearing previous session.', { position: 'top-center' });
                 }
                 localStorage.clear();
             }
@@ -43,7 +43,7 @@ const Login = () => {
                 navigate('/admin-dashboard');
                 break;
             default:
-                toast.error('Invalid user level.', { position: 'top-right' });
+                toast.error('Invalid user level.', { position: 'top-center' });
                 break;
         }
     };

@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import '../../css/seller/addstore.css';
 import SellerNavBar from '../../components/seller/sellerNavBar.js'; 
 import Footer from '../../components/Footer';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddStore = () => {
   const navigate = useNavigate();
@@ -116,7 +118,8 @@ const AddStore = () => {
       );
 
       if (response.data.success) {
-        navigate('/dashboard');
+        navigate('/seller-dashboard');
+        toast.success('Store Added Successfully!', { position: 'top-center' });
       }
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred while creating the store');
