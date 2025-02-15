@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../css/seller/additems.css';
@@ -42,6 +41,35 @@ const AddItem = () => {
     }
   });
 
+  // New state for category management
+  const [categoryInput, setCategoryInput] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [filteredCategories, setFilteredCategories] = useState([]);
+  const suggestionRef = useRef(null);
+
+  // Predefined categories list
+  const predefinedCategories = [
+    'Electronics',
+    'Clothing',
+    'Home',
+    'Books',
+    'Sports',
+    'Toys',
+    'Beauty',
+    'Automotive',
+    'Garden',
+    'Health',
+    'Pet Supplies',
+    'Office Products',
+    'Music',
+    'Movies',
+    'Food',
+    'Art',
+    'Collectibles',
+    'Jewelry',
+    'Tools'
+  ];
+
   useEffect(() => {
     const userEmail = localStorage.getItem('email');
     if (userEmail) {
@@ -50,6 +78,32 @@ const AddItem = () => {
         email: userEmail
       }));
     }
+  }, []);
+
+  // Filter categories based on input
+  useEffect(() => {
+    if (categoryInput) {
+      const filtered = predefinedCategories.filter(category =>
+        category.toLowerCase().includes(categoryInput.toLowerCase())
+      );
+      setFilteredCategories(filtered);
+      setShowSuggestions(true);
+    } else {
+      setFilteredCategories([]);
+      setShowSuggestions(false);
+    }
+  }, [categoryInput]);
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (suggestionRef.current && !suggestionRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const [images, setImages] = useState([]);
@@ -71,6 +125,23 @@ const AddItem = () => {
         ...prev,
         [name]: value
       }));
+    }
+  };
+
+  // Handle category selection or custom category addition
+  const handleCategorySelect = (category) => {
+    setFormData(prev => ({
+      ...prev,
+      category
+    }));
+    setCategoryInput(category);
+    setShowSuggestions(false);
+  };
+
+  const handleAddCustomCategory = () => {
+    if (categoryInput.trim()) {
+      handleCategorySelect(categoryInput.trim());
+      toast.success('Custom category added successfully');
     }
   };
 
@@ -174,18 +245,38 @@ const AddItem = () => {
 
           <div className="additems-input-group">
             <label className="additems-label">Category*</label>
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              className="additems-select"
-              required
-            >
-              <option value="">Select Category</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Clothing">Clothing</option>
-              <option value="Home">Home</option>
-            </select>
+            <div className="category-input-container" ref={suggestionRef}>
+              <input
+                type="text"
+                value={categoryInput}
+                onChange={(e) => setCategoryInput(e.target.value)}
+                className="additems-input"
+                placeholder="Search or enter custom category"
+                required
+              />
+              {categoryInput && (
+                <button
+                  type="button"
+                  onClick={handleAddCustomCategory}
+                  className="add-custom-category-btn"
+                >
+                  Add Custom
+                </button>
+              )}
+              {showSuggestions && filteredCategories.length > 0 && (
+                <div className="category-suggestions">
+                  {filteredCategories.map((category, index) => (
+                    <div
+                      key={index}
+                      className="category-suggestion-item"
+                      onClick={() => handleCategorySelect(category)}
+                    >
+                      {category}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="additems-input-group">
