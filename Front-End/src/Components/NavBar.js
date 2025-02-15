@@ -6,6 +6,7 @@ import logo from '../assets/images/logo.png';
 
 const NavBar = () => {
   const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem('token'); // Check if user is authenticated
 
   // Handler for cart click
   const handleCartClick = (e) => {
@@ -46,11 +47,6 @@ const NavBar = () => {
 
       if (response.ok) {
         // Clear ALL localStorage items
-        localStorage.removeItem('token');
-        localStorage.removeItem('sessionId');
-        localStorage.removeItem('email');
-        localStorage.removeItem('userLevel');
-        localStorage.removeItem('userData');
         localStorage.clear();
 
         // Show success message
@@ -86,7 +82,7 @@ const NavBar = () => {
           <img 
             src={logo} 
             alt="E-Commerce Logo" 
-            height="40"
+            height="80"
             className="d-inline-block align-top"
           />
         </Link>
@@ -145,7 +141,7 @@ const NavBar = () => {
               </a>
               <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                 <li>
-                  <Link className="dropdown-item" to="/profile">
+                  <Link className="dropdown-item" to="/user-profile">
                     Profile
                   </Link>
                 </li>
@@ -168,17 +164,21 @@ const NavBar = () => {
               </Link>
             </li>
 
-            {/* Auth Buttons */}
-            <li className="nav-item mx-3">
-              <Link className="btn btn-outline-dark" to="/login">
-                Sign In
-              </Link>
-            </li>
-            <li className="nav-item mx-3">
-              <Link className="btn btn-dark" to="/register">
-                Sign Up
-              </Link>
-            </li>
+            {/* Auth Buttons - Conditionally rendered */}
+            {!isLoggedIn && (
+              <>
+                <li className="nav-item mx-3">
+                  <Link className="btn btn-outline-dark" to="/login">
+                    Sign In
+                  </Link>
+                </li>
+                <li className="nav-item mx-3">
+                  <Link className="btn btn-dark" to="/register">
+                    Sign Up
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

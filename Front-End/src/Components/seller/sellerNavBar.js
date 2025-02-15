@@ -142,7 +142,7 @@ const SellerNavBar = () => {
               </a>
               <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                 <li>
-                  <Link className="dropdown-item" to="/seller/profile">
+                  <Link className="dropdown-item" to="/seller-profile">
                     Seller Profile
                   </Link>
                 </li>

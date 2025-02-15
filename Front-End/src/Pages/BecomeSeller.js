@@ -1,4 +1,3 @@
-// becomeseller.js
 import React, { useState, useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,18 +6,43 @@ import Footer from '../components/Footer';
 import '../css/becomeseller.css';
 
 const BecomeSeller = () => {
-    // Get email from localStorage
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [email, setEmail] = useState('');
+    const [hasExistingApplication, setHasExistingApplication] = useState(false);
+    const [applicationStatus, setApplicationStatus] = useState('');
     
     useEffect(() => {
-        const userEmail = localStorage.getItem('email') || '';
-        setEmail(userEmail);
+        const userEmail = localStorage.getItem('email');
+        if (userEmail) {
+            setIsLoggedIn(true);
+            setEmail(userEmail);
+            checkExistingApplication(userEmail);
+        }
     }, []);
 
+    const checkExistingApplication = async (userEmail) => {
+        try {
+            const response = await fetch(`http://localhost:9000/api/seller/check-status/${userEmail}`);
+            const data = await response.json();
+            
+            if (data.exists) {
+                setHasExistingApplication(true);
+                setApplicationStatus(data.status);
+            }
+        } catch (error) {
+            console.error('Error checking application status:', error);
+        }
+    };
+
     const [formData, setFormData] = useState({
-        // Personal Information
+        // User Registration Information (for non-logged in users)
         fullName: '',
+        email: '',
         mobileNumber: '',
+        password: '',
+        confirmPassword: '',
+        
+        // Personal Information
         dob: '',
         
         // Business Information
@@ -39,37 +63,90 @@ const BecomeSeller = () => {
         }));
     };
 
+    const validateForm = () => {
+        if (!isLoggedIn) {
+            if (formData.password !== formData.confirmPassword) {
+                toast.error('Passwords do not match!');
+                return false;
+            }
+            if (formData.password.length < 6) {
+                toast.error('Password must be at least 6 characters long!');
+                return false;
+            }
+        }
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         
+        if (!validateForm()) return;
+
         try {
-            const response = await fetch('http://localhost:9000/api/seller/register', {
+            let userResponse;
+            let userEmail = email;
+            
+            // If user is not logged in, register them first
+            if (!isLoggedIn) {
+                userResponse = await fetch('http://localhost:9000/api/users/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: formData.fullName,
+                        email: formData.email,
+                        mobile: formData.mobileNumber,
+                        password: formData.password
+                    }),
+                });
+
+                const userData = await userResponse.json();
+                
+                if (!userResponse.ok) {
+                    throw new Error(userData.message || 'User registration failed');
+                }
+
+                // Store email in localStorage after successful registration
+                localStorage.setItem('email', formData.email);
+                userEmail = formData.email;
+                setEmail(formData.email);
+                setIsLoggedIn(true);
+            }
+
+            // Submit seller application
+            const sellerResponse = await fetch('http://localhost:9000/api/seller/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     ...formData,
-                    email: email
+                    email: userEmail,
+                    status: 'pending', // Initial status for admin review
+                    submissionDate: new Date().toISOString(),
+                    applicationId: Date.now().toString(), // Unique identifier for the application
                 }),
             });
 
-            const data = await response.json();
+            const sellerData = await sellerResponse.json();
 
-            if (response.ok) {
-                toast.success('Seller registration submitted successfully!', {
+            if (sellerResponse.ok) {
+                toast.success('Seller application submitted successfully! Please wait for admin approval.', {
                     position: "top-center",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
+                    autoClose: 5000,
                 });
                 
-                // Optional: Reset form after successful submission
+                setHasExistingApplication(true);
+                setApplicationStatus('pending');
+                
+                // Reset form
                 setFormData({
                     fullName: '',
+                    email: '',
                     mobileNumber: '',
+                    password: '',
+                    confirmPassword: '',
                     dob: '',
                     businessName: '',
                     businessType: '',
@@ -80,27 +157,40 @@ const BecomeSeller = () => {
                     businessEmail: ''
                 });
             } else {
-                toast.error(data.message || 'Failed to submit seller registration', {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                });
+                throw new Error(sellerData.message || 'Seller registration failed');
             }
         } catch (error) {
             console.error('Error:', error);
-            toast.error('An error occurred while submitting the form. Please try again later.', {
+            toast.error(error.message || 'An error occurred. Please try again later.', {
                 position: "top-center",
                 autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
             });
         }
     };
+
+    if (hasExistingApplication) {
+        return (
+            <div>
+                <NavBar />
+                <div className="becomeseller-container">
+                    <h1 className="becomeseller-title">Seller Application Status</h1>
+                    <div className="application-status-container">
+                        <h2>Your application is {applicationStatus}</h2>
+                        {applicationStatus === 'pending' && (
+                            <p>Your application is currently under review. We will notify you once it has been processed.</p>
+                        )}
+                        {applicationStatus === 'approved' && (
+                            <p>Congratulations! Your seller account has been approved. You can now access the seller dashboard.</p>
+                        )}
+                        {applicationStatus === 'rejected' && (
+                            <p>Unfortunately, your application was not approved at this time. You may submit a new application after 30 days.</p>
+                        )}
+                    </div>
+                </div>
+                <Footer />
+            </div>
+        );
+    }
 
     return (
         <div>
@@ -127,12 +217,23 @@ const BecomeSeller = () => {
 
                         <div className="becomeseller-form-group">
                             <label className="becomeseller-label">Email</label>
-                            <input
-                                type="email"
-                                className="becomeseller-input"
-                                value={email}
-                                disabled
-                            />
+                            {isLoggedIn ? (
+                                <input
+                                    type="email"
+                                    className="becomeseller-input"
+                                    value={email}
+                                    disabled
+                                />
+                            ) : (
+                                <input
+                                    type="email"
+                                    name="email"
+                                    className="becomeseller-input"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            )}
                         </div>
 
                         <div className="becomeseller-form-group">
@@ -146,6 +247,36 @@ const BecomeSeller = () => {
                                 required
                             />
                         </div>
+
+                        {!isLoggedIn && (
+                            <>
+                                <div className="becomeseller-form-group">
+                                    <label className="becomeseller-label">Password</label>
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        className="becomeseller-input"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        required
+                                        minLength="6"
+                                    />
+                                </div>
+
+                                <div className="becomeseller-form-group">
+                                    <label className="becomeseller-label">Confirm Password</label>
+                                    <input
+                                        type="password"
+                                        name="confirmPassword"
+                                        className="becomeseller-input"
+                                        value={formData.confirmPassword}
+                                        onChange={handleChange}
+                                        required
+                                        minLength="6"
+                                    />
+                                </div>
+                            </>
+                        )}
 
                         <div className="becomeseller-form-group">
                             <label className="becomeseller-label">Date of Birth</label>

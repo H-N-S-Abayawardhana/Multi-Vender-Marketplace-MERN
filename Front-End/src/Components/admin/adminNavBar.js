@@ -120,7 +120,7 @@ const AdminNavBar = () => {
             <li className="nav-item dropdown mx-3">
               <a 
                 className="nav-link dropdown-toggle" 
-                href="#" 
+                href="#"
                 id="profileDropdown" 
                 role="button" 
                 data-bs-toggle="dropdown" 
@@ -130,7 +130,7 @@ const AdminNavBar = () => {
               </a>
               <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                 <li>
-                  <Link className="dropdown-item" to="/admin/profile">
+                  <Link className="dropdown-item" to="/admin-profile">
                     Profile
                   </Link>
                 </li>
