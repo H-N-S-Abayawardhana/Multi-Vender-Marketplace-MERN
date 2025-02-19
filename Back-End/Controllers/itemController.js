@@ -86,6 +86,17 @@ const itemController = {
       res.status(500).json({ error: error.message });
     }
   },
+  getAllItems: async (req, res) => {
+    try {
+      const items = await Item.find()
+        .sort({ createdAt: -1 }); // Sort by newest first
+      
+      res.json(items);
+    } catch (error) {
+      console.error('Error fetching all items:', error);
+      res.status(500).json({ error: error.message });
+    }
+  },
 
   getSellerItems: async (req, res) => {
     try {
@@ -96,5 +107,6 @@ const itemController = {
     }
   }
 };
+
 
 module.exports = itemController;
