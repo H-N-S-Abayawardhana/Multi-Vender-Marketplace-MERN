@@ -9,6 +9,7 @@ const storeRoutes = require('./routes/storeRoutes');
 const itemRoutes = require('./routes/itemRoutes');
 const sellerRoutes = require('./routes/sellerRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 
 
@@ -32,6 +33,7 @@ app.use('/api/stores', storeRoutes);
 app.use('/api/items', itemRoutes);
 app.use('/api/seller', sellerRoutes);
 app.use('/api/admin',adminRoutes);
+app.use('/api/orders', orderRoutes);
 
 app.use('/uploads', express.static('uploads'));
 
