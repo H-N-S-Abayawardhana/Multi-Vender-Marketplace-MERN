@@ -18,7 +18,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
   });
 
   const [errors, setErrors] = useState({});
-  const [activeStep, setActiveStep] = useState('shipping'); // shipping or payment
+  const [activeStep, setActiveStep] = useState('shipping');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateShipping = () => {
@@ -50,7 +50,6 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
       ...prev,
       [name]: value
     }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -71,14 +70,12 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
         try {
           setIsSubmitting(true);
           
-          // Get user email from localStorage
           const userEmail = localStorage.getItem('email');
           if (!userEmail) {
             alert('You must be logged in to place an order');
             return;
           }
           
-          // Create order object
           const orderData = {
             userEmail,
             itemId: item._id,
@@ -97,7 +94,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
               zipCode: formData.zipCode
             },
             paymentDetails: {
-              cardNumber: formData.cardNumber.slice(-4), // Store only last 4 digits for security
+              cardNumber: formData.cardNumber.slice(-4),
               cardExpiry: formData.cardExpiry
             },
             orderStatus: 'Pending',
@@ -105,12 +102,8 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
             totalAmount: item.price
           };
           
-          // Send order to backend
           const response = await axios.post('http://localhost:9000/api/orders/create', orderData);
-          
           console.log('Order created:', response.data);
-          
-          // Call the original onSubmit
           onSubmit(formData);
           
         } catch (error) {
@@ -147,11 +140,19 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
 
         <div className="checkout-content">
           <div className="checkout-item-summary">
-            <img 
-              src={item.images[0]} 
-              alt={item.title} 
-              className="checkout-item-image"
-            />
+            <div className="checkout-image-container">
+              <img 
+                src={`http://localhost:9000${item.images[0]}`} 
+                alt={item.title} 
+                className="checkout-item-image"
+                style={{
+                  width: '100px',
+                  height: '100px',
+                  objectFit: 'cover',
+                  borderRadius: '8px'
+                }}
+              />
+            </div>
             <div className="checkout-item-details">
               <h3>{item.title}</h3>
               <p className="checkout-item-price">${item.price.toFixed(2)}</p>

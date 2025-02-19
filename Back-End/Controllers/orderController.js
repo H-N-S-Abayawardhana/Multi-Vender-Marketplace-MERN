@@ -1,148 +1,66 @@
-// controllers/orderController.js
-const Order = require('../Models/orderModel');
-const Item = require('../Models/Item'); 
+const Order = require('../Models/Order');
+const Item = require('../Models/Item');
 
-// Create a new order
-exports.createOrder = async (req, res) => {
-  try {
-    const {
-      userEmail,
-      itemId,
-      itemDetails,
-      shippingDetails,
-      paymentDetails,
-      orderStatus,
-      totalAmount
-    } = req.body;
+const orderController = {
+  createOrder: async (req, res) => {
+    try {
+      // Get the item details to verify and get seller email
+      const item = await Item.findById(req.body.itemId);
+      if (!item) {
+        return res.status(404).json({ message: 'Item not found' });
+      }
 
-    // Validate that the item exists and has enough stock
-    const item = await Item.findById(itemId);
-    if (!item) {
-      return res.status(404).json({
-        status: 'fail',
-        message: 'Item not found'
-      });
-    }
+      // Verify item is in stock
+      if (item.quantity < 1) {
+        return res.status(400).json({ message: 'Item is out of stock' });
+      }
 
-    if (item.quantity <= 0) {
-      return res.status(400).json({
-        status: 'fail',
-        message: 'Item is out of stock'
-      });
-    }
+      // Create the order
+      const orderData = {
+        ...req.body,
+        sellerEmail: item.email, // Add seller's email
+        orderStatus: 'Pending',
+        orderDate: new Date()
+      };
 
-    // Create new order
-    const newOrder = await Order.create({
-      userEmail,
-      itemId,
-      itemDetails,
-      shippingDetails,
-      paymentDetails,
-      orderStatus,
-      orderDate: new Date(),
-      totalAmount
-    });
+      const newOrder = new Order(orderData);
+      await newOrder.save();
 
-    // Update item quantity
-    await Item.findByIdAndUpdate(itemId, {
-      $inc: { quantity: -1 }
-    });
+      // Update item quantity
+      await Item.findByIdAndUpdate(
+        req.body.itemId,
+        { $inc: { quantity: -1 } }
+      );
 
-    res.status(201).json({
-      status: 'success',
-      data: {
+      res.status(201).json({
+        message: 'Order created successfully',
         order: newOrder
-      }
-    });
-  } catch (error) {
-    console.error('Order creation error:', error);
-    res.status(400).json({
-      status: 'fail',
-      message: error.message
-    });
-  }
-};
-
-// Get all orders for a user
-exports.getUserOrders = async (req, res) => {
-  try {
-    const userEmail = req.params.email;
-    
-    const orders = await Order.find({ userEmail })
-      .sort({ orderDate: -1 });
-    
-    res.status(200).json({
-      status: 'success',
-      results: orders.length,
-      data: {
-        orders
-      }
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      message: error.message
-    });
-  }
-};
-
-// Get order by ID
-exports.getOrderById = async (req, res) => {
-  try {
-    const order = await Order.findById(req.params.id);
-    
-    if (!order) {
-      return res.status(404).json({
-        status: 'fail',
-        message: 'Order not found'
       });
+    } catch (error) {
+      console.error('Error creating order:', error);
+      res.status(500).json({ message: 'Error creating order', error: error.message });
     }
-    
-    res.status(200).json({
-      status: 'success',
-      data: {
-        order
-      }
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      message: error.message
-    });
+  },
+
+  getOrdersByUser: async (req, res) => {
+    try {
+      const orders = await Order.find({ userEmail: req.query.email })
+        .sort({ orderDate: -1 });
+      res.json(orders);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching orders', error: error.message });
+    }
+  },
+
+  getOrdersBySeller: async (req, res) => {
+    try {
+      const orders = await Order.find({ sellerEmail: req.query.email })
+        .sort({ orderDate: -1 });
+      res.json(orders);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching orders', error: error.message });
+    }
   }
 };
 
-// Update order status
-exports.updateOrderStatus = async (req, res) => {
-  try {
-    const { orderStatus } = req.body;
-    
-    const order = await Order.findByIdAndUpdate(
-      req.params.id,
-      { orderStatus },
-      {
-        new: true,
-        runValidators: true
-      }
-    );
-    
-    if (!order) {
-      return res.status(404).json({
-        status: 'fail',
-        message: 'Order not found'
-      });
-    }
-    
-    res.status(200).json({
-      status: 'success',
-      data: {
-        order
-      }
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      message: error.message
-    });
-  }
-};
+module.exports = orderController;
