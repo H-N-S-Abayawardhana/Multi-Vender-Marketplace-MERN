@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import '../../css/seller/storedetails.css';
 import SellerNavBar from '../../components/seller/sellerNavBar.js'; 
 import Footer from '../../components/Footer';
+import ItemList from '../../components/seller/ItemList.js';
 
 const StoreDetails = () => {
   const { id } = useParams();
@@ -322,6 +323,7 @@ const StoreDetails = () => {
         </div>
       )}
     </div>
+    <ItemList/>
     <Footer />
     </>
   );
