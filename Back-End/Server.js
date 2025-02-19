@@ -26,6 +26,8 @@ app.use(cors({
 // ✅ Middleware
 app.use(express.json());
 
+app.use(express.static('uploads'));
+
 // ✅ Routes
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
@@ -34,6 +36,7 @@ app.use('/api/items', itemRoutes);
 app.use('/api/seller', sellerRoutes);
 app.use('/api/admin',adminRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/uploads', express.static('uploads')); 
 
 app.use('/uploads', express.static('uploads'));
 

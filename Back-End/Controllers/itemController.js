@@ -6,7 +6,7 @@ const path = require('path');
 // Configure multer for image upload
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, 'public/uploads/');  // Make sure this directory exists
+    cb(null, 'uploads/');  // Remove 'public/' from the path
   },
   filename: function(req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname);

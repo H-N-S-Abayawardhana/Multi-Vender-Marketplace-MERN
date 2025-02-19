@@ -45,10 +45,10 @@ const ItemList = () => {
             <div className="itemlist-image-container">
               {item.images && item.images.length > 0 && (
                 <img 
-                  src={item.images[0]} 
-                  alt={item.title} 
-                  className="itemlist-image"
-                />
+                src={`http://localhost:9000${item.images[0]}`} 
+                alt={item.title} 
+                className="user-itemlist-image"
+              />
               )}
             </div>
             <div className="itemlist-content">

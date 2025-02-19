@@ -13,7 +13,7 @@ const DashboardSquares = () => {
                    
                 <button className="s-dash-box" onClick={() => navigate("/stores")}>  My Stores  </button>
 
-                <button className="s-dash-box">Sales</button>
+                <button className="s-dash-box" onClick={() => navigate("/add-items")}>  Add New Items  </button>
                 <button className="s-dash-box">Customers</button>
                 <button className="s-dash-box">Messages</button>
                 <button className="s-dash-box">Analytics</button>

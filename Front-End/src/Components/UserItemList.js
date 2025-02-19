@@ -13,14 +13,16 @@ const UserItemList = () => {
     const fetchItems = async () => {
       try {
         const response = await axios.get('http://localhost:9000/api/items/all');
+        console.log('Items received:', response.data); // Add this line
         setItems(response.data);
         setLoading(false);
       } catch (err) {
+        console.error('Error:', err); // Add error logging
         setError('Failed to fetch items. Please try again later.');
         setLoading(false);
       }
     };
-
+  
     fetchItems();
   }, []);
 
@@ -55,7 +57,7 @@ const UserItemList = () => {
             <div className="user-itemlist-image-container">
               {item.images && item.images.length > 0 && (
                 <img 
-                  src={item.images[0]} 
+                  src={`http://localhost:9000${item.images[0]}`} 
                   alt={item.title} 
                   className="user-itemlist-image"
                 />
