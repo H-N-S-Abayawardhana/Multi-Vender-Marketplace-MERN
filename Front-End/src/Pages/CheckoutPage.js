@@ -1,10 +1,12 @@
-// CheckoutPage.js
 import React, { useState } from 'react';
 import { CreditCard, Truck, ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 import '../../src/css/checkout.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CheckoutPage = ({ item, onClose, onSubmit }) => {
+  // Existing state setup
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -21,6 +23,16 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
   const [activeStep, setActiveStep] = useState('shipping');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Get the quantity from the item
+  const quantity = item.selectedQuantity || 1;
+
+  // Calculate the total price including shipping
+  const shippingCost = item.shippingDetails?.cost || 0; // Get shipping cost from item
+  const itemPrice = item.price || 0;
+  const subtotal = itemPrice * quantity; // Calculate subtotal based on quantity
+  const totalPrice = subtotal + shippingCost; // Add shipping cost to get total
+
+  // Existing validation functions and handlers
   const validateShipping = () => {
     const newErrors = {};
     if (!formData.fullName) newErrors.fullName = 'Full name is required';
@@ -72,7 +84,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
           
           const userEmail = localStorage.getItem('email');
           if (!userEmail) {
-            alert('You must be logged in to place an order');
+            toast.error('You must be logged in to place an order');
             return;
           }
           
@@ -83,7 +95,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
               title: item.title,
               price: item.price,
               image: item.images[0],
-              quantity: 1
+              quantity: quantity // Use the selected quantity from the item
             },
             shippingDetails: {
               fullName: formData.fullName,
@@ -91,7 +103,9 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
               phone: formData.phone,
               address: formData.address,
               city: formData.city,
-              zipCode: formData.zipCode
+              zipCode: formData.zipCode,
+              cost: shippingCost, // Include shipping cost
+              method: item.shippingDetails?.method || 'Standard' // Include shipping method
             },
             paymentDetails: {
               cardNumber: formData.cardNumber.slice(-4),
@@ -99,7 +113,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
             },
             orderStatus: 'Pending',
             orderDate: new Date(),
-            totalAmount: item.price
+            totalAmount: totalPrice // Use calculated total price
           };
           
           const response = await axios.post('http://localhost:9000/api/orders/create', orderData);
@@ -108,7 +122,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
           
         } catch (error) {
           console.error('Error placing order:', error);
-          alert(error.response?.data?.message || 'Failed to place order. Please try again.');
+          toast.error(error.response?.data?.message || 'Failed to place order. Please try again.');
         } finally {
           setIsSubmitting(false);
         }
@@ -155,7 +169,23 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
             </div>
             <div className="checkout-item-details">
               <h3>{item.title}</h3>
-              <p className="checkout-item-price">${item.price.toFixed(2)}</p>
+              <p className="checkout-item-price">${item.price.toFixed(2)} × {quantity}</p>
+              
+              {/* Display quantity, subtotal, shipping cost and total */}
+              <div className="checkout-price-breakdown">
+                <div className="checkout-price-row">
+                  <span>Item Subtotal:</span>
+                  <span>${subtotal.toFixed(2)}</span>
+                </div>
+                <div className="checkout-price-row">
+                  <span>Shipping ({item.shippingDetails?.method || 'Standard'}):</span>
+                  <span>${shippingCost.toFixed(2)}</span>
+                </div>
+                <div className="checkout-price-row checkout-price-total">
+                  <span>Total:</span>
+                  <span>${totalPrice.toFixed(2)}</span>
+                </div>
+              </div>
             </div>
           </div>
 
