@@ -10,6 +10,7 @@ const itemRoutes = require('./routes/itemRoutes');
 const sellerRoutes = require('./routes/sellerRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 
 
 
@@ -36,6 +37,7 @@ app.use('/api/items', itemRoutes);
 app.use('/api/seller', sellerRoutes);
 app.use('/api/admin',adminRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/notifications', notificationRoutes);
 app.use('/uploads', express.static('uploads')); 
 
 app.use('/uploads', express.static('uploads'));

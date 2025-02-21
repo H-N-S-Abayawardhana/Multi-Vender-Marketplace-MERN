@@ -1,5 +1,5 @@
-// controllers/sellerController.js
 const Seller = require('../Models/Seller');
+const Notification = require('../Models/Notification');
 
 const sellerController = {
     registerSeller: async (req, res) => {
@@ -35,10 +35,22 @@ const sellerController = {
                     businessContactNumber,
                     businessEmail
                 },
-                status: 'pending' // Default status for new applications
+                status: 'pending'
             });
 
             await newSeller.save();
+
+            // Create notification for admin
+            const notification = new Notification({
+                recipient: 'admin',
+                type: 'seller_request',
+                title: 'New Seller Application',
+                message: `${fullName} has submitted a seller application`,
+                referenceId: newSeller._id,
+                isRead: false
+            });
+
+            await notification.save();
 
             res.status(201).json({
                 success: true,
