@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../css/admin/adminnotification.css';
+import AdminNavBar from '../../components/admin/adminNavBar';
+import Footer from '../../components/Footer';
 
 const AdminNotificationPage = () => {
     const [notifications, setNotifications] = useState([]);
@@ -45,6 +47,8 @@ const AdminNotificationPage = () => {
     };
 
     return (
+        <>
+        <AdminNavBar/>
         <div className="admin-notification-container">
             <div className="notification-header">
                 <h1>Notifications</h1>
@@ -89,6 +93,8 @@ const AdminNotificationPage = () => {
                 ))}
             </div>
         </div>
+          <Footer/>      
+        </>
     );
 };
 

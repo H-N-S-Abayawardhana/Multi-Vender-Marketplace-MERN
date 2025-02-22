@@ -8,16 +8,10 @@ import logo from '../../assets/images/logo.png';
 const AdminNavBar = () => {
   const navigate = useNavigate();
 
-  // Handler for notification click
+  // Handler for notification click - now navigates to notifications page
   const handleNotificationClick = (e) => {
     e.preventDefault();
-    Swal.fire({
-      title: 'Notifications',
-      text: 'You have no new notifications',
-      icon: 'info',
-      confirmButtonColor: '#3085d6',
-      confirmButtonText: 'Ok'
-    });
+    navigate('/admin-notifications');
   };
 
   // Logout handler
@@ -100,20 +94,23 @@ const AdminNavBar = () => {
             {/* Dashboard Link */}
             <li className="nav-item mx-3">
               <Link className="nav-link d-flex align-items-center" to="/admin-dashboard">
-                
                 Dashboard
               </Link>
             </li>
 
-            {/* Notification Icon */}
+            {/* Notification Icon - Updated to use Link component */}
             <li className="nav-item mx-3">
-              <a className="nav-link position-relative" href="#" onClick={handleNotificationClick}>
+              <Link 
+                to="/admin-notifications"
+                className="nav-link position-relative"
+                onClick={handleNotificationClick}
+              >
                 <FaBell size={20} />
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   0
                   <span className="visually-hidden">unread notifications</span>
                 </span>
-              </a>
+              </Link>
             </li>
 
             {/* Profile Dropdown */}

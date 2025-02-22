@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../css/seller/selernoti.css';
+import SellerNavBar from '../../components/seller/sellerNavBar';
+import Footer from '../../components/Footer';
 
 const SellerNotifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -55,6 +57,8 @@ const SellerNotifications = () => {
   }
 
   return (
+    <>
+    <SellerNavBar />
     <div className="sellnoti-container">
       <h2 className="sellnoti-title">Seller Notifications</h2>
       <div className="sellnoti-list">
@@ -76,6 +80,8 @@ const SellerNotifications = () => {
         )}
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 
