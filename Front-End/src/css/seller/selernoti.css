@@ -1,0 +1,58 @@
+/* css/seller/sellnoti.css */
+.sellnoti-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+  }
+  
+  .sellnoti-title {
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .sellnoti-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .sellnoti-item {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .sellnoti-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sellnoti-unread {
+    background-color: #f0f7ff;
+    border-left: 4px solid #2196f3;
+  }
+  
+  .sellnoti-message {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .sellnoti-date {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #666;
+  }
+  
+  .sellnoti-empty {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 2rem;
+  }

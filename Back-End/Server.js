@@ -11,6 +11,7 @@ const sellerRoutes = require('./routes/sellerRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const sellnotiRoutes = require('./routes/sellnotiRoutes');
 
 
 
@@ -38,6 +39,7 @@ app.use('/api/seller', sellerRoutes);
 app.use('/api/admin',adminRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api', sellnotiRoutes);
 app.use('/uploads', express.static('uploads')); 
 
 app.use('/uploads', express.static('uploads'));

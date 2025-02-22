@@ -1,7 +1,7 @@
-// controllers/adminController.js
+// Controllers/adminController.js
 const Seller = require('../Models/Seller');
 const User = require('../Models/userModel');
-const mongoose = require('mongoose');
+const { createNotification } = require('./sellnotiController');
 
 const adminController = {
     getSellerRequests: async (req, res) => {
@@ -36,6 +36,7 @@ const adminController = {
     updateSellerStatus: async (req, res) => {
         try {
             const { email, status } = req.body;
+            console.log('Updating status for:', email, status); // Debug log
 
             const validStatuses = ['approved', 'rejected'];
             if (!validStatuses.includes(status)) {
@@ -68,17 +69,24 @@ const adminController = {
             // Update seller status
             const seller = await Seller.findOneAndUpdate(
                 { 'personalInfo.email': email },
-                { status },
+                { 'businessInfo.status': status },
                 { new: true }
             );
 
-            // If status is approved, update user level
+            // If status is approved, update user level and create notification
             if (status === 'approved') {
                 await User.findOneAndUpdate(
                     { email: email },
                     { userLevel: 2 },
                     { new: true }
                 );
+
+                // Create notification for approved seller
+                const notificationResult = await createNotification(
+                    email,
+                    'Your seller request has been approved'
+                );
+                console.log('Notification creation result:', notificationResult); // Debug log
             }
 
             res.status(200).json({

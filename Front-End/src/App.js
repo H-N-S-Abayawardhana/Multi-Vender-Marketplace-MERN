@@ -16,6 +16,7 @@ import BecomeSeller from './Pages/BecomeSeller';
 import SellerDashboard from './Pages/seller/SellerDashboard';
 import AddStore from './Pages/seller/AddStore';
 import AddItems from './Pages/seller/AddItems';
+import SellerNotifications from './Pages/seller/SellerNotifications';
 import AdminNotificationPage from './Pages/admin/AdminNotificationPage';
 import AdminDashboard from './Pages/admin/AdminDashboard';
 import SellerRequests from './Pages/admin/SellerRequests';
@@ -47,6 +48,7 @@ function App() {
         <Route path="/store/:id" element={<SellerProtectedRoute><StoreDetails /></SellerProtectedRoute>} />
         <Route path="/seller-profile" element={<SellerProtectedRoute><SellerProfile /></SellerProtectedRoute>} />
         <Route path="/add-items" element={<SellerProtectedRoute><AddItems /></SellerProtectedRoute>} />
+        <Route path="/seller-notifications" element={<SellerProtectedRoute><SellerNotifications /></SellerProtectedRoute>} />
         <Route path="/admin-notifications" element={<AdminProtectedRoute><AdminNotificationPage/></AdminProtectedRoute >} />
         <Route path="/admin-dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
         <Route path="/seller-requests" element={<AdminProtectedRoute><SellerRequests /></AdminProtectedRoute>} />

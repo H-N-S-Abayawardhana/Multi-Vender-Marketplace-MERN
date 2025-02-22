@@ -107,11 +107,11 @@ const BecomeSeller = () => {
                     throw new Error(userData.message || 'User registration failed');
                 }
 
-                // Store email in localStorage after successful registration
-                localStorage.setItem('email', formData.email);
-                userEmail = formData.email;
-                setEmail(formData.email);
-                setIsLoggedIn(true);
+                // // Store email in localStorage after successful registration
+                // localStorage.setItem('email', formData.email);
+                // userEmail = formData.email;
+                // setEmail(formData.email);
+                // setIsLoggedIn(true);
             }
 
             // Submit seller application
