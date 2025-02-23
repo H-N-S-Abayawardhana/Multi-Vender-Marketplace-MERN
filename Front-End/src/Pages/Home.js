@@ -1,21 +1,9 @@
+// Home.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ShoppingCart, Heart, Search, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ShoppingCart, Heart, Search, Star, ChevronLeft, ChevronRight, Truck, Shield, Headphones } from 'lucide-react';
 import UserItemList from '../components/UserItemList';
 import '../../src/css/Home.css';
-
-// Import banner images
-import banner3 from '../assets/images/sale-1.jpg';
-import banner2 from '../assets/images/electronics.jpg';
-import banner1 from '../assets/images/fashion.jpg';
-
-// Import promo images
-import freeShippingImg from '../assets/images/free-shipping.jpg';
-import guaranteeImg from '../assets/images/guarantee.jpg';
-import supportImg from '../assets/images/support.jpg';
-
-// Import placeholder
-import placeholderIcon from '../assets/images/placeholder-icon.png';
 
 const Home = () => {
   const [featuredItems, setFeaturedItems] = useState([]);
@@ -24,26 +12,29 @@ const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [trendingItems, setTrendingItems] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
+  const [flashDeals, setFlashDeals] = useState([]);
 
-  
   const banners = [
     {
       id: 1,
-      image: banner1,
-      title: 'Summer Sale',
-      description: 'Up to 70% off on summer collection'
+      image: '/assets/images/banners/fashion-banner.jpg', // 1920x600px
+      title: 'Summer Collection 2025',
+      subtitle: 'Fashion Week Special',
+      description: 'Up to 70% off on designer brands'
     },
     {
       id: 2,
-      image: banner2,
-      title: 'Tech Week',
-      description: 'Latest gadgets and electronics'
+      image: '/assets/images/banners/tech-banner.jpg', // 1920x600px
+      title: 'Tech Bonanza',
+      subtitle: 'Latest Gadgets',
+      description: 'Free shipping on orders above $999'
     },
     {
       id: 3,
-      image: banner3,
-      title: 'Fashion Deal',
-      description: 'Designer brands at amazing prices'
+      image: '/assets/images/banners/home-banner.jpg', // 1920x600px
+      title: 'Home & Living',
+      subtitle: 'Interior Special',
+      description: 'Get 30% off on home decor'
     }
   ];
 
@@ -57,11 +48,9 @@ const Home = () => {
 
         setFeaturedItems(itemsResponse.data);
         setCategories(categoriesResponse.data);
-
-        // Mock data for trending and new arrivals
-        setTrendingItems(itemsResponse.data.slice(0, 4));
-        setNewArrivals(itemsResponse.data.slice(4, 8));
-        
+        setTrendingItems(itemsResponse.data.slice(0, 8));
+        setNewArrivals(itemsResponse.data.slice(8, 16));
+        setFlashDeals(itemsResponse.data.slice(16, 20));
         setLoading(false);
       } catch (error) {
         console.error('Error fetching home data:', error);
@@ -71,7 +60,6 @@ const Home = () => {
 
     fetchHomeData();
 
-    // Auto-slide banner
     const slideInterval = setInterval(() => {
       setCurrentSlide(prev => (prev + 1) % banners.length);
     }, 5000);
@@ -79,126 +67,133 @@ const Home = () => {
     return () => clearInterval(slideInterval);
   }, []);
 
-  const nextSlide = () => {
-    setCurrentSlide(prev => (prev + 1) % banners.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide(prev => (prev - 1 + banners.length) % banners.length);
-  };
-
-  const handleQuickView = (item) => {
-    console.log('Quick view:', item);
-  };
-
-  const handleAddToWishlist = (item) => {
-    console.log('Add to wishlist:', item);
-  };
-
-  // Helper function to get category icon based on category name
-  const getCategoryIcon = (categoryName) => {
-    try {
-      return require(`../assets/images/categories/${categoryName.toLowerCase()}.png`);
-    } catch (error) {
-      return placeholderIcon;
-    }
-  };
-
   if (loading) {
-    return <div className="home-loading">Loading amazing deals for you...</div>;
+    return (
+      <div className="home-loading">
+        <div className="home-loading-spinner"></div>
+        <p>Discovering amazing deals for you...</p>
+      </div>
+    );
   }
 
   return (
     <div className="home-container">
-      {/* Hero Banner Section */}
-      <section className="hero-banner">
-        <div className="banner-container">
+      {/* Hero Section */}
+      <section className="home-hero">
+        <div className="home-banner-container">
           {banners.map((banner, index) => (
             <div
               key={banner.id}
-              className={`banner-slide ${index === currentSlide ? 'active' : ''}`}
+              className={`home-banner-slide ${index === currentSlide ? 'active' : ''}`}
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
               <img src={banner.image} alt={banner.title} />
-              <div className="banner-content">
-                <h2>{banner.title}</h2>
+              <div className="home-banner-content">
+                <span className="home-banner-subtitle">{banner.subtitle}</span>
+                <h1>{banner.title}</h1>
                 <p>{banner.description}</p>
-                <button className="shop-now-btn">Shop Now</button>
+                <button className="home-banner-btn">Shop Now</button>
+              </div>
+            </div>
+          ))}
+          <button className="home-banner-nav prev" onClick={() => setCurrentSlide(prev => (prev - 1 + banners.length) % banners.length)}>
+            <ChevronLeft />
+          </button>
+          <button className="home-banner-nav next" onClick={() => setCurrentSlide(prev => (prev + 1) % banners.length)}>
+            <ChevronRight />
+          </button>
+          <div className="home-banner-dots">
+            {banners.map((_, index) => (
+              <span
+                key={index}
+                className={`home-dot ${index === currentSlide ? 'active' : ''}`}
+                onClick={() => setCurrentSlide(index)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Flash Deals */}
+      <section className="home-flash-deals">
+        <div className="home-section-header">
+          <h2>Flash Deals</h2>
+          <div className="home-countdown">
+            Ends in: 12:30:45
+          </div>
+        </div>
+        <div className="home-flash-grid">
+          {flashDeals.map(deal => (
+            <div key={deal._id} className="home-flash-card">
+              <div className="home-flash-discount">-{deal.discount}%</div>
+              <img src={deal.images[0]} alt={deal.title} />
+              <div className="home-flash-content">
+                <h3>{deal.title}</h3>
+                <div className="home-flash-price">
+                  <span className="home-price-current">${deal.price.toFixed(2)}</span>
+                  <span className="home-price-original">${(deal.price * (100 / (100 - deal.discount))).toFixed(2)}</span>
+                </div>
+                <div className="home-flash-progress">
+                  <div className="home-progress-bar" style={{ width: `${deal.soldPercentage}%` }}></div>
+                  <span>Sold: {deal.soldPercentage}%</span>
+                </div>
               </div>
             </div>
           ))}
         </div>
-        <button className="banner-nav prev" onClick={prevSlide}>
-          <ChevronLeft />
-        </button>
-        <button className="banner-nav next" onClick={nextSlide}>
-          <ChevronRight />
-        </button>
-        <div className="banner-dots">
-          {banners.map((_, index) => (
-            <span
-              key={index}
-              className={`dot ${index === currentSlide ? 'active' : ''}`}
-              onClick={() => setCurrentSlide(index)}
-            />
-          ))}
-        </div>
       </section>
 
-      {/* Categories Section */}
-      <section className="categories-section">
-        <h2>Shop by Category</h2>
-        <div className="categories-grid">
+      {/* Categories */}
+      <section className="home-categories">
+        <div className="home-section-header">
+          <h2>Top Categories</h2>
+          <a href="/categories" className="home-view-all">View All</a>
+        </div>
+        <div className="home-categories-grid">
           {categories.map(category => (
-            <div key={category._id} className="category-card">
-              <div className="category-icon">
-                <img 
-                  src={getCategoryIcon(category.name)} 
-                  alt={category.name} 
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = placeholderIcon;
-                  }}
-                />
-              </div>
+            <a key={category._id} href={`/category/${category.slug}`} className="home-category-card">
+              <img 
+                src={`/assets/images/categories/${category.slug}.png`} 
+                alt={category.name}
+                className="home-category-icon"
+              />
               <h3>{category.name}</h3>
-              <span className="item-count">{category.itemCount} items</span>
-            </div>
+              <span>{category.itemCount} Products</span>
+            </a>
           ))}
         </div>
       </section>
 
-      {/* Trending Items Section */}
-      <section className="trending-section">
-        <h2>Trending Now</h2>
-        <div className="trending-grid">
+      {/* Trending Now */}
+      <section className="home-trending">
+        <div className="home-section-header">
+          <h2>Trending Now</h2>
+          <div className="home-trending-tabs">
+            <button className="active">All</button>
+            <button>Fashion</button>
+            <button>Electronics</button>
+            <button>Home</button>
+          </div>
+        </div>
+        <div className="home-trending-grid">
           {trendingItems.map(item => (
-            <div key={item._id} className="trending-card">
-              <div className="trending-image">
-                <img 
-                  src={item.images[0]}
-                  alt={item.title}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = placeholderIcon;
-                  }}
-                />
-                <div className="trending-overlay">
-                  <button onClick={() => handleQuickView(item)}>Quick View</button>
-                  <button onClick={() => handleAddToWishlist(item)}>
+            <div key={item._id} className="home-product-card">
+              <div className="home-product-image">
+                <img src={item.images[0]} alt={item.title} />
+                <div className="home-product-actions">
+                  <button className="home-action-btn">
                     <Heart size={20} />
                   </button>
+                  <button className="home-action-btn">
+                    <ShoppingCart size={20} />
+                  </button>
+                  <button className="home-action-btn">Quick View</button>
                 </div>
               </div>
-              <div className="trending-content">
+              <div className="home-product-content">
+                <span className="home-product-category">{item.category}</span>
                 <h3>{item.title}</h3>
-                <div className="trending-price">
-                  <span className="current-price">${item.price.toFixed(2)}</span>
-                  {item.originalPrice && (
-                    <span className="original-price">${item.originalPrice.toFixed(2)}</span>
-                  )}
-                </div>
-                <div className="trending-rating">
+                <div className="home-product-rating">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
@@ -206,7 +201,13 @@ const Home = () => {
                       className={i < (item.rating || 0) ? 'filled' : ''}
                     />
                   ))}
-                  <span>({item.reviewCount || 0})</span>
+                  <span>({item.reviewCount})</span>
+                </div>
+                <div className="home-product-price">
+                  <span className="home-price-current">${item.price.toFixed(2)}</span>
+                  {item.originalPrice && (
+                    <span className="home-price-original">${item.originalPrice.toFixed(2)}</span>
+                  )}
                 </div>
               </div>
             </div>
@@ -214,66 +215,54 @@ const Home = () => {
         </div>
       </section>
 
-      {/* New Arrivals Section */}
-      <section className="new-arrivals-section">
-        <h2>New Arrivals</h2>
-        <div className="new-arrivals-grid">
-          {newArrivals.map(item => (
-            <div key={item._id} className="arrival-card">
-              <div className="arrival-image">
-                <img 
-                  src={item.images[0]}
-                  alt={item.title}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = placeholderIcon;
-                  }}
-                />
-                <span className="new-tag">New</span>
-              </div>
-              <div className="arrival-content">
-                <h3>{item.title}</h3>
-                <p className="arrival-price">${item.price.toFixed(2)}</p>
-                <button className="add-to-cart-btn">
-                  <ShoppingCart size={16} />
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          ))}
+      {/* Features */}
+      <section className="home-features">
+        <div className="home-feature-card">
+          <Truck size={40} />
+          <h3>Free Shipping</h3>
+          <p>On orders over $50</p>
+        </div>
+        <div className="home-feature-card">
+          <Shield size={40} />
+          <h3>Money Back</h3>
+          <p>30 days guarantee</p>
+        </div>
+        <div className="home-feature-card">
+          <Headphones size={40} />
+          <h3>24/7 Support</h3>
+          <p>Dedicated support</p>
         </div>
       </section>
 
-      {/* Featured Items */}
-      <section className="featured-section">
-        <h2>Featured Items</h2>
-        <UserItemList items={featuredItems} />
-      </section>
-
-      {/* Promotional Banners */}
-      <section className="promo-section">
-        <div className="promo-grid">
-          <div className="promo-card">
-            <img src={freeShippingImg} alt="Free Shipping" />
-            <div className="promo-content">
-              <h3>Free Shipping</h3>
-              <p>On orders over $50</p>
+      {/* New Arrivals */}
+      <section className="home-new-arrivals">
+        <div className="home-section-header">
+          <h2>New Arrivals</h2>
+          <a href="/new-arrivals" className="home-view-all">View All</a>
+        </div>
+        <div className="home-arrivals-grid">
+          {newArrivals.map(item => (
+            <div key={item._id} className="home-product-card">
+              <div className="home-product-image">
+                <img src={item.images[0]} alt={item.title} />
+                <span className="home-product-tag">New</span>
+                <div className="home-product-actions">
+                  <button className="home-action-btn">
+                    <Heart size={20} />
+                  </button>
+                  <button className="home-action-btn">
+                    <ShoppingCart size={20} />
+                  </button>
+                </div>
+              </div>
+              <div className="home-product-content">
+                <h3>{item.title}</h3>
+                <div className="home-product-price">
+                  <span className="home-price-current">${item.price.toFixed(2)}</span>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="promo-card">
-            <img src={guaranteeImg} alt="Money Back Guarantee" />
-            <div className="promo-content">
-              <h3>100% Money Back</h3>
-              <p>30 day guarantee</p>
-            </div>
-          </div>
-          <div className="promo-card">
-            <img src={supportImg} alt="24/7 Support" />
-            <div className="promo-content">
-              <h3>24/7 Support</h3>
-              <p>Dedicated support</p>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
     </div>

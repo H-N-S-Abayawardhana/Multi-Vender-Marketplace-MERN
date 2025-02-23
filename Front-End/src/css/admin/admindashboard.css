@@ -1,41 +1,215 @@
-.a-dash-container {
-    text-align: center;
-    padding: 20px;
-    background-color: #ffffff;
-}
-
-.a-dash-title {
-    font-size: 24px;
-    color: #333;
-    margin-top: 20px;
-}
-
-.a-dash-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px; 
-    max-width: 800px;
+/* dashboard.css */
+.dashboard-container {
+    padding: 2rem;
+    max-width: 1400px;
     margin: 0 auto;
-    margin-top: 100px;
-    margin-bottom: 100px;
+    min-height: 100vh;
+    background: #f8fafc;
 }
 
-.a-dash-box {
-    background-color: #82daff;
-    color: #7b8588;
-    border: none;
-    padding: 20px;
-    font-size: 24px;
-    border-radius: 8px;
+.dashboard-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.dashboard-header h1 {
+    font-size: 2.5rem;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.dashboard-header p {
+    color: #64748b;
+    font-size: 1.1rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.dashboard-card {
+    height: 250px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
     cursor: pointer;
-    transition: 0.3s;
-    height: 200px;
-    width: 200px;
-    margin: 20px; 
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.a-dash-box:hover {
-    background-color: #0f8ec0;
-    font-size: 24px;
+.card-content {
+    height: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    color: #fff;
+}
+
+.icon-wrapper {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1rem;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.dashboard-icon {
+    width: 32px;
+    height: 32px;
     color: white;
+}
+
+.card-content h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.card-content p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    max-width: 200px;
+    transition: all 0.3s ease;
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Admin-specific gradient backgrounds */
+.manage-sellers {
+    background: linear-gradient(135deg, #1a237e, #283593);
+}
+
+.manage-stores {
+    background: linear-gradient(135deg, #004d40, #00695c);
+}
+
+.manage-users {
+    background: linear-gradient(135deg, #311b92, #4527a0);
+}
+
+.customers {
+    background: linear-gradient(135deg, #b71c1c, #c62828);
+}
+
+.messages {
+    background: linear-gradient(135deg, #006064, #00838f);
+}
+
+.analytics {
+    background: linear-gradient(135deg, #0d47a1, #1565c0);
+}
+
+/* Hover Effects */
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-card:hover .icon-wrapper {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.dashboard-card:hover .card-content h2 {
+    transform: translateY(-2px);
+}
+
+.dashboard-card:hover .card-content p {
+    opacity: 1;
+}
+
+.dashboard-card:hover .card-overlay {
+    background: rgba(0, 0, 0, 0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 1rem;
+    }
+
+    .dashboard-header h1 {
+        font-size: 2rem;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .dashboard-card {
+        height: 200px;
+    }
+
+    .card-content h2 {
+        font-size: 1.2rem;
+    }
+
+    .card-content p {
+        font-size: 0.8rem;
+    }
+}
+
+/* Animation for cards on page load */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dashboard-card {
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: calc(var(--animation-order) * 0.1s);
+}
+
+
+.dashboard-card.disabled {
+    position: relative;
+}
+
+.dashboard-card.disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.coming-soon-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.disabled .card-content {
+    pointer-events: none;
 }

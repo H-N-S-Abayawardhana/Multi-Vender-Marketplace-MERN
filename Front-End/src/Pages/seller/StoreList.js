@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../css/seller/storelist.css';
 import SellerNavBar from '../../components/seller/sellerNavBar.js'; 
 import Footer from '../../components/Footer';
@@ -9,6 +9,7 @@ const StoreList = () => {
   const [stores, setStores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStores = async () => {
@@ -34,6 +35,11 @@ const StoreList = () => {
 
         if (response.data.success) {
           setStores(response.data.stores);
+          // If user has exactly one store, redirect to that store's details page
+          if (response.data.stores.length === 1) {
+            navigate(`/store/${response.data.stores[0]._id}`);
+            return;
+          }
         }
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch stores');
@@ -43,7 +49,7 @@ const StoreList = () => {
     };
 
     fetchStores();
-  }, []);
+  }, [navigate]);
 
   if (loading) {
     return (
@@ -64,81 +70,21 @@ const StoreList = () => {
     );
   }
 
+  // Only render the store list page if the user has no stores
   return (
     <>
     <SellerNavBar />
     <div className="storelist-sell-container">
       <div className="storelist-sell-header">
-        <h2>My Stores</h2>
-
+        <h2>My Store</h2>
       </div>
 
-      {stores.length === 0 ? (
-        <div className="storelist-sell-empty">
-          <p>You haven't created any stores yet.</p>
-          <Link to="/add-store" className="storelist-sell-create-button">
-            Create Your First Store
-          </Link>
-        </div>
-      ) : (
-        <div className="storelist-sell-grid">
-          {stores.map((store) => (
-            <Link
-              to={`/store/${store._id}`}
-              key={store._id}
-              className="storelist-sell-card"
-            >
-              <div className="storelist-sell-banner">
-                {store.banner ? (
-                  <img
-                    src={`http://localhost:9000${store.banner}`}
-                    alt={store.storeName}
-                  />
-                ) : (
-                  <div className="storelist-sell-no-banner">
-                    <span>No Banner Image</span>
-                  </div>
-                )}
-              </div>
-              
-              <div className="storelist-sell-content">
-                <div className="storelist-sell-store-header">
-                  <div className="storelist-sell-logo">
-                    {store.logo ? (
-                      <img
-                        src={`http://localhost:9000${store.logo}`}
-                        alt={`${store.storeName} logo`}
-                      />
-                    ) : (
-                      <div className="storelist-sell-no-logo">
-                        <span>No Logo</span>
-                      </div>
-                    )}
-                  </div>
-                  <h3>{store.storeName}</h3>
-                </div>
-                
-                <p className="storelist-sell-description">{store.description}</p>
-                
-                <div className="storelist-sell-details">
-                  <div className="storelist-sell-detail-item">
-                    <span className="storelist-sell-detail-label">Email:</span>
-                    <span className="storelist-sell-detail-value">{store.email}</span>
-                  </div>
-                  <div className="storelist-sell-detail-item">
-                    <span className="storelist-sell-detail-label">Phone:</span>
-                    <span className="storelist-sell-detail-value">{store.phone}</span>
-                  </div>
-                  <div className="storelist-sell-detail-item">
-                    <span className="storelist-sell-detail-label">Address:</span>
-                    <span className="storelist-sell-detail-value">{store.address}</span>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      )}
+      <div className="storelist-sell-empty">
+        <p>You haven't created a store yet.</p>
+        <Link to="/add-store" className="storelist-sell-create-button">
+          Create Your Store
+        </Link>
+      </div>
     </div>
     <Footer />
     </>
