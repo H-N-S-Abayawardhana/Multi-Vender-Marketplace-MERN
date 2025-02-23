@@ -69,7 +69,7 @@ const adminController = {
             // Update seller status
             const seller = await Seller.findOneAndUpdate(
                 { 'personalInfo.email': email },
-                { 'businessInfo.status': status },
+                { 'status': status },
                 { new: true }
             );
 
