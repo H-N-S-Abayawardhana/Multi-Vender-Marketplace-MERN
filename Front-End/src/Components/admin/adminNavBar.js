@@ -1,20 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaBell } from 'react-icons/fa';
-import { RiDashboardLine } from 'react-icons/ri';
+import axios from 'axios';
 import Swal from 'sweetalert2';
 import logo from '../../assets/images/logo.png';
 
 const AdminNavBar = () => {
   const navigate = useNavigate();
+  const [unreadCount, setUnreadCount] = useState(0);
 
-  // Handler for notification click - now navigates to notifications page
+  // Fetch unread notifications count
+  const fetchUnreadCount = async () => {
+    try {
+      const response = await axios.get('http://localhost:9000/api/notifications');
+      const unreadNotifications = response.data.data.filter(notification => !notification.isRead);
+      setUnreadCount(unreadNotifications.length);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    }
+  };
+
+  // Fetch count when component mounts and set up interval
+  useEffect(() => {
+    fetchUnreadCount();
+    
+    // Set up polling interval to check for new notifications
+    const interval = setInterval(fetchUnreadCount, 30000); // Check every 30 seconds
+    
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
+  }, []);
+
   const handleNotificationClick = (e) => {
     e.preventDefault();
     navigate('/admin-notifications');
   };
 
-  // Logout handler
   const handleLogout = async () => {
     try {
       const sessionId = localStorage.getItem('sessionId');
@@ -28,15 +49,8 @@ const AdminNavBar = () => {
       });
 
       if (response.ok) {
-        // Clear ALL localStorage items
-        localStorage.removeItem('token');
-        localStorage.removeItem('sessionId');
-        localStorage.removeItem('email');
-        localStorage.removeItem('userLevel');
-        localStorage.removeItem('userData');
         localStorage.clear();
-
-        // Show success message
+        
         Swal.fire({
           title: 'Logged Out!',
           text: 'You have been successfully logged out',
@@ -45,7 +59,6 @@ const AdminNavBar = () => {
           timer: 1500
         });
 
-        // Redirect to login page
         navigate('/');
       } else {
         throw new Error('Logout failed');
@@ -64,7 +77,6 @@ const AdminNavBar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
       <div className="container">
-        {/* Logo */}
         <Link className="navbar-brand" to="/admin">
           <img 
             src={logo} 
@@ -74,7 +86,6 @@ const AdminNavBar = () => {
           />
         </Link>
 
-        {/* Toggle button for mobile */}
         <button 
           className="navbar-toggler" 
           type="button" 
@@ -87,18 +98,14 @@ const AdminNavBar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* Navbar content */}
         <div className="collapse navbar-collapse" id="navbarContent">
-          {/* All items aligned to the right */}
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-            {/* Dashboard Link */}
             <li className="nav-item mx-3">
               <Link className="nav-link d-flex align-items-center" to="/admin-dashboard">
                 Dashboard
               </Link>
             </li>
 
-            {/* Notification Icon - Updated to use Link component */}
             <li className="nav-item mx-3">
               <Link 
                 to="/admin-notifications"
@@ -106,14 +113,15 @@ const AdminNavBar = () => {
                 onClick={handleNotificationClick}
               >
                 <FaBell size={20} />
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  0
-                  <span className="visually-hidden">unread notifications</span>
-                </span>
+                {unreadCount > 0 && (
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {unreadCount}
+                    <span className="visually-hidden">unread notifications</span>
+                  </span>
+                )}
               </Link>
             </li>
 
-            {/* Profile Dropdown */}
             <li className="nav-item dropdown mx-3">
               <a 
                 className="nav-link dropdown-toggle" 
