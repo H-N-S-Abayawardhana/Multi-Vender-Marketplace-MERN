@@ -2,6 +2,7 @@ const Seller = require('../Models/Seller');
 const Notification = require('../Models/Notification');
 
 const sellerController = {
+    // Register new seller
     registerSeller: async (req, res) => {
         try {
             const {
@@ -63,6 +64,37 @@ const sellerController = {
             res.status(500).json({
                 success: false,
                 message: 'Error submitting seller application',
+                error: error.message
+            });
+        }
+    },
+
+    // Get seller status by email
+    getSellerStatus: async (req, res) => {
+        try {
+            const { email } = req.params;
+            console.log('Checking status for email:', email); // Debug log
+            
+            const seller = await Seller.findOne({ 'personalInfo.email': email });
+            console.log('Found seller:', seller); // Debug log
+            
+            if (!seller) {
+                return res.status(200).json({ 
+                    success: true,
+                    status: null 
+                });
+            }
+            
+            res.status(200).json({
+                success: true,
+                status: seller.status
+            });
+
+        } catch (error) {
+            console.error('Error in getSellerStatus:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Error checking seller status',
                 error: error.message
             });
         }

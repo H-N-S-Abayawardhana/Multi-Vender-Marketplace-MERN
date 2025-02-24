@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaUser, FaBell } from 'react-icons/fa';
 import Swal from 'sweetalert2';
@@ -6,9 +6,30 @@ import logo from '../assets/images/logo.png';
 
 const NavBar = () => {
   const navigate = useNavigate();
-  const isLoggedIn = !!localStorage.getItem('token'); // Check if user is authenticated
+  const [isPendingSeller, setIsPendingSeller] = useState(false);
+  const isLoggedIn = !!localStorage.getItem('token');
+  const userEmail = localStorage.getItem('email');
 
-  // Handler for cart click
+  useEffect(() => {
+    const checkSellerStatus = async () => {
+      if (isLoggedIn && userEmail) {
+        console.log('Checking status for email:', userEmail); // Debug log
+        try {
+          const response = await fetch(`http://localhost:9000/api/seller/status/${userEmail}`);
+          const data = await response.json();
+          console.log('API Response:', data); // Debug log
+          
+          setIsPendingSeller(data.status === 'pending');
+          console.log('isPendingSeller set to:', data.status === 'pending'); // Debug log
+        } catch (error) {
+          console.error('Error checking seller status:', error);
+        }
+      }
+    };
+  
+    checkSellerStatus();
+  }, [isLoggedIn, userEmail]);
+
   const handleCartClick = (e) => {
     e.preventDefault();
     Swal.fire({
@@ -20,7 +41,6 @@ const NavBar = () => {
     });
   };
 
-  // Handler for notification click
   const handleNotificationClick = (e) => {
     e.preventDefault();
     Swal.fire({
@@ -32,7 +52,6 @@ const NavBar = () => {
     });
   };
 
-  // Logout handler
   const handleLogout = async () => {
     try {
       const sessionId = localStorage.getItem('sessionId');
@@ -46,10 +65,7 @@ const NavBar = () => {
       });
 
       if (response.ok) {
-        // Clear ALL localStorage items
         localStorage.clear();
-
-        // Show success message
         Swal.fire({
           title: 'Logged Out!',
           text: 'You have been successfully logged out',
@@ -57,8 +73,6 @@ const NavBar = () => {
           confirmButtonColor: '#3085d6',
           timer: 1500
         });
-
-        // Redirect to login page
         navigate('/');
       } else {
         throw new Error('Logout failed');
@@ -77,7 +91,6 @@ const NavBar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
       <div className="container">
-        {/* Logo */}
         <Link className="navbar-brand" to="/">
           <img 
             src={logo} 
@@ -87,7 +100,6 @@ const NavBar = () => {
           />
         </Link>
 
-        {/* Toggle button for mobile */}
         <button 
           className="navbar-toggler" 
           type="button" 
@@ -100,12 +112,24 @@ const NavBar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* Navbar content */}
+        {isLoggedIn && isPendingSeller && (
+          <div
+            style={{
+              backgroundColor: "#fff285",
+              border: "1px solid #9d9444",
+              borderRadius: "0.5rem",
+              padding: "1rem",
+              marginBottom: "1px",
+              color: "#958a2f",
+              marginLeft: "400px",
+            }}
+          >
+            Your Seller request is processing...
+          </div>
+        )}
+
         <div className="collapse navbar-collapse" id="navbarContent">
-          {/* All items aligned to the right */}
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-           
-            {/* Cart Icon */}
             <li className="nav-item mx-3">
               <a className="nav-link position-relative" href="#" onClick={handleCartClick}>
                 <FaShoppingCart size={20} />
@@ -116,8 +140,7 @@ const NavBar = () => {
               </a>
             </li>
 
-             {/* Notification Icon */}
-             <li className="nav-item mx-3">
+            <li className="nav-item mx-3">
               <a className="nav-link position-relative" href="#" onClick={handleNotificationClick}>
                 <FaBell size={20} />
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -127,46 +150,51 @@ const NavBar = () => {
               </a>
             </li>
 
-            {/* Profile Dropdown */}
-            <li className="nav-item dropdown mx-3">
-              <a 
-                className="nav-link dropdown-toggle" 
-                href="#" 
-                id="profileDropdown" 
-                role="button" 
-                data-bs-toggle="dropdown" 
-                aria-expanded="false"
-              >
-                <FaUser size={20} />
-              </a>
-              <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                <li>
-                  <Link className="dropdown-item" to="/user-profile">
-                    Profile
+            {isLoggedIn ? (
+              <>
+                <li className="nav-item dropdown mx-3">
+                  <a 
+                    className="nav-link dropdown-toggle" 
+                    href="#" 
+                    id="profileDropdown" 
+                    role="button" 
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false"
+                  >
+                    <FaUser size={20} />
+                  </a>
+                  <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                    <li>
+                      <Link className="dropdown-item" to="/user-profile">
+                        Profile
+                      </Link>
+                    </li>
+                    <li><hr className="dropdown-divider" /></li>
+                    <li>
+                      <button 
+                        className="dropdown-item" 
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </li>
+                {!isPendingSeller && (
+                  <li className="nav-item mx-3">
+                    <Link className="btn btn-primary" to="/become-seller">
+                      Become a Seller
+                    </Link>
+                  </li>
+                )}
+              </>
+            ) : (
+              <>
+                <li className="nav-item mx-3">
+                  <Link className="btn btn-primary" to="/login">
+                    Become a Seller
                   </Link>
                 </li>
-                <li><hr className="dropdown-divider" /></li>
-                <li>
-                  <button 
-                    className="dropdown-item" 
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
-                </li>
-              </ul>
-            </li>
-
-            {/* Become a Seller Button */}
-            <li className="nav-item mx-3">
-              <Link className="btn btn-primary" to="/become-seller">
-                Become a Seller
-              </Link>
-            </li>
-
-            {/* Auth Buttons - Conditionally rendered */}
-            {!isLoggedIn && (
-              <>
                 <li className="nav-item mx-3">
                   <Link className="btn btn-outline-dark" to="/login">
                     Sign In

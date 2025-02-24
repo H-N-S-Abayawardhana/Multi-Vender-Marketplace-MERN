@@ -1,0 +1,210 @@
+/* shopnow.css */
+.shop-now-page-container {
+    min-height: 100vh;
+    background-color: #f9fafb;
+  }
+  
+  .shop-now-page-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+  
+  .shop-now-page-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #111827;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Promo Header */
+  .shop-now-page-promo-header {
+    background: linear-gradient(to right, #2563eb, #7c3aed);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .shop-now-page-promo-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .shop-now-page-promo-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  .shop-now-page-promo-button {
+    font-size: 0.875rem;
+    color: white;
+  }
+  
+  .shop-now-page-promo-button:hover {
+    text-decoration: underline;
+  }
+  
+  /* Welcome Alert */
+  .shop-now-page-welcome-alert {
+    background-color: #dbeafe;
+    border: 1px solid #93c5fd;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    color: #1e40af;
+  }
+  
+  /* Category Navigation */
+  .shop-now-page-category-nav {
+    background-color: white;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 1.5rem;
+  }
+  
+  .shop-now-page-category-list {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+  }
+  
+  .shop-now-page-category-button {
+    color: #4b5563;
+    font-weight: 500;
+    white-space: nowrap;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    transition: color 0.2s;
+  }
+  
+  .shop-now-page-category-button:hover {
+    color: #2563eb;
+  }
+  
+  /* Tabs */
+  .shop-now-page-tabs-container {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .shop-now-page-tabs-header {
+    display: flex;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .shop-now-page-tab-button {
+    padding: 1rem 1.5rem;
+    font-weight: 500;
+    color: #6b7280;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  
+  .shop-now-page-tab-button:hover {
+    color: #2563eb;
+  }
+  
+  .shop-now-page-tab-button.shop-now-page-active {
+    color: #2563eb;
+    border-bottom-color: #2563eb;
+  }
+  
+  .shop-now-page-tab-panel {
+    padding: 1.5rem;
+  }
+  
+  /* Featured Deals */
+  .shop-now-page-deals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .shop-now-page-deal-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s;
+  }
+  
+  .shop-now-page-deal-card:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .shop-now-page-deal-title {
+    font-weight: bold;
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .shop-now-page-deal-discount {
+    color: #dc2626;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .shop-now-page-deal-time {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+  
+  .shop-now-page-icon-red {
+    color: #dc2626;
+  }
+  
+  .shop-now-page-icon-purple {
+    color: #7c3aed;
+  }
+  
+  .shop-now-page-icon-green {
+    color: #059669;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 640px) {
+    .shop-now-page-title {
+      font-size: 1.5rem;
+    }
+    
+    .shop-now-page-tabs-header {
+      flex-direction: column;
+    }
+    
+    .shop-now-page-tab-button {
+      width: 100%;
+      text-align: center;
+    }
+    
+    .shop-now-page-category-list {
+      padding: 0.5rem;
+      gap: 1rem;
+    }
+    
+    .shop-now-page-deal-card {
+      padding: 1rem;
+    }
+  }
+  
+  /* Additional Hover Effects */
+  .shop-now-page-category-button:active,
+  .shop-now-page-tab-button:active {
+    transform: translateY(1px);
+  }
+  
+  .shop-now-page-deal-card:active {
+    transform: scale(0.98);
+  }

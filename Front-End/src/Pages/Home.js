@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ShoppingCart, Heart, Search, Star, ChevronLeft, ChevronRight, Truck, Shield, Headphones } from 'lucide-react';
 import UserItemList from '../components/UserItemList';
+import NavBar from '../components/NavBar';
 import '../../src/css/Home.css';
 
 const Home = () => {
@@ -77,6 +78,8 @@ const Home = () => {
   }
 
   return (
+    <>
+    <NavBar/>
     <div className="home-container">
       {/* Hero Section */}
       <section className="home-hero">
@@ -266,6 +269,7 @@ const Home = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

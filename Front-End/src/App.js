@@ -13,6 +13,7 @@ import Checkout from './Pages/CheckoutPage';
 import SellerProfile from './Pages/UserProfile';
 import AdminProfile from './Pages/UserProfile';
 import BecomeSeller from './Pages/BecomeSeller';
+import ShopNowPage from './Pages/shopnow';
 import SellerDashboard from './Pages/seller/SellerDashboard';
 import AddStore from './Pages/seller/AddStore';
 import AddItems from './Pages/seller/AddItems';
@@ -42,6 +43,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/user-profile" element={<BuyerProtectedRoute><UserProfile /></BuyerProtectedRoute>} />
         <Route path="/become-seller" element={<BecomeSeller />} />
+        <Route path="/shop-now" element={<ShopNowPage />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/seller-dashboard" element={<SellerProtectedRoute><SellerDashboard /></SellerProtectedRoute>} />
         <Route path="/add-store" element={<SellerProtectedRoute><AddStore /></SellerProtectedRoute>} />
