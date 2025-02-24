@@ -16,10 +16,10 @@ const DashboardSquares = () => {
             disabled: false
         },
         {
-            title: "My Stores",
+            title: "My Store",
             icon: <Store className="dashboard-icon" />,
             path: "/stores",
-            description: "Manage your existing stores",
+            description: "Manage your existing store",
             bgClass: "my-stores",
             disabled: false
         },

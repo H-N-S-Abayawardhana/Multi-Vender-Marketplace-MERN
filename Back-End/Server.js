@@ -30,6 +30,7 @@ app.use(express.json());
 
 app.use(express.static('uploads'));
 
+
 // ✅ Routes
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);

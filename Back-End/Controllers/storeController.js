@@ -1,5 +1,6 @@
 // Backend - controllers/storeController.js
 const Store = require('../Models/Store');
+const Seller = require('../Models/Seller');
 const multer = require('multer');
 const path = require('path');
 
@@ -86,6 +87,36 @@ exports.addStore = async (req, res) => {
       });
     }
   });
+};
+
+exports.getAllStores = async (req, res) => {
+  try {
+    const stores = await Store.find().sort({ createdAt: -1 });
+    
+    // Get seller information for each store
+    const storesWithSellerInfo = await Promise.all(stores.map(async (store) => {
+      const seller = await Seller.findOne({ 'personalInfo.email': store.owner });
+      return {
+        ...store.toObject(),
+        sellerInfo: seller ? {
+          name: seller.personalInfo.fullName,
+          email: seller.personalInfo.email,
+          phone: seller.personalInfo.mobileNumber
+        } : null
+      };
+    }));
+
+    res.status(200).json({
+      success: true,
+      stores: storesWithSellerInfo
+    });
+  } catch (error) {
+    console.error('Error in getAllStores:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
 };
 
 exports.getUserStores = async (req, res) => {

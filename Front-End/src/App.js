@@ -20,6 +20,7 @@ import SellerNotifications from './Pages/seller/SellerNotifications';
 import AdminNotificationPage from './Pages/admin/AdminNotificationPage';
 import AdminDashboard from './Pages/admin/AdminDashboard';
 import SellerRequests from './Pages/admin/SellerRequests';
+import AllStores from './Pages/admin/AllStores';
 
 // Import protected routes
 //import { BuyerProtectedRoute, SellerProtectedRoute, AdminProtectedRoute } from './components/ProtectedRoutes';
@@ -53,6 +54,7 @@ function App() {
         <Route path="/admin-dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
         <Route path="/seller-requests" element={<AdminProtectedRoute><SellerRequests /></AdminProtectedRoute>} />
         <Route path="/admin-profile" element={<AdminProtectedRoute><SellerProfile /></AdminProtectedRoute>} />
+        <Route path="/all-stores" element={<AdminProtectedRoute><AllStores /></AdminProtectedRoute>} />
       </Routes>
       </div>
     </Router>

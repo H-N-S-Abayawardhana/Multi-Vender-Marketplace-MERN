@@ -18,7 +18,7 @@ const DashboardSquares = () => {
         {
             title: "Manage Stores",
             icon: <Store className="dashboard-icon" />,
-            path: "/manage-stores",
+            path: "/all-stores",
             description: "Monitor and control store operations",
             bgClass: "manage-stores",
             disabled: false

@@ -7,5 +7,7 @@ router.get('/user-stores', storeController.getUserStores);
 router.get('/:id', storeController.getStoreById);
 router.put('/:id', storeController.updateStore);
 router.delete('/:id', storeController.deleteStore);
+// routes/storeRoutes.js
+router.get('/', storeController.getAllStores);
 
 module.exports = router;

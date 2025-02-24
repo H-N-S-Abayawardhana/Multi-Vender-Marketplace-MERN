@@ -98,6 +98,26 @@ const itemController = {
     }
   },
 
+    // Check if store exists for item addition
+    checkStoreForItem: async (req, res) => {
+      try {
+        const { email } = req.params;
+        const store = await Store.findOne({ email });
+        
+        res.json({
+          exists: !!store,
+          storeId: store?._id
+        });
+      } catch (error) {
+        console.error('Error in checkStoreForItem:', error);
+        res.status(500).json({
+          error: 'Error checking store existence',
+          message: error.message
+        });
+      }
+    },
+  
+
   getSellerItems: async (req, res) => {
     try {
       const items = await Item.find({ email: req.query.email });

@@ -15,4 +15,7 @@ router.post('/add', itemController.addItem);
 // Get specific item route - This should come last
 router.get('/:id', itemController.getItem);
 
+// Route to check if store exists before adding item
+router.get('/check-store/:email',  itemController.checkStoreForItem);
+
 module.exports = router;

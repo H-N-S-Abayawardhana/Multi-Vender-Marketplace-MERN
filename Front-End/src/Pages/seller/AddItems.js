@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../css/seller/additems.css';
 
+
 const AddItem = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -127,6 +128,54 @@ const AddItem = () => {
       }));
     }
   };
+
+    // Check if store exists when component mounts
+    useEffect(() => {
+      const checkStoreExists = async () => {
+        const token = localStorage.getItem('token');
+        const userEmail = localStorage.getItem('email');
+        
+        if (!token || !userEmail) {
+          toast.error('Please login first');
+          navigate('/login');
+          return;
+        }
+  
+        try {
+          const response = await axios.get(
+            `http://localhost:9000/api/items/check-store/${userEmail}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          );
+          
+          if (!response.data.exists) {
+            
+            navigate('/add-store');
+            toast.error('Please create a store first to add items');
+            return;
+          }
+  
+          setFormData(prev => ({
+            ...prev,
+            email: userEmail
+          }));
+  
+        } catch (error) {
+          if (error.response?.status === 401) {
+            toast.error('Session expired. Please login again');
+            navigate('/login');
+          } else {
+            toast.error('Error checking store existence');
+            navigate('/add-store');
+          }
+        }
+      };
+  
+      checkStoreExists();
+    }, [navigate]);
 
   // Handle category selection or custom category addition
   const handleCategorySelect = (category) => {
