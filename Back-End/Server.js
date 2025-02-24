@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path')
 
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
@@ -41,9 +42,12 @@ app.use('/api/admin',adminRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api', sellnotiRoutes);
-app.use('/uploads', express.static('uploads')); 
+// app.use('/uploads', express.static('uploads')); 
 
-app.use('/uploads', express.static('uploads'));
+// app.use('/uploads', express.static('uploads'));
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 // ✅ Health check route
 app.get('/health', (req, res) => {

@@ -1,115 +1,215 @@
-// Home.js
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { ShoppingCart, Heart, Search, Star, ChevronLeft, ChevronRight, Truck, Shield, Headphones } from 'lucide-react';
-import UserItemList from '../components/UserItemList';
-import NavBar from '../components/NavBar';
+import { ArrowRight, Sparkles, Star, ChevronLeft, ChevronRight, TrendingUp, Package } from 'lucide-react';
 import '../../src/css/Home.css';
+import summerSaleBanner from '../assets/images/summer-sale-banner.jpg';
+import newarrivals from '../assets/images/new-arrivals-banner.jpg';
+import freeShipping from '../assets/images/free-shipping-banner.jpg';
+import NavBar from '../components/NavBar';
+import Footer from '../components/Footer';
+
+const banners = [
+  {
+    title: "Summer Sale",
+    description: "Up to 50% off on selected items",
+    image: summerSaleBanner,
+    buttonText: "Shop Now",
+    link: "/sale"
+  },
+  {
+    title: "New Arrivals",
+    description: "Check out our latest collection",
+    image: newarrivals,
+    buttonText: "Explore",
+    link: "/new-arrivals"
+  },
+  {
+    title: "Free Shipping",
+    description: "On orders over $100",
+    image: freeShipping ,
+    buttonText: "Learn More",
+    link: "/shipping"
+  }
+];
 
 const Home = () => {
   const [featuredItems, setFeaturedItems] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [trendingItems, setTrendingItems] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
-  const [flashDeals, setFlashDeals] = useState([]);
+  const [categoryItems, setCategoryItems] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-  const banners = [
-    {
-      id: 1,
-      image: '/assets/images/banners/fashion-banner.jpg', // 1920x600px
-      title: 'Summer Collection 2025',
-      subtitle: 'Fashion Week Special',
-      description: 'Up to 70% off on designer brands'
-    },
-    {
-      id: 2,
-      image: '/assets/images/banners/tech-banner.jpg', // 1920x600px
-      title: 'Tech Bonanza',
-      subtitle: 'Latest Gadgets',
-      description: 'Free shipping on orders above $999'
-    },
-    {
-      id: 3,
-      image: '/assets/images/banners/home-banner.jpg', // 1920x600px
-      title: 'Home & Living',
-      subtitle: 'Interior Special',
-      description: 'Get 30% off on home decor'
-    }
+  const featuredCategories = [
+    { name: 'Electronics', icon: '🔌' },
+    { name: 'Clothing', icon: '👕' },
+    { name: 'Home', icon: '🏠' },
+    { name: 'Books', icon: '📚' },
+    { name: 'Sports', icon: '⚽' },
+    { name: 'Beauty', icon: '💄' },
+    { name: 'Automotive', icon: '🚗' },
+    { name: 'Garden', icon: '🌱' }
   ];
 
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
-        const [itemsResponse, categoriesResponse] = await Promise.all([
+        setLoading(true);
+        const [
+          featuredResponse,
+          trendingResponse,
+          newArrivalsResponse,
+          categoryResponse
+        ] = await Promise.all([
           axios.get('http://localhost:9000/api/items/featured'),
-          axios.get('http://localhost:9000/api/categories')
+          axios.get('http://localhost:9000/api/items/trending'),
+          axios.get('http://localhost:9000/api/items/new-arrivals'),
+          axios.get('http://localhost:9000/api/items/by-categories', {
+            params: {
+              categories: ['Electronics', 'Clothing', 'Home', 'Beauty', 'Sports'],
+              limit: 4
+            }
+          })
         ]);
 
-        setFeaturedItems(itemsResponse.data);
-        setCategories(categoriesResponse.data);
-        setTrendingItems(itemsResponse.data.slice(0, 8));
-        setNewArrivals(itemsResponse.data.slice(8, 16));
-        setFlashDeals(itemsResponse.data.slice(16, 20));
+        setFeaturedItems(featuredResponse.data);
+        setTrendingItems(trendingResponse.data);
+        setNewArrivals(newArrivalsResponse.data);
+        setCategoryItems(categoryResponse.data);
         setLoading(false);
-      } catch (error) {
-        console.error('Error fetching home data:', error);
+      } catch (err) {
+        console.error('Error fetching home data:', err);
+        setError('Failed to load home page data. Please try again later.');
         setLoading(false);
       }
     };
 
     fetchHomeData();
-
-    const slideInterval = setInterval(() => {
-      setCurrentSlide(prev => (prev + 1) % banners.length);
-    }, 5000);
-
-    return () => clearInterval(slideInterval);
   }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % banners.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % banners.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length);
+  };
 
   if (loading) {
     return (
-      <div className="home-loading">
-        <div className="home-loading-spinner"></div>
-        <p>Discovering amazing deals for you...</p>
+      <div className="homepage-loading">
+        <div className="homepage-loading-spinner"></div>
+        <p>Loading amazing products for you...</p>
       </div>
     );
   }
 
+  if (error) {
+    return (
+      <div className="homepage-error">
+        <p>{error}</p>
+        <button className="homepage-retry-btn" onClick={() => window.location.reload()}>Try Again</button>
+      </div>
+    );
+  }
+
+  const renderItemCard = (item) => (
+    <Link to={`/item/${item._id}`} key={item._id} className="homepage-item-card">
+      <div className="homepage-item-image">
+        {item.images && item.images[0] ? (
+          <img 
+            src={`/assets/images/products/${item.images[0]}`} 
+            alt={item.title}
+            loading="lazy"
+          />
+        ) : (
+          <div className="homepage-no-image">No Image</div>
+        )}
+        {item.listingType === 'Auction' && (
+          <div className="homepage-badge auction">Auction</div>
+        )}
+        {item.condition !== 'New' && (
+          <div className="homepage-badge condition">{item.condition}</div>
+        )}
+      </div>
+      <div className="homepage-item-details">
+        <h3>{item.title}</h3>
+        <div className="homepage-item-category">{item.category}</div>
+        <div className="homepage-item-price">
+          {item.listingType === 'Fixed' ? (
+            <>
+              <span className="homepage-current-price">${item.price.toFixed(2)}</span>
+              {item.originalPrice && item.originalPrice > item.price && (
+                <span className="homepage-original-price">
+                  ${item.originalPrice.toFixed(2)}
+                </span>
+              )}
+            </>
+          ) : (
+            <span className="homepage-current-price">Starting bid: ${item.startingBid.toFixed(2)}</span>
+          )}
+        </div>
+        {item.rating && (
+          <div className="homepage-item-rating">
+            <Star className="homepage-star-icon" size={16} />
+            <span>{item.rating.toFixed(1)} ({item.reviews || 0} reviews)</span>
+          </div>
+        )}
+      </div>
+    </Link>
+  );
+
   return (
     <>
     <NavBar/>
-    <div className="home-container">
-      {/* Hero Section */}
-      <section className="home-hero">
-        <div className="home-banner-container">
-          {banners.map((banner, index) => (
-            <div
-              key={banner.id}
-              className={`home-banner-slide ${index === currentSlide ? 'active' : ''}`}
-              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-            >
-              <img src={banner.image} alt={banner.title} />
-              <div className="home-banner-content">
-                <span className="home-banner-subtitle">{banner.subtitle}</span>
-                <h1>{banner.title}</h1>
-                <p>{banner.description}</p>
-                <button className="home-banner-btn">Shop Now</button>
-              </div>
-            </div>
-          ))}
-          <button className="home-banner-nav prev" onClick={() => setCurrentSlide(prev => (prev - 1 + banners.length) % banners.length)}>
-            <ChevronLeft />
+    <div className="homepage-container">
+      {/* Hero Carousel */}
+      <section className="homepage-hero">
+        <div className="homepage-carousel">
+          <button className="homepage-carousel-btn homepage-carousel-btn-left" onClick={prevSlide}>
+            <ChevronLeft size={20} />
           </button>
-          <button className="home-banner-nav next" onClick={() => setCurrentSlide(prev => (prev + 1) % banners.length)}>
-            <ChevronRight />
-          </button>
-          <div className="home-banner-dots">
-            {banners.map((_, index) => (
-              <span
+          <div className="homepage-carousel-slides">
+            {banners.map((banner, index) => (
+              <div
                 key={index}
-                className={`home-dot ${index === currentSlide ? 'active' : ''}`}
+                className={`homepage-carousel-slide ${
+                  index === currentSlide ? 'active' : ''
+                }`}
+                style={{ transform: `translateX(${(index - currentSlide) * 100}%)` }}
+              >
+                <img 
+                  src={banner.image} 
+                  alt={banner.title} 
+                  className="homepage-banner-image"
+                />
+                <div className="homepage-carousel-content">
+                  <h2>{banner.title}</h2>
+                  <p>{banner.description}</p>
+                  <Link to={banner.link} className="homepage-carousel-button">
+                    {banner.buttonText} <ArrowRight size={16} />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button className="homepage-carousel-btn homepage-carousel-btn-right" onClick={nextSlide}>
+            <ChevronRight size={20} />
+          </button>
+          <div className="homepage-carousel-indicators">
+            {banners.map((_, index) => (
+              <button
+                key={index}
+                className={`homepage-carousel-indicator ${index === currentSlide ? 'active' : ''}`}
                 onClick={() => setCurrentSlide(index)}
               />
             ))}
@@ -117,159 +217,86 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Flash Deals */}
-      <section className="home-flash-deals">
-        <div className="home-section-header">
-          <h2>Flash Deals</h2>
-          <div className="home-countdown">
-            Ends in: 12:30:45
-          </div>
+      {/* Featured Categories */}
+      <section className="homepage-categories">
+        <div className="homepage-section-header">
+          <h2>Shop by Category</h2>
+          <Link to="/categories" className="homepage-view-all">
+            View All Categories <ArrowRight size={16} />
+          </Link>
         </div>
-        <div className="home-flash-grid">
-          {flashDeals.map(deal => (
-            <div key={deal._id} className="home-flash-card">
-              <div className="home-flash-discount">-{deal.discount}%</div>
-              <img src={deal.images[0]} alt={deal.title} />
-              <div className="home-flash-content">
-                <h3>{deal.title}</h3>
-                <div className="home-flash-price">
-                  <span className="home-price-current">${deal.price.toFixed(2)}</span>
-                  <span className="home-price-original">${(deal.price * (100 / (100 - deal.discount))).toFixed(2)}</span>
-                </div>
-                <div className="home-flash-progress">
-                  <div className="home-progress-bar" style={{ width: `${deal.soldPercentage}%` }}></div>
-                  <span>Sold: {deal.soldPercentage}%</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Categories */}
-      <section className="home-categories">
-        <div className="home-section-header">
-          <h2>Top Categories</h2>
-          <a href="/categories" className="home-view-all">View All</a>
-        </div>
-        <div className="home-categories-grid">
-          {categories.map(category => (
-            <a key={category._id} href={`/category/${category.slug}`} className="home-category-card">
-              <img 
-                src={`/assets/images/categories/${category.slug}.png`} 
-                alt={category.name}
-                className="home-category-icon"
-              />
+        <div className="homepage-categories-grid">
+          {featuredCategories.map((category) => (
+            <Link
+              to={`/category/${category.name.toLowerCase()}`}
+              key={category.name}
+              className="homepage-category-card"
+            >
+              <span className="homepage-category-icon">{category.icon}</span>
               <h3>{category.name}</h3>
-              <span>{category.itemCount} Products</span>
-            </a>
+            </Link>
           ))}
         </div>
       </section>
 
       {/* Trending Now */}
-      <section className="home-trending">
-        <div className="home-section-header">
-          <h2>Trending Now</h2>
-          <div className="home-trending-tabs">
-            <button className="active">All</button>
-            <button>Fashion</button>
-            <button>Electronics</button>
-            <button>Home</button>
-          </div>
+      <section className="homepage-trending">
+        <div className="homepage-section-header">
+          <h2>
+            <TrendingUp className="homepage-section-icon" />
+            Trending Now
+          </h2>
+          <Link to="/trending" className="homepage-view-all">
+            View All <ArrowRight size={16} />
+          </Link>
         </div>
-        <div className="home-trending-grid">
-          {trendingItems.map(item => (
-            <div key={item._id} className="home-product-card">
-              <div className="home-product-image">
-                <img src={item.images[0]} alt={item.title} />
-                <div className="home-product-actions">
-                  <button className="home-action-btn">
-                    <Heart size={20} />
-                  </button>
-                  <button className="home-action-btn">
-                    <ShoppingCart size={20} />
-                  </button>
-                  <button className="home-action-btn">Quick View</button>
-                </div>
-              </div>
-              <div className="home-product-content">
-                <span className="home-product-category">{item.category}</span>
-                <h3>{item.title}</h3>
-                <div className="home-product-rating">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      size={16}
-                      className={i < (item.rating || 0) ? 'filled' : ''}
-                    />
-                  ))}
-                  <span>({item.reviewCount})</span>
-                </div>
-                <div className="home-product-price">
-                  <span className="home-price-current">${item.price.toFixed(2)}</span>
-                  {item.originalPrice && (
-                    <span className="home-price-original">${item.originalPrice.toFixed(2)}</span>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="home-features">
-        <div className="home-feature-card">
-          <Truck size={40} />
-          <h3>Free Shipping</h3>
-          <p>On orders over $50</p>
-        </div>
-        <div className="home-feature-card">
-          <Shield size={40} />
-          <h3>Money Back</h3>
-          <p>30 days guarantee</p>
-        </div>
-        <div className="home-feature-card">
-          <Headphones size={40} />
-          <h3>24/7 Support</h3>
-          <p>Dedicated support</p>
+        <div className="homepage-items-grid">
+          {trendingItems.map(renderItemCard)}
         </div>
       </section>
 
       {/* New Arrivals */}
-      <section className="home-new-arrivals">
-        <div className="home-section-header">
-          <h2>New Arrivals</h2>
-          <a href="/new-arrivals" className="home-view-all">View All</a>
+      <section className="homepage-new-arrivals">
+        <div className="homepage-section-header">
+          <h2>
+            <Sparkles className="homepage-section-icon" />
+            Just Arrived
+          </h2>
+          <Link to="/new-arrivals" className="homepage-view-all">
+            View All <ArrowRight size={16} />
+          </Link>
         </div>
-        <div className="home-arrivals-grid">
-          {newArrivals.map(item => (
-            <div key={item._id} className="home-product-card">
-              <div className="home-product-image">
-                <img src={item.images[0]} alt={item.title} />
-                <span className="home-product-tag">New</span>
-                <div className="home-product-actions">
-                  <button className="home-action-btn">
-                    <Heart size={20} />
-                  </button>
-                  <button className="home-action-btn">
-                    <ShoppingCart size={20} />
-                  </button>
-                </div>
-              </div>
-              <div className="home-product-content">
-                <h3>{item.title}</h3>
-                <div className="home-product-price">
-                  <span className="home-price-current">${item.price.toFixed(2)}</span>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="homepage-items-grid">
+          {newArrivals.map(renderItemCard)}
         </div>
       </section>
+
+      {/* Category Sections */}
+      {Object.entries(categoryItems).map(([category, items]) => (
+        <section key={category} className="homepage-category-section">
+          <div className="homepage-section-header">
+            <h2>
+              <Package className="homepage-section-icon" />
+              {category}
+            </h2>
+            <Link
+              to={`/category/${category.toLowerCase()}`}
+              className="homepage-view-all"
+            >
+              View All <ArrowRight size={16} />
+            </Link>
+          </div>
+          <div className="homepage-items-grid">
+            {items.map(renderItemCard)}
+          </div>
+        </section>
+      ))}
     </div>
+    <Footer/>
     </>
+   
+
+
   );
 };
 

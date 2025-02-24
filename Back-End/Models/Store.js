@@ -1,4 +1,4 @@
-// Backend - models/Store.js
+
 const mongoose = require('mongoose');
 
 // Function to generate store ID
