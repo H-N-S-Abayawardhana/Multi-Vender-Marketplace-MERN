@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { CreditCard, Truck, ArrowLeft } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { CreditCard, Truck, ArrowLeft, X } from 'lucide-react';
 import axios from 'axios';
 import '../../src/css/checkout.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const CheckoutPage = ({ item, onClose, onSubmit }) => {
-  // Existing state setup
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -22,17 +22,14 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
   const [errors, setErrors] = useState({});
   const [activeStep, setActiveStep] = useState('shipping');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Get the quantity from the item
+  const navigate = useNavigate();
   const quantity = item.selectedQuantity || 1;
 
-  // Calculate the total price including shipping
-  const shippingCost = item.shippingDetails?.cost || 0; // Get shipping cost from item
+  const shippingCost = item.shippingDetails?.cost || 0;
   const itemPrice = item.price || 0;
-  const subtotal = itemPrice * quantity; // Calculate subtotal based on quantity
-  const totalPrice = subtotal + shippingCost; // Add shipping cost to get total
+  const subtotal = itemPrice * quantity;
+  const totalPrice = subtotal + shippingCost;
 
-  // Existing validation functions and handlers
   const validateShipping = () => {
     const newErrors = {};
     if (!formData.fullName) newErrors.fullName = 'Full name is required';
@@ -85,6 +82,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
           const userEmail = localStorage.getItem('email');
           if (!userEmail) {
             toast.error('You must be logged in to place an order');
+            navigate('/login')
             return;
           }
           
@@ -95,7 +93,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
               title: item.title,
               price: item.price,
               image: item.images[0],
-              quantity: quantity // Use the selected quantity from the item
+              quantity: quantity
             },
             shippingDetails: {
               fullName: formData.fullName,
@@ -104,8 +102,8 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
               address: formData.address,
               city: formData.city,
               zipCode: formData.zipCode,
-              cost: shippingCost, // Include shipping cost
-              method: item.shippingDetails?.method || 'Standard' // Include shipping method
+              cost: shippingCost,
+              method: item.shippingDetails?.method || 'Standard'
             },
             paymentDetails: {
               cardNumber: formData.cardNumber.slice(-4),
@@ -113,7 +111,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
             },
             orderStatus: 'Pending',
             orderDate: new Date(),
-            totalAmount: totalPrice // Use calculated total price
+            totalAmount: totalPrice
           };
           
           const response = await axios.post('http://localhost:9000/api/orders/create', orderData);
@@ -133,10 +131,19 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
   return (
     <div className="checkout-overlay">
       <div className="checkout-container">
-        <button className="checkout-close" onClick={onClose}>
-          <ArrowLeft size={24} />
-          Back
-        </button>
+      <div className="checkout-navigation">
+            <button className="checkout-back" onClick={onClose}>
+              <ArrowLeft size={24} />
+              Back
+            </button>
+            <button 
+              className="checkout-close-icon" 
+              onClick={onClose}
+              aria-label="Close checkout"
+            >
+              <X size={24} />
+            </button>
+          </div>
 
         <div className="checkout-header">
           <h2>Checkout</h2>
@@ -171,7 +178,6 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
               <h3>{item.title}</h3>
               <p className="checkout-item-price">${item.price.toFixed(2)} × {quantity}</p>
               
-              {/* Display quantity, subtotal, shipping cost and total */}
               <div className="checkout-price-breakdown">
                 <div className="checkout-price-row">
                   <span>Item Subtotal:</span>

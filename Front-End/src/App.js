@@ -25,9 +25,9 @@ import AllStores from './Pages/admin/AllStores';
 
 // Import protected routes
 //import { BuyerProtectedRoute, SellerProtectedRoute, AdminProtectedRoute } from './components/ProtectedRoutes';
-import BuyerProtectedRoute from './components/BuyerProtectedRoute';
-import SellerProtectedRoute from './components/SellerProtectedRoute';
-import AdminProtectedRoute from './components/AdminProtectedRoute';
+import BuyerProtectedRoute from './Routes/BuyerProtectedRoute';
+import SellerProtectedRoute from './Routes/SellerProtectedRoute';
+import AdminProtectedRoute from './Routes/AdminProtectedRoute';
 import StoreList from './Pages/seller/StoreList';
 import StoreDetails from './Pages/seller/StoreDetails';
 

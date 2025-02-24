@@ -55,7 +55,9 @@ const Login = () => {
         try {
             const response = await axios.post('http://localhost:9000/api/users/login', formData);
             const { user, token, sessionId, expiresIn } = response.data;
-
+            
+            // In your login component/function:
+            localStorage.setItem('loginTimestamp', new Date().getTime().toString());
             localStorage.setItem('token', token);
             localStorage.setItem('email', user.email);            
             localStorage.setItem('sessionId', sessionId);

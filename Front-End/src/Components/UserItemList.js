@@ -34,8 +34,8 @@ const UserItemList = () => {
   const [error, setError] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showCheckout, setShowCheckout] = useState(false);
-  // Add state for storing quantities for each item
   const [itemQuantities, setItemQuantities] = useState({});
+
   
   // Search and filter states
   const [searchTerm, setSearchTerm] = useState('');
