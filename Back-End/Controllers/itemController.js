@@ -135,7 +135,7 @@ const itemController = {
   // Get featured items
   getFeaturedItems: async (req, res) => {
     try {
-      // we'll consider items with higher price as "featured"
+      // items with higher price as "featured"
       
       const featuredItems = await Item.find({})
         .sort({ price: -1 })
@@ -151,8 +151,8 @@ const itemController = {
   // Get trending items
   getTrendingItems: async (req, res) => {
     try {
-      // we'll use most recently viewed/high quantity items as "trending"
-      // In a real app, they might track views or have a "trending" field
+      //  most recently viewed/high quantity items as "trending"
+      
       const trendingItems = await Item.find({})
         .sort({ createdAt: -1 })
         .limit(4);
@@ -192,16 +192,16 @@ getItemsByCategories: async (req, res) => {
       return res.status(400).json({ message: 'Categories parameter is required' });
     }
 
-    // Make sure we have an array of categories
+    
     let categoryArray;
     if (Array.isArray(categories)) {
       categoryArray = categories;
     } else if (typeof categories === 'string') {
       try {
-        // Try to parse as JSON
+        
         categoryArray = JSON.parse(categories);
       } catch (e) {
-        // If not valid JSON, treat as single string or comma-separated list
+        
         categoryArray = categories.includes(',') ? categories.split(',') : [categories];
       }
     } else {

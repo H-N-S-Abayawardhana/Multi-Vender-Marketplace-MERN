@@ -27,7 +27,6 @@ router.get('/check-store/:email', itemController.checkStoreForItem);
 // Add item route
 router.post('/add', itemController.addItem);
 
-// IMPORTANT: Put parameter routes LAST
 // Get specific item route
 router.get('/:id', itemController.getItem);
 

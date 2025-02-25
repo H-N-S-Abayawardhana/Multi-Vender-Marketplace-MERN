@@ -18,7 +18,7 @@ const sellnotiRoutes = require('./routes/sellnotiRoutes');
 
 const app = express();
 
-// ✅ Correct CORS Configuration
+//  Correct CORS Configuration
 app.use(cors({
     origin: 'http://localhost:3000', // Allow frontend to access backend
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -26,13 +26,13 @@ app.use(cors({
     credentials: true  // Allow cookies, authentication headers, etc.
 }));
 
-// ✅ Middleware
+//  Middleware
 app.use(express.json());
 
 app.use(express.static('uploads'));
 
 
-// ✅ Routes
+//  Routes
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/stores', storeRoutes);
@@ -49,17 +49,17 @@ app.use('/api', sellnotiRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
-// ✅ Health check route
+//  Health check route
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'ok', timestamp: new Date() });
 });
 
-// ✅ MongoDB Connection
+//  MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB Connected Successfully"))
     .catch(err => console.error("MongoDB Connection Error:", err));
 
-// ✅ Error handling middleware
+//  Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({
@@ -68,12 +68,12 @@ app.use((err, req, res, next) => {
     });
 });
 
-// ✅ Handle 404 routes
+//  Handle 404 routes
 app.use((req, res) => {
     res.status(404).json({ message: 'Route not found' });
 });
 
-// ✅ Start Server
+//  Start Server
 const PORT = process.env.PORT || 9000;
 
 const startServer = () => {
