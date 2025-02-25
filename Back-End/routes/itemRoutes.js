@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const itemController = require('../Controllers/itemController');
 
-// IMPORTANT: Put specific routes BEFORE parameter routes
+
 // Route to fetch featured items
 router.get('/featured', itemController.getFeaturedItems);
 

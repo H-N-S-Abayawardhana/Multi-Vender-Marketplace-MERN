@@ -269,3 +269,129 @@
     height: 32px;
   }
 }
+
+
+/* Quantity controls */
+.homepage-quantity-control {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.quantity-adjust {
+  display: flex;
+  align-items: center;
+  margin: 0 8px;
+}
+
+.quantity-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #ddd;
+  background: #f5f5f5;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.quantity-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.quantity-value {
+  margin: 0 8px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.available-stock {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Item action buttons */
+.homepage-item-actions {
+  padding: 10px;
+  border-top: 1px solid #eee;
+}
+
+.homepage-item-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.homepage-cart-btn,
+.homepage-buy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  flex: 1;
+}
+
+.homepage-cart-btn {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  color: #333;
+}
+
+.homepage-buy-btn {
+  background-color: #3498db;
+  border: 1px solid #2980b9;
+  color: white;
+}
+
+/* Stock indicators */
+.homepage-low-stock,
+.homepage-out-of-stock {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.homepage-low-stock {
+  background-color: #ff9800;
+  color: white;
+}
+
+.homepage-out-of-stock {
+  background-color: #f44336;
+  color: white;
+}
+
+.homepage-out-of-stock-message {
+  text-align: center;
+  padding: 10px;
+  color: #f44336;
+  font-weight: 500;
+}
+
+/* Make sure item cards have proper positioning */
+.homepage-item-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: white;
+}
+
+.homepage-item-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
