@@ -1,81 +1,682 @@
-/* becomeseller.css */
+/* Global Styles */
 .becomeseller-container {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Header Styles */
+.becomeseller-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.becomeseller-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.becomeseller-subtitle {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Progress Bar */
+.becomeseller-progress {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  position: relative;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.becomeseller-progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.becomeseller-progress-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ecf0f1;
+  color: #95a5a6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+  border: 2px solid #e0e0e0;
+}
+
+.becomeseller-progress-label {
+  font-size: 0.9rem;
+  color: #95a5a6;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.becomeseller-progress-line {
+  flex-grow: 1;
+  height: 3px;
+  background-color: #ecf0f1;
+  z-index: 1;
+  position: relative;
+}
+
+.becomeseller-progress-step.active .becomeseller-progress-number {
+  background-color: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+.becomeseller-progress-step.active .becomeseller-progress-label {
+  color: #3498db;
+  font-weight: 600;
+}
+
+/* Form Sections */
+.becomeseller-section {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  margin-bottom: 30px;
+  display: none;
+}
+
+.becomeseller-section-active {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.becomeseller-section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.becomeseller-section-number {
+  background: #3498db;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 12px;
+  font-size: 1rem;
+}
+
+/* Form Styles */
+.becomeseller-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px 20px;
+}
+
+.becomeseller-form-group {
+  flex: 1;
+  min-width: 250px;
+  padding: 0 15px;
+  margin-bottom: 20px;
+}
+
+.becomeseller-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+.becomeseller-required {
+  color: #e74c3c;
+  margin-left: 2px;
+}
+
+.becomeseller-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.becomeseller-input:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.becomeseller-input::placeholder {
+  color: #bdc3c7;
+}
+
+.becomeseller-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232c3e50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 15px;
+}
+
+.becomeseller-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.becomeseller-input-hint {
+  display: block;
+  font-size: 0.8rem;
+  color: #7f8c8d;
+  margin-top: 5px;
+}
+
+.becomeseller-input-with-icon {
+  position: relative;
+}
+
+.becomeseller-input-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7f8c8d;
+}
+
+/* Button Styles */
+.becomeseller-button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.becomeseller-next-btn,
+.becomeseller-back-btn,
+.becomeseller-submit-btn,
+.becomeseller-dashboard-btn {
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  border: none;
+}
+
+.becomeseller-next-btn {
+  background-color: #3498db;
+  color: white;
+}
+
+.becomeseller-next-btn:hover {
+  background-color: #2980b9;
+}
+
+.becomeseller-next-btn i {
+  margin-left: 8px;
+}
+
+.becomeseller-back-btn {
+  background-color: #ecf0f1;
+  color: #7f8c8d;
+}
+
+.becomeseller-back-btn:hover {
+  background-color: #dfe6e9;
+}
+
+.becomeseller-back-btn i {
+  margin-right: 8px;
+}
+
+.becomeseller-submit-btn {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.becomeseller-submit-btn:hover {
+  background-color: #27ae60;
+}
+
+.becomeseller-dashboard-btn {
+  background-color: #3498db;
+  color: white;
+  margin: 20px auto 0;
+}
+
+.becomeseller-dashboard-btn:hover {
+  background-color: #2980b9;
+}
+
+.becomeseller-edit-btn {
+  background: none;
+  border: none;
+  color: #3498db;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.becomeseller-edit-btn:hover {
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+.becomeseller-edit-btn i {
+  margin-right: 5px;
+}
+
+/* Checkbox Styles */
+.becomeseller-checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 1rem;
+  user-select: none;
+  margin: 20px 0;
+}
+
+.becomeseller-checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.becomeseller-checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 24px;
+  width: 24px;
+  background-color: #eee;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.becomeseller-checkbox-container:hover input ~ .becomeseller-checkmark {
+  background-color: #ccc;
+}
+
+.becomeseller-checkbox-container input:checked ~ .becomeseller-checkmark {
+  background-color: #3498db;
+}
+
+.becomeseller-checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.becomeseller-checkbox-container input:checked ~ .becomeseller-checkmark:after {
+  display: block;
+}
+
+.becomeseller-checkbox-container .becomeseller-checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.becomeseller-agreement-text {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  padding-top: 2px;
+}
+
+.becomeseller-link {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.becomeseller-link:hover {
+  text-decoration: underline;
+}
+
+/* Review Section */
+.becomeseller-review-section {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.becomeseller-review-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.becomeseller-review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.becomeseller-review-item {
+  margin-bottom: 10px;
+}
+
+.becomeseller-review-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin-bottom: 3px;
+}
+
+.becomeseller-review-value {
+  font-size: 1rem;
+  color: #2c3e50;
+  word-break: break-word;
+}
+
+/* Benefits Section */
+.becomeseller-benefits {
+  margin-top: 60px;
+  padding: 30px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.becomeseller-benefits-title {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 30px;
+}
+
+.becomeseller-benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.becomeseller-benefit-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 25px 20px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.becomeseller-benefit-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.becomeseller-benefit-icon {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(52, 152, 219, 0.1);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 15px;
+  color: #3498db;
+  font-size: 1.5rem;
+}
+
+.becomeseller-benefit-card h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.becomeseller-benefit-card p {
+  color: #7f8c8d;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+/* Status Styles */
+.becomeseller-status-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.becomeseller-status-header {
+  padding: 25px 30px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.becomeseller-status-header.becomeseller-status-pending {
+  background-color: #f39c12;
+  color: white;
+}
+
+.becomeseller-status-header.becomeseller-status-approved {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.becomeseller-status-header.becomeseller-status-rejected {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.becomeseller-status-badge {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 5px 15px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.becomeseller-status-body {
+  padding: 30px;
+}
+
+.becomeseller-status-message {
+  display: flex;
+  align-items: flex-start;
+}
+
+.becomeseller-status-icon {
+  font-size: 2.5rem;
+  margin-right: 25px;
+  flex-shrink: 0;
+}
+
+.becomeseller-status-icon.pending {
+  color: #f39c12;
+}
+
+.becomeseller-status-icon.approved {
+  color: #2ecc71;
+}
+
+.becomeseller-status-icon.rejected {
+  color: #e74c3c;
+}
+
+.becomeseller-status-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.becomeseller-status-content p {
+  color: #7f8c8d;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.becomeseller-info-box {
+  background-color: #f8f9fa;
+  border-left: 4px solid #3498db;
+  padding: 15px 20px;
+  border-radius: 4px;
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+
+.becomeseller-info-box p {
+  margin: 0;
+  color: #2c3e50;
+}
+
+/* Loading Spinner */
+.becomeseller-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 400px;
+}
+
+.becomeseller-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(52, 152, 219, 0.3);
+  border-radius: 50%;
+  border-top-color: #3498db;
+  animation: spin 1s infinite linear;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
-  
-  .becomeseller-title {
-    text-align: center;
-    color: #333;
-    margin-bottom: 30px;
-  }
-  
-  .becomeseller-section {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 25px;
-    margin-bottom: 30px;
-  }
-  
-  .becomeseller-section-title {
-    color: #2c3e50;
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #eee;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .becomeseller-form-row {
+    flex-direction: column;
   }
   
   .becomeseller-form-group {
-    margin-bottom: 20px;
+    min-width: 100%;
   }
   
-  .becomeseller-label {
-    display: block;
-    margin-bottom: 8px;
-    color: #555;
-    font-weight: 500;
+  .becomeseller-button-group {
+    flex-direction: column;
+    gap: 15px;
   }
   
-  .becomeseller-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  
-  .becomeseller-input:disabled {
-    background-color: #f5f5f5;
-    cursor: not-allowed;
-  }
-  
-  .becomeseller-input:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-  }
-  
+  .becomeseller-next-btn,
+  .becomeseller-back-btn,
   .becomeseller-submit-btn {
-    background-color: #3498db;
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
     width: 100%;
-    margin-top: 20px;
-    transition: background-color 0.3s;
+    justify-content: center;
   }
   
-  .becomeseller-submit-btn:hover {
-    background-color: #2980b9;
+  .becomeseller-progress-label {
+    font-size: 0.8rem;
   }
   
-  .becomeseller-error {
-    color: #e74c3c;
-    font-size: 14px;
-    margin-top: 5px;
+  .becomeseller-title {
+    font-size: 2rem;
   }
+  
+  .becomeseller-review-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .becomeseller-status-message {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .becomeseller-status-icon {
+    margin: 0 auto 20px;
+  }
+  
+  .becomeseller-benefits-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Toast Container Customization */
+/* .Toastify__toast-container {
+  width: 320px;
+}
+
+.Toastify__toast {
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.Toastify__toast--success {
+  background-color: #2ecc71;
+}
+
+.Toastify__toast--error {
+  background-color: #e74c3c;
+}
+
+.Toastify__toast-body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+} */
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.becomeseller-section-active {
+  animation: slideIn 0.4s ease-out;
+}

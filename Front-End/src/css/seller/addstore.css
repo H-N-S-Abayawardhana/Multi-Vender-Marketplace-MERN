@@ -1,161 +1,514 @@
+/* Main Container Styles */
 .addstore-sell-container {
-    min-height: 100vh;
-    background-color: #f8f9fa;
-    padding: 2rem;
-}
-
-.addstore-sell-content {
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.addstore-sell-title {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 2rem;
+    max-width: 1000px;
+    margin: 2rem auto 4rem;
+    padding: 0 1.5rem;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+  }
+  
+  .addstore-sell-header {
     text-align: center;
-    font-weight: 600;
-}
-
-.addstore-sell-error {
-    background-color: #fee2e2;
-    border: 1px solid #ef4444;
-    color: #dc2626;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-}
-
-.addstore-sell-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.addstore-sell-form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.addstore-sell-label {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: #374151;
-}
-
-.addstore-sell-input,
-.addstore-sell-textarea {
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.2s;
-}
-
-.addstore-sell-input:focus,
-.addstore-sell-textarea:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.addstore-sell-input-disabled {
-    background-color: #f3f4f6;
-    cursor: not-allowed;
-}
-
-.addstore-sell-textarea {
-    min-height: 100px;
-    resize: vertical;
-}
-
-.addstore-sell-file-input {
-    padding: 0.5rem;
-    border: 2px dashed #d1d5db;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.addstore-sell-file-input:hover {
-    border-color: #3b82f6;
-}
-
-.addstore-sell-preview {
-    margin-top: 1rem;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.addstore-sell-logo-preview img {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-}
-
-.addstore-sell-banner-preview img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.addstore-sell-submit {
-    background-color: #3b82f6;
-    color: white;
-    padding: 1rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    margin-top: 1rem;
-}
-
-.addstore-sell-submit:hover {
-    background-color: #2563eb;
-}
-
-.addstore-sell-submit:disabled {
-    background-color: #93c5fd;
-    cursor: not-allowed;
-}
-
-.addstore-sell-submit-loading {
-    opacity: 0.7;
-}
-
-.addstore-sell-loading-container {
-    min-height: 100vh;
+    margin-bottom: 2.5rem;
+  }
+  
+  .addstore-sell-main-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .addstore-sell-subtitle {
+    font-size: 1.125rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  /* Step Indicator Styles */
+  .addstore-sell-steps {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f8f9fa;
-}
-
-.addstore-sell-loading-message {
-    background-color: #fef3c7;
-    border: 1px solid #f59e0b;
-    color: #b45309;
-    padding: 1rem 2rem;
-    border-radius: 8px;
+    margin-bottom: 3rem;
+  }
+  
+  .addstore-sell-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .addstore-sell-step-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #666;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .addstore-sell-step-active .addstore-sell-step-number {
+    background-color: #4a6cf7;
+    color: white;
+  }
+  
+  .addstore-sell-step-label {
+    font-size: 0.875rem;
+    color: #666;
+    transition: all 0.3s ease;
+  }
+  
+  .addstore-sell-step-active .addstore-sell-step-label {
+    color: #4a6cf7;
+    font-weight: 600;
+  }
+  
+  .addstore-sell-step-connector {
+    height: 2px;
+    width: 80px;
+    background-color: #e0e0e0;
+    margin: 0 0.5rem;
+    position: relative;
+    top: -18px;
+  }
+  
+  /* Content Area Styles */
+  .addstore-sell-content {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    padding: 2.5rem;
+  }
+  
+  .addstore-sell-step-content {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .addstore-sell-step-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  /* Form Styles */
+  .addstore-sell-form {
+    width: 100%;
+  }
+  
+  .addstore-sell-form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  
+  .addstore-sell-label {
+    display: block;
+    font-size: 0.95rem;
     font-weight: 500;
-}
-
-@media (max-width: 768px) {
+    color: #444;
+    margin-bottom: 0.5rem;
+  }
+  
+  .addstore-sell-required {
+    color: #e53935;
+    margin-left: 2px;
+  }
+  
+  .addstore-sell-optional {
+    color: #9e9e9e;
+    font-size: 0.875rem;
+    font-weight: normal;
+  }
+  
+  .addstore-sell-input,
+  .addstore-sell-textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: all 0.2s ease;
+  }
+  
+  .addstore-sell-input:focus,
+  .addstore-sell-textarea:focus {
+    outline: none;
+    border-color: #4a6cf7;
+    box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.1);
+  }
+  
+  .addstore-sell-input-error,
+  .addstore-sell-textarea-error {
+    border-color: #e53935;
+    background-color: rgba(229, 57, 53, 0.03);
+  }
+  
+  .addstore-sell-input-error:focus,
+  .addstore-sell-textarea-error:focus {
+    border-color: #e53935;
+    box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.1);
+  }
+  
+  .addstore-sell-input-disabled {
+    background-color: #f9f9f9;
+    color: #777;
+    cursor: not-allowed;
+  }
+  
+  .addstore-sell-helper-text {
+    font-size: 0.75rem;
+    color: #757575;
+    margin-top: 0.375rem;
+  }
+  
+  .addstore-sell-error-text {
+    font-size: 0.75rem;
+    color: #e53935;
+    margin-top: 0.375rem;
+  }
+  
+  .addstore-sell-textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+  
+  .addstore-sell-textarea-counter {
+    font-size: 0.75rem;
+    color: #757575;
+    margin-top: 0.375rem;
+    text-align: right;
+  }
+  
+  .addstore-sell-counter-warning {
+    color: #f57c00;
+  }
+  
+  /* Dropzone Styles */
+  .addstore-sell-dropzone {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #f9fafc;
+    position: relative;
+  }
+  
+  .addstore-sell-dropzone:hover {
+    border-color: #4a6cf7;
+    background-color: rgba(74, 108, 247, 0.02);
+  }
+  
+  .addstore-sell-dropzone-active {
+    border-color: #4a6cf7;
+    background-color: rgba(74, 108, 247, 0.05);
+  }
+  
+  .addstore-sell-dropzone-error {
+    border-color: #e53935;
+    background-color: rgba(229, 57, 53, 0.03);
+  }
+  
+  .addstore-sell-dropzone-icon {
+    margin-bottom: 1rem;
+    color: #4a6cf7;
+  }
+  
+  .addstore-sell-dropzone-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .addstore-sell-dropzone-primary {
+    font-size: 0.95rem;
+    color: #444;
+  }
+  
+  .addstore-sell-dropzone-secondary {
+    font-size: 0.8rem;
+    color: #757575;
+  }
+  
+  .addstore-sell-file-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  /* Preview Image Styles */
+  .addstore-sell-preview-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .addstore-sell-logo-preview-img {
+    max-width: 150px;
+    max-height: 150px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+    object-fit: contain;
+  }
+  
+  .addstore-sell-banner-preview-img {
+    width: 100%;
+    max-height: 200px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  
+  .addstore-sell-remove-image {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 28px;
+    height: 28px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  
+  .addstore-sell-remove-image:hover {
+    background-color: rgba(229, 57, 53, 0.8);
+  }
+  
+  /* Button Styles */
+  .addstore-sell-buttons-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    gap: 1rem;
+  }
+  
+  .addstore-sell-next-button,
+  .addstore-sell-back-button,
+  .addstore-sell-submit {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 150px;
+  }
+  
+  .addstore-sell-next-button {
+    background-color: #4a6cf7;
+    color: white;
+    border: none;
+  }
+  
+  .addstore-sell-next-button:hover {
+    background-color: #3a5bd9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 108, 247, 0.15);
+  }
+  
+  .addstore-sell-back-button {
+    background-color: transparent;
+    color: #555;
+    border: 1px solid #ddd;
+  }
+  
+  .addstore-sell-back-button:hover {
+    background-color: #f5f5f5;
+    border-color: #ccc;
+  }
+  
+  .addstore-sell-submit {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+  }
+  
+  .addstore-sell-submit:hover {
+    background-color: #43a047;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
+  }
+  
+  .addstore-sell-submit-loading {
+    opacity: 0.8;
+    cursor: not-allowed;
+  }
+  
+  /* Loading Spinner */
+  .addstore-sell-spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Error Box */
+  .addstore-sell-error-box {
+    background-color: #FFEBEE;
+    border-left: 4px solid #e53935;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .addstore-sell-error-icon {
+    width: 24px;
+    height: 24px;
+    background-color: #e53935;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+  }
+  
+  .addstore-sell-error-message {
+    color: #c62828;
+  }
+  
+  /* Loading Container */
+  .addstore-sell-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    width: 100%;
+  }
+  
+  .addstore-sell-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(74, 108, 247, 0.2);
+    border-radius: 50%;
+    border-top-color: #4a6cf7;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+  
+  .addstore-sell-loading-message {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
     .addstore-sell-container {
-        padding: 1rem;
+      padding: 0 1rem;
+      margin: 1.5rem auto 3rem;
     }
-
+    
+    .addstore-sell-main-title {
+      font-size: 2rem;
+    }
+    
     .addstore-sell-content {
-        padding: 1.5rem;
+      padding: 1.5rem;
     }
-
-    .addstore-sell-title {
-        font-size: 1.75rem;
+    
+    .addstore-sell-step-connector {
+      width: 40px;
     }
-}
+    
+    .addstore-sell-buttons-container {
+      flex-direction: column;
+    }
+    
+    .addstore-sell-next-button,
+    .addstore-sell-back-button,
+    .addstore-sell-submit {
+      width: 100%;
+    }
+    
+    .addstore-sell-back-button {
+      order: 2;
+    }
+    
+    .addstore-sell-next-button,
+    .addstore-sell-submit {
+      order: 1;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .addstore-sell-main-title {
+      font-size: 1.75rem;
+    }
+    
+    .addstore-sell-subtitle {
+      font-size: 1rem;
+    }
+    
+    .addstore-sell-step-number {
+      width: 30px;
+      height: 30px;
+      font-size: 0.875rem;
+    }
+    
+    .addstore-sell-step-label {
+      font-size: 0.75rem;
+    }
+    
+    .addstore-sell-step-connector {
+      width: 30px;
+    }
+    
+    .addstore-sell-content {
+      padding: 1.25rem;
+    }
+  }

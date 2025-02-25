@@ -9,6 +9,8 @@ import freeShipping from '../assets/images/free-shipping-banner.jpg';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import CheckoutPage from '../Pages/CheckoutPage';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const banners = [
   {
@@ -54,7 +56,9 @@ const Home = () => {
     { name: 'Sports', icon: '⚽' },
     { name: 'Beauty', icon: '💄' },
     { name: 'Automotive', icon: '🚗' },
-    { name: 'Garden', icon: '🌱' }
+    { name: 'Garden', icon: '🌱' },
+    { name: 'Jewelry', icon: '💍' },
+    { name: 'Tools', icon: '🔨' }
   ];
 
   useEffect(() => {
@@ -180,24 +184,22 @@ const Home = () => {
 
   const handleOrderSubmit = async (orderData) => {
     try {
-      // Show loading state or disable buttons if needed
+      
       setLoading(true);
 
       const orderedQuantity = selectedItem.selectedQuantity || 1;
 
-      // Update item quantity in the UI
-      // This is a simplified approach - in a real app you'd want to update this
-      // across all lists that might contain this item
+      
       
       // Close checkout and clear selection
       setShowCheckout(false);
       setSelectedItem(null);
 
       // Show success message
-      alert(`Order placed successfully! You ordered ${orderedQuantity} item(s).`);
+      toast.success(`Order placed successfully! You ordered ${orderedQuantity} item(s).`);
     } catch (error) {
       console.error('Error submitting order:', error);
-      alert('Failed to place order. Please try again.');
+      toast.error('Failed to place order. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -289,7 +291,7 @@ const Home = () => {
         </div>
       </Link>
       
-      {/* Add quantity control and action buttons (outside the Link) */}
+      {/* Add quantity control and action buttons */}
       <div className="homepage-item-actions">
         {item.quantity > 0 ? (
           <>

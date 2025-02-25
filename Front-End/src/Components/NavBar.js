@@ -224,6 +224,9 @@ const NavBar = () => {
                 <Link className="user-navbar-signup-btn" to="/register">
                   Sign Up
                 </Link>
+                <Link className="user-navbar-seller-btn" to="/become-seller">
+                  Become a Seller
+                </Link>
               </div>
             )}
           </div>
