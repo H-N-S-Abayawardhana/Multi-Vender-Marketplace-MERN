@@ -10,6 +10,7 @@ import Register from './Pages/Register';
 import Login from './Pages/Login';
 import UserProfile from './Pages/UserProfile';
 import Checkout from './Pages/CheckoutPage';
+import Categories from './Pages/Categories'
 import SellerProfile from './Pages/UserProfile';
 import AdminProfile from './Pages/UserProfile';
 import BecomeSeller from './Pages/BecomeSeller';
@@ -45,6 +46,7 @@ function App() {
         <Route path="/become-seller" element={<BecomeSeller />} />
         <Route path="/shop-now" element={<ShopNowPage />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/categories" element={<Categories />} />
         <Route path="/seller-dashboard" element={<SellerProtectedRoute><SellerDashboard /></SellerProtectedRoute>} />
         <Route path="/add-store" element={<SellerProtectedRoute><AddStore /></SellerProtectedRoute>} />
         <Route path="/stores" element={<SellerProtectedRoute><StoreList /></SellerProtectedRoute>} />

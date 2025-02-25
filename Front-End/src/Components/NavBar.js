@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaShoppingCart, FaUser, FaBell } from 'react-icons/fa';
+import { FaShoppingCart, FaUser, FaBell, FaSearch, FaBars, FaTimes } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import logo from '../assets/images/logo.png';
+import '../css/NavBar.css'; 
 
 const NavBar = () => {
   const navigate = useNavigate();
   const [isPendingSeller, setIsPendingSeller] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [scrolled, setScrolled] = useState(false);
   const isLoggedIn = !!localStorage.getItem('token');
   const userEmail = localStorage.getItem('email');
 
   useEffect(() => {
     const checkSellerStatus = async () => {
       if (isLoggedIn && userEmail) {
-        console.log('Checking status for email:', userEmail); // Debug log
         try {
           const response = await fetch(`http://localhost:9000/api/seller/status/${userEmail}`);
           const data = await response.json();
-          console.log('API Response:', data); // Debug log
-          
           setIsPendingSeller(data.status === 'pending');
-          console.log('isPendingSeller set to:', data.status === 'pending'); // Debug log
         } catch (error) {
           console.error('Error checking seller status:', error);
         }
@@ -28,6 +28,18 @@ const NavBar = () => {
     };
   
     checkSellerStatus();
+
+    // Add scroll event listener
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [isLoggedIn, userEmail]);
 
   const handleCartClick = (e) => {
@@ -88,126 +100,133 @@ const NavBar = () => {
     }
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery('');
+    }
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-      <div className="container">
-        <Link className="navbar-brand" to="/">
+    <nav className={`user-navbar-main ${scrolled ? 'user-navbar-scrolled' : ''}`}>
+      <div className="user-navbar-container">
+        {/* Logo */}
+        <Link className="user-navbar-logo" to="/">
           <img 
             src={logo} 
             alt="E-Commerce Logo" 
-            height="80"
-            className="d-inline-block align-top"
+            className="user-navbar-logo-img"
           />
         </Link>
 
+        {/* Search Bar */}
+        {/* <form className="user-navbar-search-form" onSubmit={handleSearch}>
+          <input
+            type="text"
+            placeholder="Search products..."
+            className="user-navbar-search-input"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button type="submit" className="user-navbar-search-button">
+            <FaSearch />
+          </button>
+        </form> */}
+
+        {/* Mobile Menu Toggle */}
         <button 
-          className="navbar-toggler" 
-          type="button" 
-          data-bs-toggle="collapse" 
-          data-bs-target="#navbarContent"
-          aria-controls="navbarContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+          className="user-navbar-menu-toggle" 
+          onClick={toggleMenu}
+          aria-label="Toggle navigation menu"
         >
-          <span className="navbar-toggler-icon"></span>
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
         </button>
 
-        {isLoggedIn && isPendingSeller && (
-          <div
-            style={{
-              backgroundColor: "#fff285",
-              border: "1px solid #9d9444",
-              borderRadius: "0.5rem",
-              padding: "1rem",
-              marginBottom: "1px",
-              color: "#958a2f",
-              marginLeft: "400px",
-            }}
-          >
-            Your Seller request is processing...
-          </div>
-        )}
+        {/* Main Navigation */}
+        <div className={`user-navbar-menu ${isMenuOpen ? 'user-navbar-menu-active' : ''}`}>
+          {/* Seller Status Notification */}
+          {isLoggedIn && isPendingSeller && (
+            <div className="user-navbar-seller-status">
+              <span>Your Seller request is processing...</span>
+            </div>
+          )}
 
-        <div className="collapse navbar-collapse" id="navbarContent">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-            <li className="nav-item mx-3">
-              <a className="nav-link position-relative" href="#" onClick={handleCartClick}>
-                <FaShoppingCart size={20} />
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  0
-                  <span className="visually-hidden">items in cart</span>
-                </span>
-              </a>
+          {/* Navigation Links */}
+          <ul className="user-navbar-nav">
+            <li className="user-navbar-item">
+              <Link className="user-navbar-link" to="/shop-now">Shop</Link>
             </li>
+            <li className="user-navbar-item">
+              <Link className="user-navbar-link" to="/categories">Categories</Link>
+            </li>
+            <li className="user-navbar-item">
+              <Link className="user-navbar-link" to="/">Deals</Link>
+            </li>
+          </ul>
 
-            <li className="nav-item mx-3">
-              <a className="nav-link position-relative" href="#" onClick={handleNotificationClick}>
-                <FaBell size={20} />
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  0
-                  <span className="visually-hidden">unread notifications</span>
-                </span>
-              </a>
-            </li>
+          {/* User Actions */}
+          <div className="user-navbar-actions">
+            <button className="user-navbar-icon-btn" onClick={handleCartClick}>
+              <FaShoppingCart />
+              <span className="user-navbar-badge">0</span>
+            </button>
+
+            <button className="user-navbar-icon-btn" onClick={handleNotificationClick}>
+              <FaBell />
+              <span className="user-navbar-badge">0</span>
+            </button>
 
             {isLoggedIn ? (
-              <>
-                <li className="nav-item dropdown mx-3">
-                  <a 
-                    className="nav-link dropdown-toggle" 
-                    href="#" 
-                    id="profileDropdown" 
-                    role="button" 
-                    data-bs-toggle="dropdown" 
-                    aria-expanded="false"
+              <div className="user-navbar-profile">
+                <button 
+                  className="user-navbar-profile-btn" 
+                  onClick={() => {
+                    const dropdown = document.getElementById('profileDropdown');
+                    dropdown.classList.toggle('user-navbar-dropdown-show');
+                  }}
+                >
+                  <FaUser />
+                </button>
+                <div className="user-navbar-dropdown" id="profileDropdown">
+                  <Link className="user-navbar-dropdown-item" to="/user-profile">
+                    My Profile
+                  </Link>
+                  <Link className="user-navbar-dropdown-item" to="/orders">
+                    My Orders
+                  </Link>
+                  <Link className="user-navbar-dropdown-item" to="/wishlist">
+                    Wishlist
+                  </Link>
+                  <div className="user-navbar-dropdown-divider"></div>
+                  <button 
+                    className="user-navbar-dropdown-item" 
+                    onClick={handleLogout}
                   >
-                    <FaUser size={20} />
-                  </a>
-                  <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                    <li>
-                      <Link className="dropdown-item" to="/user-profile">
-                        Profile
-                      </Link>
-                    </li>
-                    <li><hr className="dropdown-divider" /></li>
-                    <li>
-                      <button 
-                        className="dropdown-item" 
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
-                </li>
+                    Logout
+                  </button>
+                </div>
                 {!isPendingSeller && (
-                  <li className="nav-item mx-3">
-                    <Link className="btn btn-primary" to="/become-seller">
-                      Become a Seller
-                    </Link>
-                  </li>
-                )}
-              </>
-            ) : (
-              <>
-                <li className="nav-item mx-3">
-                  <Link className="btn btn-primary" to="/login">
+                  <Link className="user-navbar-seller-btn" to="/become-seller">
                     Become a Seller
                   </Link>
-                </li>
-                <li className="nav-item mx-3">
-                  <Link className="btn btn-outline-dark" to="/login">
-                    Sign In
-                  </Link>
-                </li>
-                <li className="nav-item mx-3">
-                  <Link className="btn btn-dark" to="/register">
-                    Sign Up
-                  </Link>
-                </li>
-              </>
+                )}
+              </div>
+            ) : (
+              <div className="user-navbar-auth">
+                <Link className="user-navbar-login-btn" to="/login">
+                  Sign In
+                </Link>
+                <Link className="user-navbar-signup-btn" to="/register">
+                  Sign Up
+                </Link>
+              </div>
             )}
-          </ul>
+          </div>
         </div>
       </div>
     </nav>
