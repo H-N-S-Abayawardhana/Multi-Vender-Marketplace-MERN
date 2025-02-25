@@ -392,9 +392,10 @@ const UserItemList = () => {
                   {item.condition && (
                     <span className="user-itemlist-condition">{item.condition}</span>
                   )}
-                  {item.category && (
+                  {/* {item.category && (
                     <span className="user-itemlist-category">{item.category}</span>
-                  )}
+                  )} */}
+                            
                 </div>
                 <p className="user-itemlist-description">
                   {item.description ? (
@@ -405,6 +406,9 @@ const UserItemList = () => {
                   ) : (
                     'No description available'
                   )}
+                </p>
+                <p className="homepage-item-shippingcost">
+                Shipping cost: ${item.shippingDetails.cost}
                 </p>
                 
                 {/* Quantity controls */}

@@ -250,7 +250,7 @@ const Home = () => {
         </div>
         <div className="homepage-item-details">
           <h3>{item.title}</h3>
-          <div className="homepage-item-category">{item.category}</div>
+          {/* <div className="homepage-item-category">{item.category}</div> */}
           <div className="homepage-item-price">
             {item.listingType === 'Fixed' ? (
               <>
@@ -280,6 +280,11 @@ const Home = () => {
             ) : (
               'No description available'
             )}
+          </p>
+          <p className="homepage-item-shippingcost">
+
+             Shipping cost: ${item.shippingDetails.cost}
+
           </p>
         </div>
       </Link>

@@ -1,8 +1,8 @@
-// pages/AllStores.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../css/admin/admin-view-stores.css';
+import AdminNavBar from '../../components/admin/adminNavBar';
+import Footer from '../../components/Footer';
 
 const AllStores = () => {
   const [stores, setStores] = useState([]);
@@ -53,6 +53,8 @@ const AllStores = () => {
   );
 
   return (
+    <>
+    <AdminNavBar/>
     <div className="admin-view-stores-container">
       <div className="admin-view-stores-header">
         <h1 className="admin-view-stores-title">All Stores</h1>
@@ -61,16 +63,19 @@ const AllStores = () => {
       <div className="admin-view-stores-grid">
         {stores.map((store) => (
           <div key={store._id} className="admin-view-stores-card">
-            <img
+            <img src={`http://localhost:9000${store.banner || '/default-banner.jpg'}`} alt={store.storeName} />
+            {/* <img
               src={store.banner || '/default-banner.jpg'}
               alt={`${store.storeName} banner`}
               className="admin-view-stores-banner"
-            />
-            <img
+            /> */}
+
+            <img src={`http://localhost:9000${store.logo || '/default-banner.jpg'}`} alt={store.storeName} />
+            {/* <img
               src={store.logo || '/default-logo.jpg'}
               alt={`${store.storeName} logo`}
               className="admin-view-stores-logo"
-            />
+            /> */}
             
             <div className="admin-view-stores-content">
               <h2 className="admin-view-stores-store-name">{store.storeName}</h2>
@@ -108,6 +113,8 @@ const AllStores = () => {
         />
       )}
     </div>
+    <Footer/>
+    </>
   );
 };
 
