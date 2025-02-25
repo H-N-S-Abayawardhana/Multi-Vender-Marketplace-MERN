@@ -136,13 +136,13 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
               <ArrowLeft size={24} />
               Back
             </button>
-            <button 
+            {/* <button 
               className="checkout-close-icon" 
               onClick={onClose}
               aria-label="Close checkout"
             >
               <X size={24} />
-            </button>
+            </button> */}
           </div>
 
         <div className="checkout-header">

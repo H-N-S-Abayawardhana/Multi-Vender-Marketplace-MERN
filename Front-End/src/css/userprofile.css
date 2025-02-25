@@ -1,67 +1,124 @@
+/* userprofile.css - Enhanced version */
 .userprofile-container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 80vh;
     padding: 2rem;
-    background-color: #f5f5f5;
+    background-color: #f8f9fa;
+    background-image: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
 .userprofile-card {
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     width: 100%;
-    max-width: 600px;
-    padding: 2rem;
+    max-width: 680px;
+    padding: 2.5rem;
+    transition: all 0.3s ease;
 }
 
 .userprofile-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.2rem;
     border-bottom: 2px solid #f0f0f0;
+}
+
+.userprofile-title-area {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .userprofile-header h1 {
     font-size: 1.8rem;
     color: #333;
     margin: 0;
+    font-weight: 700;
 }
 
 .userprofile-badge {
-    background-color: #007bff;
-    color: white;
     padding: 0.5rem 1rem;
     border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.userprofile-badge.admin {
+    background-color: #6f42c1;
+    color: white;
+}
+
+.userprofile-badge.seller {
+    background-color: #fd7e14;
+    color: white;
+}
+
+.userprofile-badge.buyer {
+    background-color: #20c997;
+    color: white;
+}
+
+.userprofile-badge.default {
+    background-color: #6c757d;
+    color: white;
 }
 
 .userprofile-content {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    align-items: center;
+    gap: 2rem;
+}
+
+.userprofile-user-initial {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #0d6efd, #0dcaf0);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.2);
+}
+
+.userprofile-fields-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
 }
 
 .userprofile-field {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem;
+    gap: 1.2rem;
+    padding: 1.2rem;
     background-color: #f8f9fa;
-    border-radius: 8px;
+    border-radius: 12px;
     transition: all 0.3s ease;
+    border: 1px solid transparent;
 }
 
 .userprofile-field:hover {
     background-color: #f0f0f0;
+    transform: translateY(-2px);
+    border-color: #e9ecef;
 }
 
 .userprofile-icon {
-    color: #007bff;
+    color: #0d6efd;
     width: 24px;
     height: 24px;
 }
@@ -72,96 +129,130 @@
 
 .userprofile-field-content label {
     display: block;
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 0.25rem;
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .userprofile-field-content p {
     margin: 0;
     font-size: 1.1rem;
-    color: #333;
+    color: #212529;
     font-weight: 500;
+}
+
+.email-value {
+    color: #0d6efd !important;
+    word-break: break-all;
 }
 
 /* Edit mode styles */
 .edit-button {
-    background: transparent;
-    border: 1px solid #007bff;
-    color: #007bff;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #0d6efd;
     border-radius: 8px;
-    padding: 0.5rem;
+    padding: 0.6rem 1.2rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
 }
 
 .edit-button:hover {
-    background: #007bff;
+    background: #0d6efd;
     color: white;
+    border-color: #0d6efd;
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.25);
 }
 
 .edit-icon {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
 }
 
 .edit-input {
     width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
     font-size: 1rem;
     color: #333;
-    transition: border-color 0.3s ease;
+    background-color: white;
+    transition: all 0.3s ease;
 }
 
 .edit-input:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
+
+.edit-input::placeholder {
+    color: #adb5bd;
 }
 
 /* Button group styles */
 .button-group {
     display: flex;
     gap: 1rem;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
+    width: 100%;
 }
 
-.save-button, .cancel-button {
+.save-button, .cancel-button, .retry-button {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.save-button {
-    background: #007bff;
-    color: white;
+    transition: all 0.2s ease;
     border: none;
 }
 
-.save-button:hover {
-    background: #0056b3;
+.save-button {
+    background: #0d6efd;
+    color: white;
+    flex: 2;
+}
+
+.save-button:hover:not(:disabled) {
+    background: #0b5ed7;
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25);
+    transform: translateY(-2px);
 }
 
 .cancel-button {
-    background: white;
-    color: #666;
-    border: 1px solid #ddd;
+    background: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+    flex: 1;
 }
 
-.cancel-button:hover {
-    background: #f8f9fa;
-    border-color: #999;
+.cancel-button:hover:not(:disabled) {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.retry-button {
+    background: #0d6efd;
+    color: white;
+    margin-top: 1rem;
+}
+
+.retry-button:hover {
+    background: #0b5ed7;
 }
 
 .button-icon {
@@ -169,33 +260,82 @@
     height: 18px;
 }
 
+.button-icon.spin {
+    animation: spin 1s linear infinite;
+}
+
+.save-button:disabled, .cancel-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
 /* Status message styles */
-.success-message {
-    background: #d4edda;
-    color: #155724;
+.success-message, .error-message {
+    width: 100%;
     padding: 1rem;
     border-radius: 8px;
     margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.8rem;
     font-weight: 500;
+    animation: fadeIn 0.3s ease;
+}
+
+.success-message {
+    background: #d1e7dd;
+    color: #0f5132;
+    border-left: 4px solid #0f5132;
+}
+
+.error-message {
+    background: #f8d7da;
+    color: #842029;
+    border-left: 4px solid #842029;
 }
 
 .userprofile-error {
     text-align: center;
-    color: #dc3545;
+    color: #842029;
     font-size: 1.1rem;
-    padding: 1rem;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    max-width: 500px;
 }
 
 .userprofile-loading {
     text-align: center;
     font-size: 1.2rem;
-    color: #666;
+    color: #6c757d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    background-color: white;
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.loading-spinner {
+    animation: spin 1.2s linear infinite;
+    color: #0d6efd;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Responsive styles */
@@ -208,33 +348,121 @@
         padding: 1.5rem;
     }
     
+    .userprofile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .userprofile-title-area {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
     .userprofile-header h1 {
         font-size: 1.5rem;
+    }
+
+    .edit-button {
+        align-self: flex-end;
+    }
+
+    .userprofile-user-initial {
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
     }
 
     .button-group {
         flex-direction: column;
     }
-
-    .save-button, .cancel-button {
-        width: 100%;
-        justify-content: center;
-    }
 }
 
-/* Hover effects */
+/* Hover and active states */
 .userprofile-field:hover .userprofile-icon {
-    color: #0056b3;
+    color: #0b5ed7;
+    transform: scale(1.1);
 }
 
 .edit-input:hover {
-    border-color: #999;
+    border-color: #adb5bd;
 }
 
-/* Focus styles */
+/* Focus styles for accessibility */
 .edit-button:focus,
 .save-button:focus,
-.cancel-button:focus {
+.cancel-button:focus,
+.retry-button:focus,
+.edit-input:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+    .userprofile-container {
+        background-color: #212529;
+        background-image: linear-gradient(135deg, #212529 0%, #343a40 100%);
+    }
+    
+    .userprofile-card {
+        background: #2b3035;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .userprofile-header {
+        border-bottom-color: #495057;
+    }
+    
+    .userprofile-header h1 {
+        color: #f8f9fa;
+    }
+    
+    .userprofile-field {
+        background-color: #343a40;
+        border-color: #495057;
+    }
+    
+    .userprofile-field:hover {
+        background-color: #495057;
+    }
+    
+    .userprofile-field-content label {
+        color: #adb5bd;
+    }
+    
+    .userprofile-field-content p {
+        color: #e9ecef;
+    }
+    
+    .edit-button {
+        background: #343a40;
+        border-color: #495057;
+    }
+    
+    .edit-input {
+        background-color: #343a40;
+        color: #e9ecef;
+        border-color: #495057;
+    }
+    
+    .edit-input::placeholder {
+        color: #6c757d;
+    }
+    
+    .cancel-button {
+        background: #343a40;
+        color: #adb5bd;
+        border-color: #495057;
+    }
+    
+    .cancel-button:hover:not(:disabled) {
+        background: #495057;
+        color: #e9ecef;
+    }
+    
+    .userprofile-error, .userprofile-loading {
+        background-color: #2b3035;
+        color: #e9ecef;
+    }
 }

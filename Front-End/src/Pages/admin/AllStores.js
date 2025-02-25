@@ -25,7 +25,7 @@ const AllStores = () => {
 
   const handleMessageSubmit = (e, store) => {
     e.preventDefault();
-    // Here you would implement the actual message sending functionality
+    
     alert(`Message sent to ${store.sellerInfo.name}: ${message}`);
     setMessage('');
     setShowModal(false);
@@ -54,66 +54,74 @@ const AllStores = () => {
 
   return (
     <>
-    <AdminNavBar/>
-    <div className="admin-view-stores-container">
-      <div className="admin-view-stores-header">
-        <h1 className="admin-view-stores-title">All Stores</h1>
-      </div>
-      
-      <div className="admin-view-stores-grid">
-        {stores.map((store) => (
-          <div key={store._id} className="admin-view-stores-card">
-            <img src={`http://localhost:9000${store.banner || '/default-banner.jpg'}`} alt={store.storeName} />
-            {/* <img
-              src={store.banner || '/default-banner.jpg'}
-              alt={`${store.storeName} banner`}
-              className="admin-view-stores-banner"
-            /> */}
-
-            <img src={`http://localhost:9000${store.logo || '/default-banner.jpg'}`} alt={store.storeName} />
-            {/* <img
-              src={store.logo || '/default-logo.jpg'}
-              alt={`${store.storeName} logo`}
-              className="admin-view-stores-logo"
-            /> */}
-            
-            <div className="admin-view-stores-content">
-              <h2 className="admin-view-stores-store-name">{store.storeName}</h2>
-              <p className="admin-view-stores-description">{store.description}</p>
-              
-              <div className="admin-view-stores-seller-info">
-                <h3 className="admin-view-stores-seller-title">Seller Information</h3>
-                <p>Name: {store.sellerInfo?.name}</p>
-                <p>Email: {store.sellerInfo?.email}</p>
-                <p>Phone: {store.sellerInfo?.phone}</p>
+      <AdminNavBar />
+      <div className="admin-view-stores-container">
+        <div className="admin-view-stores-header">
+          <h1 className="admin-view-stores-title">All Stores</h1>
+        </div>
+        
+        <div className="admin-view-stores-grid">
+          {stores.map((store) => (
+            <div key={store._id} className="admin-view-stores-card">
+              <div className="admin-view-stores-banner-container">
+                <img 
+                  src={`http://localhost:9000${store.banner || '/default-banner.jpg'}`} 
+                  alt={`${store.storeName} banner`}
+                  className="admin-view-stores-banner"
+                  onError={(e) => {
+                    e.target.src = 'https://via.placeholder.com/400x150?text=No+Banner';
+                  }}
+                />
               </div>
               
-              <button
-                className="admin-view-stores-button"
-                onClick={() => {
-                  setSelectedStore(store);
-                  setShowModal(true);
-                }}
-              >
-                Contact Seller
-              </button>
+              <div className="admin-view-stores-logo-container">
+                <img 
+                  src={`http://localhost:9000${store.logo || '/default-logo.jpg'}`} 
+                  alt={`${store.storeName} logo`}
+                  className="admin-view-stores-logo"
+                  onError={(e) => {
+                    e.target.src = 'https://via.placeholder.com/80x80?text=Logo';
+                  }}
+                />
+              </div>
+              
+              <div className="admin-view-stores-content">
+                <h2 className="admin-view-stores-store-name">{store.storeName}</h2>
+                <p className="admin-view-stores-description">{store.description || "No description available"}</p>
+                
+                <div className="admin-view-stores-seller-info">
+                  <h3 className="admin-view-stores-seller-title">Seller Information</h3>
+                  <p><strong>Name:</strong> {store.sellerInfo?.name || "N/A"}</p>
+                  <p><strong>Email:</strong> {store.sellerInfo?.email || "N/A"}</p>
+                  <p><strong>Phone:</strong> {store.sellerInfo?.phone || "N/A"}</p>
+                </div>
+                
+                <button
+                  className="admin-view-stores-button"
+                  onClick={() => {
+                    setSelectedStore(store);
+                    setShowModal(true);
+                  }}
+                >
+                  Contact Seller
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      {showModal && selectedStore && (
-        <MessageModal
-          store={selectedStore}
-          onClose={() => {
-            setShowModal(false);
-            setSelectedStore(null);
-            setMessage('');
-          }}
-        />
-      )}
-    </div>
-    <Footer/>
+        {showModal && selectedStore && (
+          <MessageModal
+            store={selectedStore}
+            onClose={() => {
+              setShowModal(false);
+              setSelectedStore(null);
+              setMessage('');
+            }}
+          />
+        )}
+      </div>
+      <Footer />
     </>
   );
 };

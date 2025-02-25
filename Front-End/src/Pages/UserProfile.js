@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../css/userprofile.css';
-import { User, Mail, Phone, Shield, Edit2, Save, X } from 'lucide-react';
+import { User, Mail, Phone, Shield, Edit2, Save, X, Calendar, AlertCircle, CheckCircle, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import SellerNavBar from '../components/seller/sellerNavBar.js';
@@ -15,6 +15,7 @@ const UserProfile = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [updateSuccess, setUpdateSuccess] = useState(false);
     const [editedData, setEditedData] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -56,10 +57,14 @@ const UserProfile = () => {
 
     const handleUpdate = async () => {
         try {
+            setIsSubmitting(true);
+            setError(null);
+            
             const token = localStorage.getItem('token');
             
             if (!token) {
                 setError('Please log in to update your profile');
+                setIsSubmitting(false);
                 navigate('/login');
                 return;
             }
@@ -78,6 +83,7 @@ const UserProfile = () => {
             setUserData(response.data);
             setIsEditing(false);
             setUpdateSuccess(true);
+            setIsSubmitting(false);
             
             setTimeout(() => {
                 setUpdateSuccess(false);
@@ -89,6 +95,7 @@ const UserProfile = () => {
         } catch (err) {
             console.error('Profile update error:', err);
             setError(err.response?.data?.message || 'Failed to update profile');
+            setIsSubmitting(false);
             
             if (err.response?.status === 401) {
                 localStorage.clear();
@@ -97,7 +104,6 @@ const UserProfile = () => {
         }
     };
     
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setEditedData(prev => ({
@@ -121,6 +127,15 @@ const UserProfile = () => {
         }
     };
 
+    const getUserLevelColor = (level) => {
+        switch(level) {
+            case 1: return 'admin';
+            case 2: return 'seller';
+            case 3: return 'buyer';
+            default: return 'default';
+        }
+    };
+
     const renderNavBar = () => {
         const userLevel = userData?.userLevel;
         
@@ -136,21 +151,49 @@ const UserProfile = () => {
         }
     };
 
+    const formatDate = (dateString) => {
+        if (!dateString) return 'Not available';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+    };
+
     if (loading) {
         return (
-            <div className="userprofile-container">
-                <div className="userprofile-loading">Loading...</div>
-            </div>
+            <>
+                {renderNavBar()}
+                <div className="userprofile-container">
+                    <div className="userprofile-loading">
+                        <Loader className="loading-spinner" size={40} />
+                        <p>Loading your profile...</p>
+                    </div>
+                </div>
+                <Footer />
+            </>
         );
     }
 
     if (error) {
         return (
-            <div className="userprofile-container">
-                <div className="userprofile-error">
-                    {error}
+            <>
+                {renderNavBar()}
+                <div className="userprofile-container">
+                    <div className="userprofile-error">
+                        <AlertCircle size={24} />
+                        <p>{error}</p>
+                        <button 
+                            className="retry-button"
+                            onClick={fetchUserProfile}
+                        >
+                            Try Again
+                        </button>
+                    </div>
                 </div>
-            </div>
+                <Footer />
+            </>
         );
     }
 
@@ -160,76 +203,104 @@ const UserProfile = () => {
             <div className="userprofile-container">
                 <div className="userprofile-card">
                     <div className="userprofile-header">
-                        <h1>User Profile</h1>
-                        <div className="userprofile-badge">
-                            {getUserLevel(userData?.userLevel)}
+                        <div className="userprofile-title-area">
+                            <h1>User Profile</h1>
+                            <div className={`userprofile-badge ${getUserLevelColor(userData?.userLevel)}`}>
+                                {getUserLevel(userData?.userLevel)}
+                            </div>
                         </div>
                         {!isEditing && (
                             <button
                                 className="edit-button"
                                 onClick={() => setIsEditing(true)}
+                                aria-label="Edit profile"
                             >
                                 <Edit2 className="edit-icon" />
+                                <span>Edit</span>
                             </button>
                         )}
                     </div>
                     
                     {updateSuccess && (
                         <div className="success-message">
+                            <CheckCircle size={20} />
                             Profile updated successfully!
                         </div>
                     )}
 
+                    {error && isEditing && (
+                        <div className="error-message">
+                            <AlertCircle size={20} />
+                            {error}
+                        </div>
+                    )}
+
                     <div className="userprofile-content">
-                        <div className="userprofile-field">
-                            <User className="userprofile-icon" />
-                            <div className="userprofile-field-content">
-                                <label>Name</label>
-                                {isEditing ? (
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        value={editedData.name || ''}
-                                        onChange={handleInputChange}
-                                        className="edit-input"
-                                    />
-                                ) : (
-                                    <p>{userData?.name}</p>
-                                )}
-                            </div>
+                        <div className="userprofile-user-initial">
+                            {userData?.name?.charAt(0).toUpperCase() || 'U'}
                         </div>
 
-                        <div className="userprofile-field">
-                            <Mail className="userprofile-icon" />
-                            <div className="userprofile-field-content">
-                                <label>Email</label>
-                                <p>{userData?.email}</p>
+                        <div className="userprofile-fields-container">
+                            <div className="userprofile-field">
+                                <User className="userprofile-icon" />
+                                <div className="userprofile-field-content">
+                                    <label>Full Name</label>
+                                    {isEditing ? (
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            value={editedData.name || ''}
+                                            onChange={handleInputChange}
+                                            className="edit-input"
+                                            placeholder="Enter your full name"
+                                        />
+                                    ) : (
+                                        <p>{userData?.name || 'Not set'}</p>
+                                    )}
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="userprofile-field">
-                            <Phone className="userprofile-icon" />
-                            <div className="userprofile-field-content">
-                                <label>Mobile</label>
-                                {isEditing ? (
-                                    <input
-                                        type="text"
-                                        name="mobile"
-                                        value={editedData.mobile || ''}
-                                        onChange={handleInputChange}
-                                        className="edit-input"
-                                    />
-                                ) : (
-                                    <p>{userData?.mobile}</p>
-                                )}
+                            <div className="userprofile-field">
+                                <Mail className="userprofile-icon" />
+                                <div className="userprofile-field-content">
+                                    <label>Email Address</label>
+                                    <p className="email-value">{userData?.email}</p>
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="userprofile-field">
-                            <Shield className="userprofile-icon" />
-                            <div className="userprofile-field-content">
-                                <label>Account Type</label>
-                                <p>{getUserLevel(userData?.userLevel)}</p>
+                            <div className="userprofile-field">
+                                <Phone className="userprofile-icon" />
+                                <div className="userprofile-field-content">
+                                    <label>Mobile Number</label>
+                                    {isEditing ? (
+                                        <input
+                                            type="text"
+                                            name="mobile"
+                                            value={editedData.mobile || ''}
+                                            onChange={handleInputChange}
+                                            className="edit-input"
+                                            placeholder="Enter your mobile number"
+                                        />
+                                    ) : (
+                                        <p>{userData?.mobile || 'Not set'}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="userprofile-field">
+                                <Shield className="userprofile-icon" />
+                                <div className="userprofile-field-content">
+                                    <label>Account Type</label>
+                                    <p>{getUserLevel(userData?.userLevel)}</p>
+                                </div>
+                            </div>
+
+                            <div className="userprofile-field">
+                                <Calendar className="userprofile-icon" />
+                                <div className="userprofile-field-content">
+                                    <label>Member Since</label>
+                                    <p>{formatDate(userData?.createdAt)}</p>
+                                </div>
                             </div>
                         </div>
 
@@ -238,15 +309,26 @@ const UserProfile = () => {
                                 <button
                                     className="save-button"
                                     onClick={handleUpdate}
+                                    disabled={isSubmitting}
                                 >
-                                    <Save className="button-icon" />
-                                    Save Changes
+                                    {isSubmitting ? (
+                                        <>
+                                            <Loader className="button-icon spin" size={18} />
+                                            Saving...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Save className="button-icon" size={18} />
+                                            Save Changes
+                                        </>
+                                    )}
                                 </button>
                                 <button
                                     className="cancel-button"
                                     onClick={cancelEdit}
+                                    disabled={isSubmitting}
                                 >
-                                    <X className="button-icon" />
+                                    <X className="button-icon" size={18} />
                                     Cancel
                                 </button>
                             </div>

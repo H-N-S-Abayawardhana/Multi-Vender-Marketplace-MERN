@@ -114,7 +114,7 @@ const ShopNowPage = () => {
         </div>
       </div>
     </div>
-    
+    <Footer/>
     </>
   );
 };

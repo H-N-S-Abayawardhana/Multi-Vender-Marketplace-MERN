@@ -2,6 +2,7 @@
     display: flex;
     min-height: 100vh;
     background-color: #fff;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
 }
 
 .register-page-left {
@@ -11,6 +12,17 @@
     background-size: cover;
     background-position: center;
     clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
+    overflow: hidden;
+}
+
+.register-page-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 123, 255, 0.7);
+    z-index: 0;
 }
 
 .register-page-left-content {
@@ -19,19 +31,51 @@
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    color: rgb(255, 255, 255);
+    color: #ffffff;
     z-index: 1;
-    margin-top: -220px;
+    width: 80%;
+    animation: fadeIn 0.8s ease-in-out;
 }
 
 .register-page-left-content h2 {
     font-size: 2.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .register-page-left-content p {
     font-size: 1.2rem;
-    opacity: 0.9;
+    opacity: 0.95;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+.register-page-benefits {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    text-align: left;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.register-page-benefit-item {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.register-page-benefit-item svg {
+    background: white;
+    color: #007bff;
+    border-radius: 50%;
+    padding: 0.15rem;
+    font-size: 1rem;
 }
 
 .register-page-right {
@@ -45,14 +89,26 @@
 .register-page-form-container {
     width: 100%;
     max-width: 450px;
-    padding: 2rem;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    background-color: #ffffff;
+    animation: slideUp 0.5s ease-out;
 }
 
 .register-page-form-container h2 {
     text-align: center;
     color: #333;
-    margin-bottom: 2rem;
+    margin-bottom: 0.75rem;
     font-size: 2rem;
+    font-weight: 700;
+}
+
+.register-page-form-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1rem;
 }
 
 .register-page-form-group {
@@ -60,29 +116,48 @@
     position: relative;
 }
 
+.register-page-input-with-icon {
+    position: relative;
+}
+
+.register-page-input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
 .register-page-form-group input {
     width: 100%;
-    padding: 0.75rem 1rem;
+    padding: 0.9rem 2.75rem;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 1rem;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
 }
 
 .register-page-form-group input:focus {
     outline: none;
     border-color: #007bff;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
 
 .register-page-form-group input.register-page-error {
     border-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.05);
 }
 
 .register-page-error-message {
     color: #dc3545;
     font-size: 0.875rem;
-    margin-top: 0.25rem;
+    margin-top: 0.5rem;
     display: block;
+    padding-left: 0.5rem;
+    animation: shake 0.5s ease-in-out;
 }
 
 .register-page-password-input {
@@ -97,8 +172,101 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #666;
+    color: #6c757d;
     padding: 0;
+    font-size: 1rem;
+    transition: color 0.2s ease;
+}
+
+.register-page-toggle-password:hover {
+    color: #333;
+}
+
+.register-page-password-strength {
+    margin-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.register-page-password-strength-bar {
+    height: 5px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.register-page-password-strength-bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.3s ease;
+}
+
+.register-page-password-strength-bar-empty {
+    background-color: #e9ecef;
+}
+
+.register-page-password-strength-bar-weak {
+    background-color: #dc3545;
+}
+
+.register-page-password-strength-bar-medium {
+    background-color: #ffc107;
+}
+
+.register-page-password-strength-bar-strong {
+    background-color: #28a745;
+}
+
+.register-page-password-strength-text {
+    font-size: 0.75rem;
+    color: #6c757d;
+    text-align: right;
+}
+
+.register-page-password-hints {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.register-page-password-hints ul {
+    list-style: none;
+    padding-left: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.register-page-password-hints li {
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.register-page-password-hints li::before {
+    content: '○';
+    color: #6c757d;
+}
+
+.register-page-password-hints li.valid::before {
+    content: '●';
+    color: #28a745;
+}
+
+.register-page-terms {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.register-page-terms a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.register-page-terms a:hover {
+    text-decoration: underline;
 }
 
 .register-page-submit-button {
@@ -109,38 +277,99 @@
     border: none;
     border-radius: 8px;
     font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .register-page-submit-button:hover {
-    background-color: #0056b3;
+    background-color: #0069d9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.register-page-submit-button:active {
+    transform: translateY(0);
 }
 
 .register-page-submit-button:disabled {
-    background-color: #ccc;
+    background-color: #6c757d;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.register-page-loading-spinner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.register-page-loading-spinner-inner {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
 }
 
 .register-page-login-link {
     text-align: center;
-    margin-top: 1.5rem;
-    color: #666;
+    margin-top: 2rem;
+    color: #6c757d;
+    font-size: 0.95rem;
 }
 
 .register-page-login-link a {
     color: #007bff;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
+    transition: color 0.2s ease;
 }
 
 .register-page-login-link a:hover {
+    color: #0056b3;
     text-decoration: underline;
 }
 
-.register-page-submit-error {
-    text-align: center;
-    margin-bottom: 1rem;
+.register-page-toast {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 991px) {
+    .register-page-left-content {
+        margin-top: 0;
+    }
 }
 
 @media (max-width: 768px) {
@@ -149,11 +378,59 @@
     }
 
     .register-page-left {
-        min-height: 200px;
-        clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        min-height: 250px;
+        clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+    }
+
+    .register-page-left-content {
+        padding: 1.5rem;
+        width: 90%;
+    }
+
+    .register-page-left-content h2 {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .register-page-left-content p {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .register-page-benefits {
+        margin-top: 1rem;
+    }
+
+    .register-page-benefit-item {
+        font-size: 0.95rem;
     }
 
     .register-page-right {
-        padding: 1rem;
+        padding: 1.5rem;
+    }
+
+    .register-page-form-container {
+        max-width: 100%;
+        padding: 1.5rem;
+        box-shadow: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .register-page-left {
+        min-height: 200px;
+    }
+
+    .register-page-form-container h2 {
+        font-size: 1.75rem;
+    }
+
+    .register-page-form-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .register-page-form-group input {
+        padding: 0.75rem 2.5rem;
+        font-size: 0.95rem;
     }
 }

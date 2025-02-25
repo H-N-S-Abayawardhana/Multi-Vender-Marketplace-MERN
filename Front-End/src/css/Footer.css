@@ -1,47 +1,296 @@
-/* Footer Styles */
+/* Enhanced Footer Styles for Multi-Vendor Marketplace */
+
+.footer {
+  --footer-bg: #121212;
+  --footer-text: #ffffff;
+  --footer-link: #b0b0b0;
+  --footer-link-hover: #ffffff;
+  --footer-border: rgba(255, 255, 255, 0.1);
+  --footer-badge-bg: rgba(255, 255, 255, 0.05);
+  --footer-badge-hover: rgba(255, 255, 255, 0.1);
+  
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
+  font-size: 0.95rem;
+}
+
+/* Footer Sections */
+.footer-top {
+  padding: 4rem 0 2rem;
+}
+
+.footer-middle {
+  padding: 2rem 0;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.footer-newsletter {
+  padding: 3rem 0;
+  background-color: var(--bs-primary);
+}
+
+.footer-bottom {
+  padding: 1.5rem 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  font-size: 0.85rem;
+}
+
+/* Headings */
+.footer-heading {
+  color: var(--footer-text);
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  position: relative;
+  padding-bottom: 0.8rem;
+}
+
+.footer-heading::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 2px;
+  background-color: var(--bs-primary);
+}
+
+/* Footer Links */
+.footer-links {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.7rem;
+}
+
+.footer-links a {
+  color: var(--footer-link);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: inline-block;
+  position: relative;
+}
+
+.footer-links a:hover {
+  color: var(--footer-link-hover);
+  padding-left: 5px;
+}
+
+.footer-links a::before {
+  content: '›';
+  opacity: 0;
+  position: absolute;
+  left: -10px;
+  transition: all 0.2s ease;
+}
+
+.footer-links a:hover::before {
+  opacity: 1;
+  left: -5px;
+}
+
+/* Footer About Section */
+.footer-about p {
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+/* Download App Buttons */
+.download-app .btn {
+  border-radius: 50px;
+  font-size: 0.85rem;
+  padding: 0.4rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.download-app .btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Social Icons */
+.social-icons {
+  display: flex;
+  gap: 0.8rem;
+}
+
 .social-icon {
-    background-color: rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--footer-text);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  background-color: var(--bs-primary);
+  color: #ffffff;
+  transform: translateY(-3px);
+}
+
+/* Trust Badges */
+.trust-badge {
+  background-color: var(--footer-badge-bg);
+  border-radius: 8px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.trust-badge:hover {
+  background-color: var(--footer-badge-hover);
+  transform: translateY(-5px);
+}
+
+.trust-icon {
+  font-size: 2rem;
+  color: var(--bs-primary);
+  margin-bottom: 1rem;
+}
+
+.trust-badge h6 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.trust-badge p {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin-bottom: 0;
+}
+
+/* Newsletter Form */
+.newsletter-form input {
+  height: 50px;
+  border-radius: 4px 0 0 4px;
+  border: none;
+  padding-left: 1.2rem;
+}
+
+.newsletter-form .btn {
+  border-radius: 0 4px 4px 0;
+  padding: 0 1.5rem;
+  height: 50px;
+  font-weight: 600;
+  background-color: var(--footer-bg);
+  border-color: var(--footer-bg);
+}
+
+.newsletter-form .btn:hover {
+  background-color: #000000;
+  border-color: #000000;
+}
+
+.newsletter-form .form-text {
+  font-size: 0.8rem;
+}
+
+/* Copyright and Legal */
+.footer-copyright {
+  opacity: 0.7;
+}
+
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.footer-legal a {
+  color: var(--footer-link);
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: color 0.2s ease;
+}
+
+.footer-legal a:hover {
+  color: var(--footer-link-hover);
+}
+
+/* Payment Methods */
+.payment-methods {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.payment-methods svg {
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.3s ease;
+}
+
+.payment-methods svg:hover {
+  color: var(--bs-primary);
+  transform: translateY(-3px);
+}
+
+/* Language Selector */
+.language-selector {
+  display: flex;
+  align-items: center;
+}
+
+.language-selector select {
+  cursor: pointer;
+}
+
+.language-selector select option {
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
+}
+
+/* Mobile Accordion */
+.footer-accordion {
+  margin-bottom: 1.5rem;
+}
+
+.footer-accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--footer-border);
+  cursor: pointer;
+}
+
+.footer-accordion-content {
+  padding: 1.5rem 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767.98px) {
+  .footer-top, .footer-middle, .footer-newsletter {
+    padding: 2rem 0;
   }
   
-  .social-icon:hover {
-    background-color: var(--bs-primary);
-    transform: translateY(-3px);
-  }
-  
-  .hover-link {
-    transition: all 0.3s ease;
-  }
-  
-  .hover-link:hover {
-    color: var(--bs-primary) !important;
-    text-decoration: none !important;
-    padding-left: 5px;
+  .footer-heading {
+    margin-bottom: 1rem;
   }
   
   .trust-badge {
-    transition: all 0.3s ease;
+    padding: 1rem;
   }
   
-  .trust-badge:hover {
-    transform: translateY(-5px);
+  .footer-legal {
+    justify-content: center;
+    margin-top: 1rem;
   }
   
-  .newsletter-form input {
-    background-color: rgba(255, 255, 255, 0.05) !important;
+  .social-icons {
+    justify-content: center;
   }
-  
-  .newsletter-form input:focus {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    border-color: var(--bs-primary) !important;
-    box-shadow: none;
-  }
-  
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
   .payment-methods svg {
-    transition: all 0.3s ease;
+    font-size: 1.75rem;
   }
-  
-  .payment-methods svg:hover {
-    color: var(--bs-primary) !important;
-    transform: translateY(-3px);
-  }
+}
