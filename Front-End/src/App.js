@@ -19,13 +19,14 @@ import SellerDashboard from './Pages/seller/SellerDashboard';
 import AddStore from './Pages/seller/AddStore';
 import AddItems from './Pages/seller/AddItems';
 import SellerNotifications from './Pages/seller/SellerNotifications';
+import MyProducts from './Pages/seller/myproducts';
 import AdminNotificationPage from './Pages/admin/AdminNotificationPage';
 import AdminDashboard from './Pages/admin/AdminDashboard';
 import SellerRequests from './Pages/admin/SellerRequests';
 import AllStores from './Pages/admin/AllStores';
 
-// Import protected routes
-//import { BuyerProtectedRoute, SellerProtectedRoute, AdminProtectedRoute } from './components/ProtectedRoutes';
+
+// { BuyerProtectedRoute, SellerProtectedRoute, AdminProtectedRoute } from './components/ProtectedRoutes';
 import BuyerProtectedRoute from './Routes/BuyerProtectedRoute';
 import SellerProtectedRoute from './Routes/SellerProtectedRoute';
 import AdminProtectedRoute from './Routes/AdminProtectedRoute';
@@ -54,6 +55,7 @@ function App() {
         <Route path="/seller-profile" element={<SellerProtectedRoute><SellerProfile /></SellerProtectedRoute>} />
         <Route path="/add-items" element={<SellerProtectedRoute><AddItems /></SellerProtectedRoute>} />
         <Route path="/seller-notifications" element={<SellerProtectedRoute><SellerNotifications /></SellerProtectedRoute>} />
+        <Route path="/my-products" element={<SellerProtectedRoute><MyProducts /></SellerProtectedRoute>} />
         <Route path="/admin-notifications" element={<AdminProtectedRoute><AdminNotificationPage/></AdminProtectedRoute >} />
         <Route path="/admin-dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
         <Route path="/seller-requests" element={<AdminProtectedRoute><SellerRequests /></AdminProtectedRoute>} />
