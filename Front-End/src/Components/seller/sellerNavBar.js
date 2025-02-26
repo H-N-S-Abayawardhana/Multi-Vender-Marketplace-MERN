@@ -1,11 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaBell } from 'react-icons/fa';
+import axios from 'axios';
 import Swal from 'sweetalert2';
 import logo from '../../assets/images/logo.png';
 
 const SellerNavBar = () => {
   const navigate = useNavigate();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // Fetch unread notifications count
+  const fetchUnreadCount = async () => {
+    try {
+      const email = localStorage.getItem('email');
+      if (!email) return;
+      
+      const response = await axios.get(`http://localhost:9000/api/notifications/${email}`);
+      const unreadNotifications = response.data.filter(notification => !notification.isRead);
+      setUnreadCount(unreadNotifications.length);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    }
+  };
+
+  // Fetch count when component mounts and set up interval
+  useEffect(() => {
+    fetchUnreadCount();
+    
+    // Set up polling interval to check for new notifications
+    const interval = setInterval(fetchUnreadCount, 30000); // Check every 30 seconds
+    
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
+  }, []);
 
   // Handler for notification click - now navigates to notifications page
   const handleNotificationClick = (e) => {
@@ -99,14 +126,14 @@ const SellerNavBar = () => {
 
             {/* Seller Products Link */}
             <li className="nav-item mx-3">
-              <Link className="nav-link" to="/seller/products">
+              <Link className="nav-link" to="/my-products">
                 My Products
               </Link>
             </li>
 
             {/* Seller Orders Link */}
             <li className="nav-item mx-3">
-              <Link className="nav-link" to="/seller/orders">
+              <Link className="nav-link" to="/my-orders">
                 Orders
               </Link>
             </li>
@@ -119,10 +146,12 @@ const SellerNavBar = () => {
                 onClick={handleNotificationClick}
               >
                 <FaBell size={20} />
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  0
-                  <span className="visually-hidden">unread notifications</span>
-                </span>
+                {unreadCount > 0 && (
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {unreadCount}
+                    <span className="visually-hidden">unread notifications</span>
+                  </span>
+                )}
               </Link>
             </li>
 

@@ -6,14 +6,10 @@ const sellnotiController = require('../Controllers/sellnotiController');
 // Get notifications for a specific email
 router.get('/notifications/:email', sellnotiController.getSellerNotifications);
 
+// Get unread notification count for a specific email
+router.get('/notifications/:email/unread', sellnotiController.getUnreadCount);
+
 // Mark notification as read
-router.put('/notifications/:id/read', async (req, res) => {
-    try {
-        const notificationId = req.params.id;
-        await sellnotiController.markAsRead(req, res);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+router.put('/notifications/:id/read', sellnotiController.markAsRead);
 
 module.exports = router;

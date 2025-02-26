@@ -56,3 +56,93 @@
     font-style: italic;
     padding: 2rem;
   }
+
+  /* Add these styles to your existing CSS file */
+
+.sellnoti-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.sellnoti-mark-all-btn {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sellnoti-mark-all-btn:hover {
+  background-color: #e9ecef;
+  color: #212529;
+}
+
+.sellnoti-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  background-color: #fff;
+  border-left: 4px solid transparent;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.sellnoti-unread {
+  border-left-color: #0d6efd;
+  background-color: #f8f9fa;
+}
+
+.sellnoti-content {
+  flex: 1;
+}
+
+.sellnoti-message {
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+  color: #343a40;
+}
+
+.sellnoti-date {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.sellnoti-read-btn {
+  background-color: #e7f5ff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  color: #0d6efd;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 1rem;
+}
+
+.sellnoti-read-btn:hover {
+  background-color: #d0ebff;
+}
+
+.sellnoti-loading, .sellnoti-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  font-size: 1.2rem;
+  color: #6c757d;
+}
+
+.sellnoti-empty {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+  font-size: 1.1rem;
+}

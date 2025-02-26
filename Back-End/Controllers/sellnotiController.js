@@ -1,4 +1,3 @@
-// Controllers/sellnotiController.js
 const SellerNotification = require('../Models/sellnotiModel');
 
 // Create new notification
@@ -36,10 +35,38 @@ exports.getSellerNotifications = async (req, res) => {
 exports.markAsRead = async (req, res) => {
     try {
         const notificationId = req.params.id;
-        await SellerNotification.findByIdAndUpdate(notificationId, { isRead: true });
-        res.status(200).json({ message: 'Notification marked as read' });
+        const updatedNotification = await SellerNotification.findByIdAndUpdate(
+            notificationId, 
+            { isRead: true },
+            { new: true } // Return the updated document
+        );
+        
+        if (!updatedNotification) {
+            return res.status(404).json({ error: 'Notification not found' });
+        }
+        
+        res.status(200).json({ 
+            message: 'Notification marked as read',
+            notification: updatedNotification
+        });
     } catch (error) {
         console.error('Error marking notification as read:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Get unread notification count for a specific email
+exports.getUnreadCount = async (req, res) => {
+    try {
+        const email = req.params.email;
+        const count = await SellerNotification.countDocuments({ 
+            email, 
+            isRead: false 
+        });
+        
+        res.status(200).json({ count });
+    } catch (error) {
+        console.error('Error getting unread count:', error);
         res.status(500).json({ error: error.message });
     }
 };
