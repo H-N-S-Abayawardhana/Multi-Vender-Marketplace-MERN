@@ -12,8 +12,8 @@ import {
   ShoppingCart, 
   CreditCard, 
   Minus, 
-  Plus,
-  Heart,
+  Plus, 
+  Heart, 
   Truck
 } from 'lucide-react';
 import '../css/Home.css';
