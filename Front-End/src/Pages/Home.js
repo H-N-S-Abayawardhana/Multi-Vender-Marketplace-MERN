@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { 
   ArrowRight, 
@@ -14,7 +14,10 @@ import {
   Minus, 
   Plus, 
   Heart, 
-  Truck
+  Truck,
+  X,
+  User,
+  Lock
 } from 'lucide-react';
 import '../css/Home.css';
 import summerSaleBanner from '../assets/images/summer-sale-banner.jpg';
@@ -62,7 +65,107 @@ const featuredCategories = [
   { name: 'Jewelry', icon: '💍', color: '#f97316' }
 ];
 
+// Sign-in component
+const SignInPopup = ({ onClose, onSignInSuccess }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      setError('Email and password are required');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError('');
+      
+      const response = await axios.post('http://localhost:9000/api/users/login', {
+        email,
+        password
+      });
+
+      // Store token and email in localStorage
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('email', email);
+      
+      // Call the success callback
+      onSignInSuccess();
+      
+      toast.success('Signed in successfully!');
+    } catch (err) {
+      console.error('Login error:', err);
+      setError(err.response?.data?.message || 'Failed to sign in. Please check your credentials.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="signin-popup-overlay">
+      <div className="signin-popup">
+        <div className="signin-popup-header">
+          <h2>Sign In</h2>
+          <button className="signin-close-btn" onClick={onClose}>
+            <X size={20} />
+          </button>
+        </div>
+        
+        {error && <div className="signin-error">{error}</div>}
+        
+        <form onSubmit={handleSubmit} className="signin-form">
+          <div className="signin-form-group">
+            <label htmlFor="email">
+              <User size={16} />
+              <span>Email</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              disabled={loading}
+            />
+          </div>
+          
+          <div className="signin-form-group">
+            <label htmlFor="password">
+              <Lock size={16} />
+              <span>Password</span>
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              disabled={loading}
+            />
+          </div>
+          
+          <button 
+            type="submit" 
+            className="signin-submit-btn"
+            disabled={loading}
+          >
+            {loading ? 'Signing in...' : 'Sign In'}
+          </button>
+        </form>
+        
+        <div className="signin-footer">
+          <p>Don't have an account? <Link to="/signup" onClick={onClose}>Sign Up</Link></p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Home = () => {
+  const navigate = useNavigate();
   const [featuredItems, setFeaturedItems] = useState([]);
   const [trendingItems, setTrendingItems] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
@@ -74,8 +177,15 @@ const Home = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [showCheckout, setShowCheckout] = useState(false);
   const [wishlist, setWishlist] = useState([]);
+  const [showSignIn, setShowSignIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
+    setIsLoggedIn(!!(token && email));
+
     const fetchHomeData = async () => {
       try {
         setLoading(true);
@@ -204,16 +314,39 @@ const Home = () => {
     event.preventDefault();
     event.stopPropagation();
     
-    // Set the selected item with its current selected quantity
-    const quantity = itemQuantities[item._id] || 1;
-    const itemWithQuantity = {
-      ...item,
-      selectedQuantity: quantity,
-      // Calculate total price based on selected quantity
-      totalPrice: item.price * quantity
-    };
-    setSelectedItem(itemWithQuantity);
-    setShowCheckout(true);
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
+    
+    if (token && email) {
+      // User is logged in, proceed with checkout
+      const quantity = itemQuantities[item._id] || 1;
+      const itemWithQuantity = {
+        ...item,
+        selectedQuantity: quantity,
+        // Calculate total price based on selected quantity
+        totalPrice: item.price * quantity
+      };
+      setSelectedItem(itemWithQuantity);
+      setShowCheckout(true);
+    } else {
+      // User is not logged in, show sign-in popup
+      setSelectedItem({
+        ...item,
+        selectedQuantity: itemQuantities[item._id] || 1
+      });
+      setShowSignIn(true);
+    }
+  };
+
+  const handleSignInSuccess = () => {
+    setShowSignIn(false);
+    setIsLoggedIn(true);
+    
+    if (selectedItem) {
+      // Proceed with checkout after successful sign-in
+      setShowCheckout(true);
+    }
   };
 
   const toggleWishlist = (itemId, event) => {
@@ -235,6 +368,11 @@ const Home = () => {
 
   const handleCheckoutClose = () => {
     setShowCheckout(false);
+    setSelectedItem(null);
+  };
+
+  const handleSignInClose = () => {
+    setShowSignIn(false);
     setSelectedItem(null);
   };
 
@@ -578,6 +716,14 @@ const Home = () => {
             item={selectedItem}
             onClose={handleCheckoutClose}
             onSubmit={handleOrderSubmit}
+          />
+        )}
+        
+        {/* Sign-in Popup */}
+        {showSignIn && (
+          <SignInPopup
+            onClose={handleSignInClose}
+            onSignInSuccess={handleSignInSuccess}
           />
         )}
         

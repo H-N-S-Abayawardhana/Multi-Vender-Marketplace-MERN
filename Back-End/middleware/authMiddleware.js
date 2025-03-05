@@ -16,8 +16,7 @@ const isAdmin = async (req, res, next) => {
 
         // Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
-        // Get user from database
+                // Get user from database
         const user = await User.findById(decoded.userId);
         
         if (!user) {
