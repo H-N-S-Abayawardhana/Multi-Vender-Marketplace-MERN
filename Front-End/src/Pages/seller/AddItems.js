@@ -392,7 +392,7 @@ const AddItem = () => {
                       onClick={handleAddCustomCategory}
                       className="additems-custom-category-btn"
                     >
-                      Add Custom
+                      Add Category
                     </button>
                   )}
                   {showSuggestions && filteredCategories.length > 0 && (
