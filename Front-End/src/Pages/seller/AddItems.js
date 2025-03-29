@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../css/seller/additems.css';
+import SellerNavBar from '../../components/seller/sellerNavBar';
+import Footer from '../../components/Footer';
 
 const AddItem = () => {
   const navigate = useNavigate();
@@ -53,11 +55,10 @@ const AddItem = () => {
 
   // Predefined categories list
   const predefinedCategories = [
-    'Electronics',
+    'Computer',
     'Clothing',
     'Home',
     'Books',
-    'Sports',
     'Toys',
     'Beauty',
     'Automotive',
@@ -294,8 +295,11 @@ const AddItem = () => {
   };
 
   return (
+    <>
+    <SellerNavBar/>
     <div className="additems-container">
-      <ToastContainer position="top-right" autoClose={3000} />
+      
+      <ToastContainer position="top-center" autoClose={3000} />
       
       <div className="additems-header">
         <h1 className="additems-title">Add New Item</h1>
@@ -726,6 +730,8 @@ const AddItem = () => {
         )}
       </form>
     </div>
+    <Footer/>
+    </>
   );
 };
 

@@ -9,21 +9,18 @@ const SellerNavBar = () => {
   const navigate = useNavigate();
   const [unreadCount, setUnreadCount] = useState(0);
 
-  // Improved ResizeObserver error handler with broader catch pattern
+  // Improved ResizeObserver error handler
   useEffect(() => {
-    const handleResizeError = function(e) {
-      if (e && e.message && (
-          e.message.includes('ResizeObserver loop') || 
-          e.message.includes('ResizeObserver')
-        )) {
-        // Prevent the error from bubbling up
-        e.stopImmediatePropagation();
-        // Avoid console error by returning true
+    // This function prevents ResizeObserver errors from being shown in the console
+    const handleResizeError = (event) => {
+      if (event && event.message && event.message.includes('ResizeObserver')) {
+        event.stopPropagation();
+        event.preventDefault();
         return true;
       }
     };
     
-    // Capture errors at window level
+    // Add error event listener with capture phase to catch the error early
     window.addEventListener('error', handleResizeError, { capture: true });
     
     // Cleanup on unmount
@@ -32,7 +29,7 @@ const SellerNavBar = () => {
     };
   }, []);
 
-  // Safer fetch unread notifications count with better error handling
+  // Fetch unread notifications count
   const fetchUnreadCount = async () => {
     try {
       const email = localStorage.getItem('email');
@@ -45,88 +42,76 @@ const SellerNavBar = () => {
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
-      // Don't update state on error to maintain previous valid count
+      // Keep existing count on error
     }
   };
 
-  // Fetch count when component mounts and set up interval with cleanup
+  // Fetch notification count on mount and set up polling
   useEffect(() => {
-    // Initial fetch
     fetchUnreadCount();
     
-    // Set up polling interval with more realistic timing
-    const interval = setInterval(fetchUnreadCount, 60000); // Check every minute instead of 30s
+    // Check for new notifications every minute
+    const interval = setInterval(fetchUnreadCount, 60000);
     
-    // Cleanup interval on unmount
     return () => {
       clearInterval(interval);
     };
   }, []);
 
-  // Handler for notification click - navigates to notifications page
+  // Navigate to notifications page
   const handleNotificationClick = (e) => {
     e.preventDefault();
     navigate('/seller-notifications');
   };
 
-  // Improved logout handler with better state management
-  const handleLogout = async () => {
+  // Fixed logout handler to address ResizeObserver issues
+  const handleLogout = () => {
+    // Get session info before clearing localStorage
+    const sessionId = localStorage.getItem('sessionId');
+    
+    // Clear localStorage first
+    localStorage.clear();
+    
+    // Use this flag to prevent multiple logout attempts
+    let isLoggingOut = true;
+    
     try {
-      // Get session info before clearing
-      const sessionId = localStorage.getItem('sessionId');
-      
-      // Prevent multiple logout attempts
-      if (!sessionId) {
-        navigate('/', { replace: true });
-        return;
-      }
-      
-      // Clear localStorage first to prevent UI state issues
-      localStorage.clear();
-      
-      // Delay navigation slightly to allow cleanup
-      setTimeout(() => {
-        // Show logout success message before final navigation
-        Swal.fire({
-          title: 'Logged Out!',
-          text: 'You have been successfully logged out',
-          icon: 'success',
-          confirmButtonColor: '#3085d6',
-          timer: 1500,
-          willClose: () => {
-            // Navigate after the Swal modal is closed
+      // Show logout message first, then navigate
+      Swal.fire({
+        title: 'Logged Out!',
+        text: 'You have been successfully logged out',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        timer: 1500,
+        willClose: () => {
+          // Only navigate once
+          if (isLoggingOut) {
+            isLoggingOut = false;
             navigate('/', { replace: true });
           }
-        });
-      }, 100);
+        }
+      });
       
-      // Make API call in background without waiting for response
-      try {
-        await fetch('http://localhost:9000/api/auth/logout', {
+      // Make API call in background if sessionId exists
+      if (sessionId) {
+        fetch('http://localhost:9000/api/auth/logout', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ sessionId }),
+        }).catch(err => {
+          console.error('Background logout request failed:', err);
         });
-      } catch (err) {
-        // Silently handle API errors since user is already logged out locally
-        console.error('Background logout request failed:', err);
       }
     } catch (error) {
       console.error('Logout error:', error);
-      // Clear localStorage as fallback even if there was an error
-      localStorage.clear();
       
-      Swal.fire({
-        title: 'Error!',
-        text: 'There was an issue during logout, but you have been logged out successfully.',
-        icon: 'warning',
-        confirmButtonColor: '#3085d6',
-        willClose: () => {
-          navigate('/', { replace: true });
-        }
-      });
+      // Ensure user still gets logged out even if there's an error
+      if (isLoggingOut) {
+        isLoggingOut = false;
+        navigate('/', { replace: true });
+      }
     }
   };
 
@@ -181,7 +166,7 @@ const SellerNavBar = () => {
               </Link>
             </li>
 
-            {/* Notification Icon - Updated to use Link component */}
+            {/* Notification Icon */}
             <li className="nav-item mx-3">
               <Link 
                 to="/seller-notifications" 
