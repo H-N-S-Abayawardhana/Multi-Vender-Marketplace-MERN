@@ -378,12 +378,17 @@ const StoreDetails = () => {
             </div>
           )}
           
-          <div className="storedetails-sell-items-section">
+                  <div className="storedetails-sell-items-section">
+          <div className="storedetails-sell-items-header">
             <h2 className="storedetails-sell-items-title">
               <i className="fas fa-box"></i> Store Products
             </h2>
-            <ItemList storeId={id} />
+            <Link to={`/add-items`} className="storedetails-sell-btn storedetails-sell-btn-primary">
+              <i className="fas fa-plus"></i> Add Items
+            </Link>
           </div>
+          <ItemList storeId={id} />
+        </div>
         </div>
       </div>
       <Footer />
