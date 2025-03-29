@@ -46,7 +46,7 @@ const banners = [
   },
   {
     title: "Free Shipping",
-    description: "On orders over $100",
+    description: "On orders over LKR 20,000",
     image: freeShipping,
     buttonText: "Learn More",
     link: "/shipping"
@@ -104,64 +104,64 @@ const SignInPopup = ({ onClose, onSignInSuccess }) => {
     }
   };
 
-  return (
-    <div className="signin-popup-overlay">
-      <div className="signin-popup">
-        <div className="signin-popup-header">
-          <h2>Sign In</h2>
-          <button className="signin-close-btn" onClick={onClose}>
-            <X size={20} />
-          </button>
-        </div>
+  // return (
+  //   <div className="signin-popup-overlay">
+  //     <div className="signin-popup">
+  //       <div className="signin-popup-header">
+  //         <h2>Sign In</h2>
+  //         <button className="signin-close-btn" onClick={onClose}>
+  //           <X size={20} />
+  //         </button>
+  //       </div>
         
-        {error && <div className="signin-error">{error}</div>}
+  //       {error && <div className="signin-error">{error}</div>}
         
-        <form onSubmit={handleSubmit} className="signin-form">
-          <div className="signin-form-group">
-            <label htmlFor="email">
-              <User size={16} />
-              <span>Email</span>
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              disabled={loading}
-            />
-          </div>
+  //       <form onSubmit={handleSubmit} className="signin-form">
+  //         <div className="signin-form-group">
+  //           <label htmlFor="email">
+  //             <User size={16} />
+  //             <span>Email</span>
+  //           </label>
+  //           <input
+  //             type="email"
+  //             id="email"
+  //             value={email}
+  //             onChange={(e) => setEmail(e.target.value)}
+  //             placeholder="Enter your email"
+  //             disabled={loading}
+  //           />
+  //         </div>
           
-          <div className="signin-form-group">
-            <label htmlFor="password">
-              <Lock size={16} />
-              <span>Password</span>
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              disabled={loading}
-            />
-          </div>
+  //         <div className="signin-form-group">
+  //           <label htmlFor="password">
+  //             <Lock size={16} />
+  //             <span>Password</span>
+  //           </label>
+  //           <input
+  //             type="password"
+  //             id="password"
+  //             value={password}
+  //             onChange={(e) => setPassword(e.target.value)}
+  //             placeholder="Enter your password"
+  //             disabled={loading}
+  //           />
+  //         </div>
           
-          <button 
-            type="submit" 
-            className="signin-submit-btn"
-            disabled={loading}
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
+  //         <button 
+  //           type="submit" 
+  //           className="signin-submit-btn"
+  //           disabled={loading}
+  //         >
+  //           {loading ? 'Signing in...' : 'Sign In'}
+  //         </button>
+  //       </form>
         
-        <div className="signin-footer">
-          <p>Don't have an account? <Link to="/signup" onClick={onClose}>Sign Up</Link></p>
-        </div>
-      </div>
-    </div>
-  );
+  //       <div className="signin-footer">
+  //         <p>Don't have an account? <Link to="/signup" onClick={onClose}>Sign Up</Link></p>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 };
 
 const Home = () => {
@@ -388,6 +388,11 @@ const Home = () => {
     return discount > 0 ? discount : null;
   };
 
+  // Format price to display in LKR
+  const formatPrice = (price) => {
+    return `LKR ${price.toFixed(2)}`;
+  };
+
   if (loading) {
     return (
       <div className="homepage-loading">
@@ -462,15 +467,15 @@ const Home = () => {
             <div className="homepage-item-price">
               {item.listingType === 'Fixed' ? (
                 <>
-                  <span className="homepage-current-price">${item.price.toFixed(2)}</span>
+                  <span className="homepage-current-price">{formatPrice(item.price)}</span>
                   {item.originalPrice && item.originalPrice > item.price && (
                     <span className="homepage-original-price">
-                      ${item.originalPrice.toFixed(2)}
+                      {formatPrice(item.originalPrice)}
                     </span>
                   )}
                 </>
               ) : (
-                <span className="homepage-current-price">Starting bid: ${item.startingBid.toFixed(2)}</span>
+                <span className="homepage-current-price">Starting bid: {formatPrice(item.startingBid)}</span>
               )}
             </div>
             
@@ -497,7 +502,7 @@ const Home = () => {
               <span>
                 {item.shippingDetails.cost === 0 
                   ? 'Free Shipping' 
-                  : `Shipping: $${item.shippingDetails.cost.toFixed(2)}`}
+                  : `Shipping: ${formatPrice(item.shippingDetails.cost)}`}
               </span>
             </div>
           </div>

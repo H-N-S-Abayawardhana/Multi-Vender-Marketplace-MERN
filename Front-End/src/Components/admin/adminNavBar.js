@@ -9,6 +9,23 @@ const AdminNavBar = () => {
   const navigate = useNavigate();
   const [unreadCount, setUnreadCount] = useState(0);
 
+  // Add a ResizeObserver error handler to fix potential errors
+  useEffect(() => {
+    const handleResizeError = function(e) {
+      if (e.message === 'ResizeObserver loop completed with undelivered notifications.' || 
+          e.message === 'ResizeObserver loop limit exceeded') {
+        e.stopImmediatePropagation();
+        return true;
+      }
+    };
+    
+    window.addEventListener('error', handleResizeError, true);
+    
+    return () => {
+      window.removeEventListener('error', handleResizeError, true);
+    };
+  }, []);
+
   // Fetch unread notifications count
   const fetchUnreadCount = async () => {
     try {
@@ -40,29 +57,34 @@ const AdminNavBar = () => {
     try {
       const sessionId = localStorage.getItem('sessionId');
       
-      const response = await fetch('http://localhost:9000/api/auth/logout', {
+      // First clear localStorage before making API call
+      // This ensures UI updates immediately even if server call takes time
+      const tempSessionId = sessionId; // Save ID before clearing
+      localStorage.clear();
+      
+      // Show logout success message before navigation
+      Swal.fire({
+        title: 'Logged Out!',
+        text: 'You have been successfully logged out',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        timer: 1500,
+        willClose: () => {
+          // Navigate after the Swal modal is closed
+          navigate('/', { replace: true });
+        }
+      });
+      
+      // Make API call in background without waiting for it
+      fetch('http://localhost:9000/api/auth/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ sessionId }),
+        body: JSON.stringify({ sessionId: tempSessionId }),
+      }).catch(err => {
+        console.error('Background logout request failed:', err);
       });
-
-      if (response.ok) {
-        localStorage.clear();
-        
-        Swal.fire({
-          title: 'Logged Out!',
-          text: 'You have been successfully logged out',
-          icon: 'success',
-          confirmButtonColor: '#3085d6',
-          timer: 1500
-        });
-
-        navigate('/');
-      } else {
-        throw new Error('Logout failed');
-      }
     } catch (error) {
       console.error('Logout error:', error);
       Swal.fire({

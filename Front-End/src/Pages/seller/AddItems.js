@@ -577,7 +577,7 @@ const AddItem = () => {
 
               <div className="additems-two-col">
                 <div className="additems-input-group">
-                  <label className="additems-label">Shipping Cost ($)<span className="additems-required">*</span></label>
+                  <label className="additems-label">Shipping Cost (LKR)<span className="additems-required">*</span></label>
                   <input
                     type="number"
                     name="shippingDetails.cost"
@@ -649,7 +649,7 @@ const AddItem = () => {
             <div className="additems-section-content">
               <div className="additems-two-col">
                 <div className="additems-input-group">
-                  <label className="additems-label">Price ($)<span className="additems-required">*</span></label>
+                  <label className="additems-label">Price (LKR)<span className="additems-required">*</span></label>
                   <input
                     type="number"
                     name="price"
@@ -691,11 +691,11 @@ const AddItem = () => {
                   </div>
                   <div className="additems-summary-row">
                     <span>Price:</span>
-                    <span>${formData.price || '0.00'}</span>
+                    <span>LKR {formData.price || '0.00'}</span>
                   </div>
                   <div className="additems-summary-row">
                     <span>Shipping:</span>
-                    <span>${formData.shippingDetails.cost || '0.00'} ({formData.shippingDetails.method})</span>
+                    <span>LKR {formData.shippingDetails.cost || '0.00'} ({formData.shippingDetails.method})</span>
                   </div>
                   <div className="additems-summary-row">
                     <span>Images:</span>

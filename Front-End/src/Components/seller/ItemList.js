@@ -53,7 +53,7 @@ const ItemList = () => {
             </div>
             <div className="itemlist-content">
               <h3 className="itemlist-item-title">{item.title}</h3>
-              <p className="itemlist-price">${item.price.toFixed(2)}</p>
+              <p className="itemlist-price">LKR {item.price.toFixed(2)}</p>
               <p className="itemlist-category">{item.category}</p>
               <div className="itemlist-details">
                 <span className="itemlist-condition">{item.condition}</span>

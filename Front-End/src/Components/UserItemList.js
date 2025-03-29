@@ -320,7 +320,7 @@ const UserItemList = () => {
             <h4>Price Range</h4>
             <div className="price-range-inputs">
               <div className="price-input">
-                <span>$</span>
+                <span>LKR</span>
                 <input 
                   type="number" 
                   min="0" 
@@ -330,7 +330,7 @@ const UserItemList = () => {
               </div>
               <span>to</span>
               <div className="price-input">
-                <span>$</span>
+                <span>LKR</span>
                 <input 
                   type="number" 
                   min="0" 
