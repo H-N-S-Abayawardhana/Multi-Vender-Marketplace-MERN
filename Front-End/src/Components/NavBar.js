@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaShoppingCart, FaUser, FaBell, FaSearch, FaBars, FaTimes } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import logo from '../assets/images/logo.png';
@@ -7,12 +7,30 @@ import '../css/NavBar.css';
 
 const NavBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isPendingSeller, setIsPendingSeller] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const isLoggedIn = !!localStorage.getItem('token');
   const userEmail = localStorage.getItem('email');
+
+  // Add a ResizeObserver error handler to fix the Windows laptop issue
+  useEffect(() => {
+    const handleResizeError = function(e) {
+      if (e.message === 'ResizeObserver loop completed with undelivered notifications.' || 
+          e.message === 'ResizeObserver loop limit exceeded') {
+        e.stopImmediatePropagation();
+        return true;
+      }
+    };
+    
+    window.addEventListener('error', handleResizeError, true);
+    
+    return () => {
+      window.removeEventListener('error', handleResizeError, true);
+    };
+  }, []);
 
   useEffect(() => {
     const checkSellerStatus = async () => {
@@ -66,29 +84,43 @@ const NavBar = () => {
 
   const handleLogout = async () => {
     try {
+      // Close dropdown menu if open
+      const dropdown = document.getElementById('profileDropdown');
+      if (dropdown && dropdown.classList.contains('user-navbar-dropdown-show')) {
+        dropdown.classList.remove('user-navbar-dropdown-show');
+      }
+      
       const sessionId = localStorage.getItem('sessionId');
       
-      const response = await fetch('http://localhost:9000/api/auth/logout', {
+      // First clear localStorage before making API call
+      // This ensures UI updates immediately even if server call takes time
+      const tempSessionId = sessionId; // Save ID before clearing
+      localStorage.clear();
+      
+      // Show logout success message before navigation
+      Swal.fire({
+        title: 'Logged Out!',
+        text: 'You have been successfully logged out',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        timer: 1500,
+        willClose: () => {
+          // Navigate after the Swal modal is closed
+          navigate('/', { replace: true });
+        }
+      });
+      
+      // Make API call in background without waiting for it
+      fetch('http://localhost:9000/api/auth/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ sessionId }),
+        body: JSON.stringify({ sessionId: tempSessionId }),
+      }).catch(err => {
+        console.error('Background logout request failed:', err);
       });
-
-      if (response.ok) {
-        localStorage.clear();
-        Swal.fire({
-          title: 'Logged Out!',
-          text: 'You have been successfully logged out',
-          icon: 'success',
-          confirmButtonColor: '#3085d6',
-          timer: 1500
-        });
-        navigate('/');
-      } else {
-        throw new Error('Logout failed');
-      }
+      
     } catch (error) {
       console.error('Logout error:', error);
       Swal.fire({
@@ -112,6 +144,31 @@ const NavBar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  // Handle click outside dropdown to close it
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const dropdown = document.getElementById('profileDropdown');
+      const profileBtn = document.querySelector('.user-navbar-profile-btn');
+      
+      if (dropdown && 
+          !dropdown.contains(event.target) && 
+          profileBtn && 
+          !profileBtn.contains(event.target)) {
+        dropdown.classList.remove('user-navbar-dropdown-show');
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Check if a path is active
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
+
   return (
     <nav className={`user-navbar-main ${scrolled ? 'user-navbar-scrolled' : ''}`}>
       <div className="user-navbar-container">
@@ -123,20 +180,6 @@ const NavBar = () => {
             className="user-navbar-logo-img"
           />
         </Link>
-
-        {/* Search Bar */}
-        {/* <form className="user-navbar-search-form" onSubmit={handleSearch}>
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="user-navbar-search-input"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button type="submit" className="user-navbar-search-button">
-            <FaSearch />
-          </button>
-        </form> */}
 
         {/* Mobile Menu Toggle */}
         <button 
@@ -159,14 +202,40 @@ const NavBar = () => {
           {/* Navigation Links */}
           <ul className="user-navbar-nav">
             <li className="user-navbar-item">
-              <Link className="user-navbar-link" to="/shop-now">Shop</Link>
+              <Link 
+                className={`user-navbar-link ${isActive('/shop-now') ? 'user-navbar-link-active' : ''}`} 
+                to="/shop-now"
+              >
+                Shop
+              </Link>
             </li>
             <li className="user-navbar-item">
-              <Link className="user-navbar-link" to="/categories">Categories</Link>
+              <Link 
+                className={`user-navbar-link ${isActive('/categories') ? 'user-navbar-link-active' : ''}`} 
+                to="/categories"
+              >
+                Categories
+              </Link>
             </li>
             <li className="user-navbar-item">
-              <Link className="user-navbar-link" to="/">Deals</Link>
+              <Link 
+                className={`user-navbar-link ${isActive('/') && location.pathname === '/' ? 'user-navbar-link-active' : ''}`} 
+                to="/"
+              >
+                Deals
+              </Link>
             </li>
+            {/* New Become Seller navigation item, only shown if not pending */}
+            {!isPendingSeller && (
+              <li className="user-navbar-item">
+                <Link 
+                  className={`user-navbar-link ${isActive('/become-seller') ? 'user-navbar-link-active' : ''}`} 
+                  to="/become-seller"
+                >
+                  Become Seller
+                </Link>
+              </li>
+            )}
           </ul>
 
           {/* User Actions */}
@@ -185,7 +254,8 @@ const NavBar = () => {
               <div className="user-navbar-profile">
                 <button 
                   className="user-navbar-profile-btn" 
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     const dropdown = document.getElementById('profileDropdown');
                     dropdown.classList.toggle('user-navbar-dropdown-show');
                   }}
@@ -210,11 +280,6 @@ const NavBar = () => {
                     Logout
                   </button>
                 </div>
-                {!isPendingSeller && (
-                  <Link className="user-navbar-seller-btn" to="/become-seller">
-                    Become a Seller
-                  </Link>
-                )}
               </div>
             ) : (
               <div className="user-navbar-auth">
@@ -223,9 +288,6 @@ const NavBar = () => {
                 </Link>
                 <Link className="user-navbar-signup-btn" to="/register">
                   Sign Up
-                </Link>
-                <Link className="user-navbar-seller-btn" to="/become-seller">
-                  Become a Seller
                 </Link>
               </div>
             )}

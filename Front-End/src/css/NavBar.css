@@ -10,6 +10,12 @@
     z-index: 1000;
     transition: all 0.3s ease;
   }
+
+  .user-navbar-link-active {
+    color: #4a90e2; 
+    font-weight: bold;
+    border-bottom: 2px solid #2f629d; 
+  }
   
   .user-navbar-scrolled {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
