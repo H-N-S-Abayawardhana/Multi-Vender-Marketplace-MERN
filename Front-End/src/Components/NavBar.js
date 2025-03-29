@@ -201,6 +201,14 @@ const NavBar = () => {
 
           {/* Navigation Links */}
           <ul className="user-navbar-nav">
+          <li className="user-navbar-item">
+              <Link 
+                className={`user-navbar-link ${isActive('/') && location.pathname === '/' ? 'user-navbar-link-active' : ''}`} 
+                to="/"
+              >
+                Home
+              </Link>
+            </li>
             <li className="user-navbar-item">
               <Link 
                 className={`user-navbar-link ${isActive('/shop-now') ? 'user-navbar-link-active' : ''}`} 
@@ -217,14 +225,7 @@ const NavBar = () => {
                 Categories
               </Link>
             </li>
-            <li className="user-navbar-item">
-              <Link 
-                className={`user-navbar-link ${isActive('/') && location.pathname === '/' ? 'user-navbar-link-active' : ''}`} 
-                to="/"
-              >
-                Deals
-              </Link>
-            </li>
+          
             {/* New Become Seller navigation item, only shown if not pending */}
             {!isPendingSeller && (
               <li className="user-navbar-item">
