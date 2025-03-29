@@ -314,29 +314,16 @@ const Home = () => {
     event.preventDefault();
     event.stopPropagation();
     
-    // Check if user is logged in
-    const token = localStorage.getItem('token');
-    const email = localStorage.getItem('email');
-    
-    if (token && email) {
-      // User is logged in, proceed with checkout
-      const quantity = itemQuantities[item._id] || 1;
-      const itemWithQuantity = {
-        ...item,
-        selectedQuantity: quantity,
-        // Calculate total price based on selected quantity
-        totalPrice: item.price * quantity
-      };
-      setSelectedItem(itemWithQuantity);
-      setShowCheckout(true);
-    } else {
-      // User is not logged in, show sign-in popup
-      setSelectedItem({
-        ...item,
-        selectedQuantity: itemQuantities[item._id] || 1
-      });
-      setShowSignIn(true);
-    }
+    // Allow all users to proceed with checkout
+    const quantity = itemQuantities[item._id] || 1;
+    const itemWithQuantity = {
+      ...item,
+      selectedQuantity: quantity,
+      // Calculate total price based on selected quantity
+      totalPrice: item.price * quantity
+    };
+    setSelectedItem(itemWithQuantity);
+    setShowCheckout(true);
   };
 
   const handleSignInSuccess = () => {
