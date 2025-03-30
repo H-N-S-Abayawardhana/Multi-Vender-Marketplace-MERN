@@ -33,7 +33,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 123, 255, 0.7);
+    background: rgba(227, 93, 0, 0.7);
     z-index: 1;
 }
 
@@ -100,7 +100,7 @@
 .login-page-input-icon {
     position: absolute;
     left: 12px;
-    color: #007bff;
+    color: #FF8C38;
     font-size: 1rem;
 }
 
@@ -116,8 +116,8 @@
 
 .login-page-form-group input:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    border-color: #FF8C38;
+    box-shadow: 0 0 0 3px rgba(227, 93, 0, 0.1);
     background-color: white;
 }
 
@@ -140,20 +140,23 @@
 }
 
 .login-page-forgot-password a {
-    color: #007bff;
+    color: #FF8C38;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, background-color 0.3s ease;
 }
 
 .login-page-forgot-password a:hover {
-    color: #0056b3;
+    color: #E35D00;
     text-decoration: underline;
+    background-color: #FFF1E7;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
 }
 
 .login-page-submit-button {
     width: 100%;
     padding: 1rem;
-    background-color: #007bff;
+    background-color: #FF8C38;
     color: white;
     border: none;
     border-radius: 8px;
@@ -172,9 +175,9 @@
 }
 
 .login-page-submit-button:hover {
-    background-color: #0056b3;
+    background-color: #E35D00;
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+    box-shadow: 0 4px 10px rgba(227, 93, 0, 0.2);
 }
 
 .login-page-submit-button:active {
@@ -215,15 +218,18 @@
 }
 
 .login-page-register-link a {
-    color: #007bff;
+    color: #FF8C38;
     text-decoration: none;
     font-weight: 600;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, background-color 0.3s ease;
 }
 
 .login-page-register-link a:hover {
-    color: #0056b3;
+    color: #E35D00;
     text-decoration: underline;
+    background-color: #FFF1E7;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
 }
 
 @media (max-width: 992px) {

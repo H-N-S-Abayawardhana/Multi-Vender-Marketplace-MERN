@@ -62,7 +62,7 @@
 }
 
 .clear-search:hover {
-  color: #718096;
+  color: #E35D00;
 }
 
 .user-itemlist-filter-toggle {
@@ -81,13 +81,13 @@
 }
 
 .user-itemlist-filter-toggle:hover {
-  background: #f7fafc;
+  background: #FFF1E7;
 }
 
 .user-itemlist-filter-toggle.active {
-  background: #ebf4ff;
-  border-color: #4299e1;
-  color: #3182ce;
+  background: #FFF1E7;
+  border-color: #E35D00;
+  color: #E35D00;
 }
 
 /* Filter Panel */
@@ -184,8 +184,9 @@
 }
 
 .clear-filters-btn:hover {
-  background: #f7fafc;
-  color: #4a5568;
+  background: #FFF1E7;
+  color: #E35D00;
+  border-color: #E35D00;
 }
 
 /* Results Summary */
@@ -207,7 +208,7 @@
   grid-column: 1 / -1;
   text-align: center;
   padding: 40px;
-  background: #f7fafc;
+  background: #FFF1E7;
   border-radius: 8px;
   color: #4a5568;
   font-size: 16px;
@@ -226,6 +227,7 @@
 .user-itemlist-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  border-color: #E35D00;
 }
 
 .user-itemlist-image-container {
@@ -258,8 +260,8 @@
 }
 
 .user-itemlist-low-stock {
-  background-color: rgba(254, 243, 199, 0.9);
-  color: #92400e;
+  background-color: #FFF1E7;
+  color: #E35D00;
 }
 
 .user-itemlist-out-of-stock {
@@ -284,7 +286,7 @@
 .user-itemlist-price {
   font-size: 18px;
   font-weight: 700;
-  color: #2c5282;
+  color: #E35D00;
   margin: 8px 0;
 }
 
@@ -342,21 +344,23 @@
 }
 
 .user-itemlist-cart-btn {
-  background-color: #edf2f7;
-  color: #2d3748;
+  background-color: #FFF1E7;
+  color: #E35D00;
+  border: 1px solid #E35D00;
 }
 
 .user-itemlist-cart-btn:hover {
-  background-color: #e2e8f0;
+  background-color: #E35D00;
+  color: white;
 }
 
 .user-itemlist-buy-btn {
-  background-color: #3182ce;
+  background-color: #E35D00;
   color: white;
 }
 
 .user-itemlist-buy-btn:hover {
-  background-color: #2c5282;
+  background-color: #bf4f00;
 }
 
 .user-itemlist-cart-btn:disabled,
@@ -364,6 +368,7 @@
   background-color: #edf2f7;
   color: #a0aec0;
   cursor: not-allowed;
+  border: 1px solid #edf2f7;
 }
 
 .user-itemlist-loading {
@@ -376,8 +381,8 @@
 .user-itemlist-error {
   text-align: center;
   padding: 40px;
-  color: #e53e3e;
-  background: #fff5f5;
+  color: #E35D00;
+  background: #FFF1E7;
   border-radius: 8px;
   margin: 20px;
 }
@@ -386,7 +391,7 @@
   text-align: center;
   padding: 40px;
   color: #4a5568;
-  background: #f7fafc;
+  background: #FFF1E7;
   border-radius: 8px;
   margin: 20px;
 }
@@ -467,7 +472,8 @@
 }
 
 .quantity-btn:hover:not(:disabled) {
-  background-color: #e0e0e0;
+  background-color: #FFF1E7;
+  color: #E35D00;
 }
 
 .quantity-btn:disabled {

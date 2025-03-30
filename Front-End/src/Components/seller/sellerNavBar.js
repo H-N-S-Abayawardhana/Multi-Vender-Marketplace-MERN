@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaUser, FaBell } from 'react-icons/fa';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -7,6 +7,7 @@ import logo from '../../assets/images/logo.png';
 
 const SellerNavBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [unreadCount, setUnreadCount] = useState(0);
 
   // Improved ResizeObserver error handler
@@ -81,7 +82,7 @@ const SellerNavBar = () => {
         title: 'Logged Out!',
         text: 'You have been successfully logged out',
         icon: 'success',
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#E35D00',
         timer: 1500,
         willClose: () => {
           // Only navigate once
@@ -113,6 +114,11 @@ const SellerNavBar = () => {
         navigate('/', { replace: true });
       }
     }
+  };
+
+  // Check if the current path matches the link path
+  const isActive = (path) => {
+    return location.pathname === path;
   };
 
   return (
@@ -147,22 +153,37 @@ const SellerNavBar = () => {
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
             {/* Seller Dashboard Link */}
             <li className="nav-item mx-3">
-              <Link className="nav-link" to="/seller-dashboard">
-                Dashboard
+              <Link 
+                className="nav-link" 
+                to="/seller-dashboard"
+              >
+                <span className={isActive('/seller-dashboard') ? 'active-nav-item' : ''}>
+                  Dashboard
+                </span>
               </Link>
             </li>
 
             {/* Seller Products Link */}
             <li className="nav-item mx-3">
-              <Link className="nav-link" to="/my-products">
-                My Products
+              <Link 
+                className="nav-link" 
+                to="/my-products"
+              >
+                <span className={isActive('/my-products') ? 'active-nav-item' : ''}>
+                  My Products
+                </span>
               </Link>
             </li>
 
             {/* Seller Orders Link */}
             <li className="nav-item mx-3">
-              <Link className="nav-link" to="/my-orders">
-                Orders
+              <Link 
+                className="nav-link" 
+                to="/my-orders"
+              >
+                <span className={isActive('/my-orders') ? 'active-nav-item' : ''}>
+                  Orders
+                </span>
               </Link>
             </li>
 
@@ -173,9 +194,11 @@ const SellerNavBar = () => {
                 className="nav-link position-relative"
                 onClick={handleNotificationClick}
               >
-                <FaBell size={20} />
+                <span className={isActive('/seller-notifications') ? 'active-nav-item' : ''}>
+                  <FaBell size={20} />
+                </span>
                 {unreadCount > 0 && (
-                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill" style={{ backgroundColor: '#E35D00' }}>
                     {unreadCount}
                     <span className="visually-hidden">unread notifications</span>
                   </span>
@@ -197,13 +220,23 @@ const SellerNavBar = () => {
               </a>
               <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                 <li>
-                  <Link className="dropdown-item" to="/seller-profile">
-                    Seller Profile
+                  <Link 
+                    className="dropdown-item" 
+                    to="/seller-profile"
+                  >
+                    <span className={isActive('/seller-profile') ? 'active-dropdown-item' : ''}>
+                      Seller Profile
+                    </span>
                   </Link>
                 </li>
                 <li>
-                  <Link className="dropdown-item" to="/seller/settings">
-                    Settings
+                  <Link 
+                    className="dropdown-item" 
+                    to="/seller/settings"
+                  >
+                    <span className={isActive('/seller/settings') ? 'active-dropdown-item' : ''}>
+                      Settings
+                    </span>
                   </Link>
                 </li>
                 <li><hr className="dropdown-divider" /></li>
@@ -220,6 +253,42 @@ const SellerNavBar = () => {
           </ul>
         </div>
       </div>
+      
+      {/* Add CSS for hover styles and active indicators */}
+      <style jsx>{`
+        .nav-link:hover {
+          background-color: rgba(255, 241, 231, 0.3);
+          border-radius: 0.25rem;
+        }
+        
+        .dropdown-item:hover {
+          background-color: rgba(255, 241, 231, 0.5);
+        }
+        
+        button.dropdown-item:hover {
+          background-color: rgba(255, 241, 231, 0.5);
+          color: #E35D00;
+        }
+        
+        .active-nav-item {
+          text-decoration: underline;
+          text-decoration-color: #E35D00;
+          text-decoration-thickness: 2px;
+          text-underline-offset: 5px;
+          padding: 8px 12px;
+          background-color: rgba(255, 241, 231, 0.4);
+          border-radius: 4px;
+          font-weight: 500;
+        }
+        
+        .active-dropdown-item {
+          text-decoration: underline;
+          text-decoration-color: #E35D00;
+          text-decoration-thickness: 2px;
+          text-underline-offset: 3px;
+          font-weight: 500;
+        }
+      `}</style>
     </nav>
   );
 };
