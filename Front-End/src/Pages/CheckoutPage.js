@@ -181,15 +181,15 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
               <div className="checkout-price-breakdown">
                 <div className="checkout-price-row">
                   <span>Item Subtotal:</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>LKR {subtotal.toFixed(2)}</span>
                 </div>
                 <div className="checkout-price-row">
                   <span>Shipping ({item.shippingDetails?.method || 'Standard'}):</span>
-                  <span>${shippingCost.toFixed(2)}</span>
+                  <span>LKR {shippingCost.toFixed(2)}</span>
                 </div>
                 <div className="checkout-price-row checkout-price-total">
                   <span>Total:</span>
-                  <span>${totalPrice.toFixed(2)}</span>
+                  <span>LKR {totalPrice.toFixed(2)}</span>
                 </div>
               </div>
             </div>

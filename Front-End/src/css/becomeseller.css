@@ -80,13 +80,13 @@
 }
 
 .becomeseller-progress-step.active .becomeseller-progress-number {
-  background-color: #3498db;
+  background-color: #E35D00;
   color: white;
-  border-color: #3498db;
+  border-color: #E35D00;
 }
 
 .becomeseller-progress-step.active .becomeseller-progress-label {
-  color: #3498db;
+  color: #E35D00;
   font-weight: 600;
 }
 
@@ -120,7 +120,7 @@
 }
 
 .becomeseller-section-number {
-  background: #3498db;
+  background: #E35D00;
   color: white;
   width: 32px;
   height: 32px;
@@ -168,9 +168,9 @@
 }
 
 .becomeseller-input:focus {
-  border-color: #3498db;
+  border-color: #E35D00;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  box-shadow: 0 0 0 2px rgba(227, 93, 0, 0.2);
 }
 
 .becomeseller-input::placeholder {
@@ -232,12 +232,12 @@
 }
 
 .becomeseller-next-btn {
-  background-color: #3498db;
+  background-color: #E35D00;
   color: white;
 }
 
 .becomeseller-next-btn:hover {
-  background-color: #2980b9;
+  background-color: #c94d00;
 }
 
 .becomeseller-next-btn i {
@@ -250,7 +250,8 @@
 }
 
 .becomeseller-back-btn:hover {
-  background-color: #dfe6e9;
+  background-color: #FFF1E7;
+  color: #E35D00;
 }
 
 .becomeseller-back-btn i {
@@ -258,28 +259,28 @@
 }
 
 .becomeseller-submit-btn {
-  background-color: #2ecc71;
+  background-color: #E35D00;
   color: white;
 }
 
 .becomeseller-submit-btn:hover {
-  background-color: #27ae60;
+  background-color: #c94d00;
 }
 
 .becomeseller-dashboard-btn {
-  background-color: #3498db;
+  background-color: #E35D00;
   color: white;
   margin: 20px auto 0;
 }
 
 .becomeseller-dashboard-btn:hover {
-  background-color: #2980b9;
+  background-color: #c94d00;
 }
 
 .becomeseller-edit-btn {
   background: none;
   border: none;
-  color: #3498db;
+  color: #E35D00;
   cursor: pointer;
   font-size: 0.9rem;
   display: flex;
@@ -291,7 +292,7 @@
 }
 
 .becomeseller-edit-btn:hover {
-  background-color: rgba(52, 152, 219, 0.1);
+  background-color: #FFF1E7;
 }
 
 .becomeseller-edit-btn i {
@@ -330,11 +331,11 @@
 }
 
 .becomeseller-checkbox-container:hover input ~ .becomeseller-checkmark {
-  background-color: #ccc;
+  background-color: #FFF1E7;
 }
 
 .becomeseller-checkbox-container input:checked ~ .becomeseller-checkmark {
-  background-color: #3498db;
+  background-color: #E35D00;
 }
 
 .becomeseller-checkmark:after {
@@ -364,7 +365,7 @@
 }
 
 .becomeseller-link {
-  color: #3498db;
+  color: #E35D00;
   text-decoration: none;
 }
 
@@ -417,7 +418,7 @@
 .becomeseller-benefits {
   margin-top: 60px;
   padding: 30px;
-  background-color: #f8f9fa;
+  background-color: #FFF1E7;
   border-radius: 8px;
 }
 
@@ -452,13 +453,13 @@
 .becomeseller-benefit-icon {
   width: 60px;
   height: 60px;
-  background-color: rgba(52, 152, 219, 0.1);
+  background-color: rgba(227, 93, 0, 0.1);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto 15px;
-  color: #3498db;
+  color: #E35D00;
   font-size: 1.5rem;
 }
 
@@ -499,7 +500,7 @@
 }
 
 .becomeseller-status-header.becomeseller-status-approved {
-  background-color: #2ecc71;
+  background-color: #E35D00;
   color: white;
 }
 
@@ -536,7 +537,7 @@
 }
 
 .becomeseller-status-icon.approved {
-  color: #2ecc71;
+  color: #E35D00;
 }
 
 .becomeseller-status-icon.rejected {
@@ -557,8 +558,8 @@
 }
 
 .becomeseller-info-box {
-  background-color: #f8f9fa;
-  border-left: 4px solid #3498db;
+  background-color: #FFF1E7;
+  border-left: 4px solid #E35D00;
   padding: 15px 20px;
   border-radius: 4px;
   margin-top: 20px;
@@ -582,9 +583,9 @@
 .becomeseller-spinner {
   width: 50px;
   height: 50px;
-  border: 3px solid rgba(52, 152, 219, 0.3);
+  border: 3px solid rgba(227, 93, 0, 0.3);
   border-radius: 50%;
-  border-top-color: #3498db;
+  border-top-color: #E35D00;
   animation: spin 1s infinite linear;
   margin-bottom: 20px;
 }
@@ -642,28 +643,6 @@
     grid-template-columns: 1fr;
   }
 }
-
-/* Toast Container Customization */
-/* .Toastify__toast-container {
-  width: 320px;
-}
-
-.Toastify__toast {
-  border-radius: 4px;
-  padding: 16px;
-}
-
-.Toastify__toast--success {
-  background-color: #2ecc71;
-}
-
-.Toastify__toast--error {
-  background-color: #e74c3c;
-}
-
-.Toastify__toast-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-} */
 
 /* Animations */
 @keyframes slideIn {

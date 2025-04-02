@@ -22,7 +22,7 @@
   height: 50px;
   border: 3px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
-  border-top-color: #3b82f6;
+  border-top-color: #FF5733; /* Changed to red from logo */
   animation: spin 1s ease-in-out infinite;
   margin-bottom: 1rem;
 }
@@ -43,7 +43,7 @@
   text-align: center;
   padding: 3rem 1rem;
   margin: 2rem 0;
-  background-color: #fee2e2;
+  background-color: #ffe6e2; /* Lighter version of the red */
   border-radius: 8px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
@@ -56,7 +56,7 @@
 .homepage-retry-btn {
   margin-top: 1.5rem;
   padding: 0.75rem 1.5rem;
-  background-color: #ef4444;
+  background-color: #FF5733; /* Changed to red from logo */
   color: white;
   border: none;
   border-radius: 4px;
@@ -66,7 +66,7 @@
 }
 
 .homepage-retry-btn:hover {
-  background-color: #dc2626;
+  background-color: #E64A2E; /* Darker version of the red */
 }
 
 /* Hero Carousel */
@@ -128,7 +128,7 @@
   align-items: flex-start;
   height: 100%;
   padding: 2rem 3rem;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(to right, rgba(255, 87, 51, 0.7) 0%, rgba(255, 87, 51, 0.3) 50%, rgba(255, 87, 51, 0) 100%); /* Changed gradient to use red color */
   color: white;
   z-index: 2;
 }
@@ -150,7 +150,7 @@
 .homepage-carousel-button {
   display: inline-flex;
   align-items: center;
-  background-color: #3b82f6;
+  background-color: #FF9F45; /* Changed to orange from logo */
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 4px;
@@ -160,7 +160,7 @@
 }
 
 .homepage-carousel-button:hover {
-  background-color: #2563eb;
+  background-color: #F77F00; /* Darker version of the orange */
   transform: translateY(-2px);
 }
 
@@ -254,20 +254,20 @@
 }
 
 .homepage-section-icon {
-  color: #3b82f6;
+  color: #FF9F45; /* Changed to orange from logo */
 }
 
 .homepage-view-all {
   display: flex;
   align-items: center;
   font-size: 0.875rem;
-  color: #3b82f6;
+  color: #FF9F45; /* Changed to orange from logo */
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .homepage-view-all:hover {
-  color: #2563eb;
+  color: #F77F00; /* Darker version of the orange */
 }
 
 .homepage-view-all svg {
@@ -307,7 +307,7 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background-color: var(--category-color, #3b82f6);
+  background-color: var(--category-color, #FF9F45); /* Changed to orange from logo with variable support */
   transition: height 0.2s;
 }
 
@@ -421,17 +421,17 @@
 }
 
 .homepage-badge.auction {
-  background-color: #8b5cf6;
+  background-color: #FF9F45; /* Changed to orange from logo */
   color: white;
 }
 
 .homepage-badge.condition {
-  background-color: #f59e0b;
+  background-color: #F77F00; /* Darker version of the orange */
   color: white;
 }
 
 .homepage-badge.discount {
-  background-color: #ef4444;
+  background-color: #FF5733; /* Changed to red from logo */
   color: white;
 }
 
@@ -439,7 +439,7 @@
   position: absolute;
   bottom: 10px;
   left: 10px;
-  background-color: rgba(245, 158, 11, 0.9);
+  background-color: rgba(247, 127, 0, 0.9); /* Darker orange */
   color: white;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
@@ -451,7 +451,7 @@
   position: absolute;
   bottom: 10px;
   left: 10px;
-  background-color: rgba(239, 68, 68, 0.9);
+  background-color: rgba(255, 87, 51, 0.9); /* Red from logo */
   color: white;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
@@ -534,6 +534,7 @@
 
 .homepage-star-icon {
   margin-right: 0.25rem;
+  color: #FF9F45; /* Changed to orange from logo */
 }
 
 .homepage-review-count {
@@ -640,12 +641,12 @@
 }
 
 .homepage-buy-btn {
-  background-color: #3b82f6;
+  background-color: #FF5733; /* Changed to red from logo */
   color: white;
 }
 
 .homepage-buy-btn:hover {
-  background-color: #2563eb;
+  background-color: #E64A2E; /* Darker version of the red */
 }
 
 .homepage-cart-btn:active,
@@ -656,19 +657,19 @@
 .homepage-out-of-stock-message {
   text-align: center;
   padding: 0.5rem;
-  color: #ef4444;
+  color: #FF5733; /* Changed to red from logo */
   font-weight: 600;
-  background-color: #fee2e2;
+  background-color: #ffe6e2; /* Lighter version of the red */
   border-radius: 6px;
 }
 
 /* Specific section styling */
 .homepage-trending {
-  background-color: #f0f9ff;
+  background-color: #fff5f0; /* Light orange background */
 }
 
 .homepage-new-arrivals {
-  background-color: #f7fee7;
+  background-color: #fff9f5; /* Very light orange background */
 }
 
 /* Responsive Adjustments */
@@ -781,7 +782,7 @@
 
 /* Additional Classes */
 .homepage-section:nth-child(even) {
-  background-color: #f9fafb;
+  background-color: #fff9f5; /* Very light orange background */
 }
 
 .homepage-section:nth-child(odd) {
@@ -790,27 +791,27 @@
 
 /* Category-specific tweaks */
 .homepage-category-electronics {
-  background-color: rgba(59, 130, 246, 0.05);
+  background-color: rgba(255, 159, 69, 0.05); /* Very light orange */
 }
 
 .homepage-category-clothing {
-  background-color: rgba(236, 72, 153, 0.05);
+  background-color: rgba(255, 87, 51, 0.05); /* Very light red */
 }
 
 .homepage-category-home {
-  background-color: rgba(16, 185, 129, 0.05);
+  background-color: rgba(247, 127, 0, 0.05); /* Very light darker orange */
 }
 
 .homepage-category-books {
-  background-color: rgba(245, 158, 11, 0.05);
+  background-color: rgba(230, 74, 46, 0.05); /* Very light darker red */
 }
 
 .homepage-category-sports {
-  background-color: rgba(99, 102, 241, 0.05);
+  background-color: rgba(255, 159, 69, 0.08); /* Light orange */
 }
 
 .homepage-category-beauty {
-  background-color: rgba(217, 70, 239, 0.05);
+  background-color: rgba(255, 87, 51, 0.08); /* Light red */
 }
 
 /* Sign-in Popup Styles */
@@ -884,10 +885,10 @@
 .signin-error {
   margin: 10px 20px 5px;
   padding: 10px;
-  background-color: #fff2f0;
+  background-color: #ffe6e2; /* Light red background */
   border: 1px solid #ffccc7;
   border-radius: 4px;
-  color: #ff4d4f;
+  color: #FF5733; /* Red from logo */
   font-size: 0.9rem;
 }
 
@@ -919,8 +920,8 @@
 
 .signin-form-group input:focus {
   outline: none;
-  border-color: #4096ff;
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  border-color: #FF9F45; /* Changed to orange from logo */
+  box-shadow: 0 0 0 2px rgba(255, 159, 69, 0.2); /* Light orange shadow */
 }
 
 .signin-form-group input::placeholder {
@@ -930,7 +931,7 @@
 .signin-submit-btn {
   width: 100%;
   padding: 12px;
-  background-color: #1677ff;
+  background-color: #FF5733; /* Changed to red from logo */
   color: white;
   border: none;
   border-radius: 4px;
@@ -941,7 +942,7 @@
 }
 
 .signin-submit-btn:hover {
-  background-color: #0958d9;
+  background-color: #E64A2E; /* Darker version of the red */
 }
 
 .signin-submit-btn:disabled {
@@ -963,7 +964,7 @@
 }
 
 .signin-footer a {
-  color: #1677ff;
+  color: #FF9F45; /* Changed to orange from logo */
   text-decoration: none;
   font-weight: 500;
 }

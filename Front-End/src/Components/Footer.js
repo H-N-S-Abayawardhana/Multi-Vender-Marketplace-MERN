@@ -181,7 +181,7 @@ const Footer = () => {
 
                 {/* About TrolleyMart */}
                 <div className="col-md-6 col-lg-12 mb-4">
-                  <h5 className="footer-heading">About TrolleyMart</h5>
+                  <h5 className="footer-heading">About Upulni Express</h5>
                   <ul className="footer-links">
                     <li><Link to="/about">About Us</Link></li>
                     <li><Link to="/careers">Careers</Link></li>
@@ -201,7 +201,7 @@ const Footer = () => {
         <div className="container">
           <div className="row">
             <div className="col-12 text-center mb-4">
-              <h4 className="text-white">Why shop with TrolleyMart?</h4>
+              <h4 className="text-white">Why shop with Upulni Express?</h4>
             </div>
           </div>
           <div className="row justify-content-center">
@@ -242,7 +242,7 @@ const Footer = () => {
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-md-8 col-lg-6 text-center">
-              <h4 className="text-white mb-3">Stay updated with TrolleyMart</h4>
+              <h4 className="text-white mb-3">Stay updated with Upulni Express</h4>
               <p className="mb-4">Subscribe to receive exclusive deals, trending products, and personalized recommendations.</p>
               <form className="newsletter-form">
                 <div className="input-group mb-3">
@@ -274,7 +274,7 @@ const Footer = () => {
           <div className="row gy-4 align-items-center">
             <div className="col-lg-6 col-md-6 text-center text-md-start">
               <p className="mb-0 footer-copyright">
-                © {currentYear} TrolleyMart Inc. All rights reserved.
+                © {currentYear} Upulni Express Inc. All rights reserved.
               </p>
               <div className="footer-legal mt-2">
                 <Link to="/terms">Terms of Service</Link>

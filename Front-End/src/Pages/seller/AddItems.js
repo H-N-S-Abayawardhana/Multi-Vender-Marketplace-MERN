@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../css/seller/additems.css';
+import SellerNavBar from '../../components/seller/sellerNavBar';
+import Footer from '../../components/Footer';
 
 const AddItem = () => {
   const navigate = useNavigate();
@@ -53,11 +55,10 @@ const AddItem = () => {
 
   // Predefined categories list
   const predefinedCategories = [
-    'Electronics',
+    'Computer',
     'Clothing',
     'Home',
     'Books',
-    'Sports',
     'Toys',
     'Beauty',
     'Automotive',
@@ -294,8 +295,11 @@ const AddItem = () => {
   };
 
   return (
+    <>
+    <SellerNavBar/>
     <div className="additems-container">
-      <ToastContainer position="top-right" autoClose={3000} />
+      
+      <ToastContainer position="top-center" autoClose={3000} />
       
       <div className="additems-header">
         <h1 className="additems-title">Add New Item</h1>
@@ -577,7 +581,7 @@ const AddItem = () => {
 
               <div className="additems-two-col">
                 <div className="additems-input-group">
-                  <label className="additems-label">Shipping Cost ($)<span className="additems-required">*</span></label>
+                  <label className="additems-label">Shipping Cost (LKR)<span className="additems-required">*</span></label>
                   <input
                     type="number"
                     name="shippingDetails.cost"
@@ -649,7 +653,7 @@ const AddItem = () => {
             <div className="additems-section-content">
               <div className="additems-two-col">
                 <div className="additems-input-group">
-                  <label className="additems-label">Price ($)<span className="additems-required">*</span></label>
+                  <label className="additems-label">Price (LKR)<span className="additems-required">*</span></label>
                   <input
                     type="number"
                     name="price"
@@ -691,11 +695,11 @@ const AddItem = () => {
                   </div>
                   <div className="additems-summary-row">
                     <span>Price:</span>
-                    <span>${formData.price || '0.00'}</span>
+                    <span>LKR {formData.price || '0.00'}</span>
                   </div>
                   <div className="additems-summary-row">
                     <span>Shipping:</span>
-                    <span>${formData.shippingDetails.cost || '0.00'} ({formData.shippingDetails.method})</span>
+                    <span>LKR {formData.shippingDetails.cost || '0.00'} ({formData.shippingDetails.method})</span>
                   </div>
                   <div className="additems-summary-row">
                     <span>Images:</span>
@@ -726,6 +730,8 @@ const AddItem = () => {
         )}
       </form>
     </div>
+    <Footer/>
+    </>
   );
 };
 

@@ -1,5 +1,3 @@
-/* Enhanced Footer Styles for Multi-Vendor Marketplace */
-
 .footer {
   --footer-bg: #121212;
   --footer-text: #ffffff;
@@ -8,6 +6,8 @@
   --footer-border: rgba(255, 255, 255, 0.1);
   --footer-badge-bg: rgba(255, 255, 255, 0.05);
   --footer-badge-hover: rgba(255, 255, 255, 0.1);
+  --footer-primary: #E35D00;
+  --footer-primary-light: #FFF1E7;
   
   background-color: var(--footer-bg);
   color: var(--footer-text);
@@ -26,7 +26,7 @@
 
 .footer-newsletter {
   padding: 3rem 0;
-  background-color: var(--bs-primary);
+  background-color: var(--footer-primary);
 }
 
 .footer-bottom {
@@ -51,7 +51,7 @@
   bottom: 0;
   width: 40px;
   height: 2px;
-  background-color: var(--bs-primary);
+  background-color: var(--footer-primary);
 }
 
 /* Footer Links */
@@ -89,6 +89,7 @@
 .footer-links a:hover::before {
   opacity: 1;
   left: -5px;
+  color: var(--footer-primary);
 }
 
 /* Footer About Section */
@@ -106,7 +107,8 @@
 }
 
 .download-app .btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--footer-primary-light);
+  color: var(--footer-primary);
 }
 
 /* Social Icons */
@@ -129,7 +131,7 @@
 }
 
 .social-icon:hover {
-  background-color: var(--bs-primary);
+  background-color: var(--footer-primary);
   color: #ffffff;
   transform: translateY(-3px);
 }
@@ -145,13 +147,13 @@
 }
 
 .trust-badge:hover {
-  background-color: var(--footer-badge-hover);
+  background-color: rgba(227, 93, 0, 0.1);
   transform: translateY(-5px);
 }
 
 .trust-icon {
   font-size: 2rem;
-  color: var(--bs-primary);
+  color: var(--footer-primary);
   margin-bottom: 1rem;
 }
 
@@ -211,7 +213,7 @@
 }
 
 .footer-legal a:hover {
-  color: var(--footer-link-hover);
+  color: var(--footer-primary);
 }
 
 /* Payment Methods */
@@ -228,7 +230,7 @@
 }
 
 .payment-methods svg:hover {
-  color: var(--bs-primary);
+  color: var(--footer-primary);
   transform: translateY(-3px);
 }
 
@@ -240,6 +242,16 @@
 
 .language-selector select {
   cursor: pointer;
+  border: 1px solid var(--footer-border);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--footer-text);
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.language-selector select:hover {
+  background-color: var(--footer-primary-light);
+  color: var(--footer-primary);
 }
 
 .language-selector select option {
@@ -263,6 +275,28 @@
 
 .footer-accordion-content {
   padding: 1.5rem 0;
+}
+
+/* Customer Support Badge */
+.customer-support-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--footer-primary-light);
+  color: var(--footer-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  font-weight: 600;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+.customer-support-badge:hover {
+  background-color: var(--footer-primary);
+  color: #fff;
+}
+
+.customer-support-badge i {
+  margin-right: 8px;
 }
 
 /* Responsive Adjustments */
