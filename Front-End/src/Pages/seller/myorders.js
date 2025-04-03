@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Card, Badge, Button, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Card, Badge, Button, Spinner, Toast, ToastContainer } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import NavBar from '../../components/seller/sellerNavBar';
 import Footer from '../../components/Footer';
+import '../../css/seller/myorders.css';
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [toast, setToast] = useState({
+    show: false,
+    message: '',
+    variant: 'success'
+  });
   
   // Get seller email from localStorage
   const sellerEmail = localStorage.getItem('email');
@@ -36,11 +42,19 @@ const MyOrders = () => {
     }
   }, [sellerEmail]);
 
+  // Function to show toast notification
+  const showToast = (message, variant = 'success') => {
+    setToast({
+      show: true,
+      message,
+      variant
+    });
+  };
+
   // Function to update order status
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      // Implement order status update functionality here
-      // This would be a PUT request to update the order status
+      // API request to update the order status
       await axios.put(`http://localhost:9000/api/orders/${orderId}/status`, { status: newStatus });
 
       const response = await axios.get(`http://localhost:9000/api/orders/seller?email=${sellerEmail}`);
@@ -51,11 +65,11 @@ const MyOrders = () => {
         order._id === orderId ? {...order, orderStatus: newStatus} : order
       ));
       
-      // Show a success message (you can implement toast notifications here)
-      alert(`Order ${orderId} status updated to ${newStatus}`);
+      // Show success toast notification
+      showToast(`Order status updated to ${newStatus} successfully!`);
     } catch (err) {
       console.error('Error updating order status:', err);
-      alert('Failed to update order status');
+      showToast('Failed to update order status. Please try again.', 'danger');
     }
   };
 
@@ -79,135 +93,158 @@ const MyOrders = () => {
 
   if (loading) {
     return (
-      <Container className="text-center my-5">
-        <Spinner animation="border" role="status">
+      <div className="seller-orders-loading-container">
+        <Spinner animation="border" role="status" className="seller-orders-spinner">
           <span className="visually-hidden">Loading...</span>
         </Spinner>
-      </Container>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Container className="text-center my-5">
-        <div className="alert alert-danger">{error}</div>
+      <Container className="seller-orders-error-container">
+        <div className="seller-orders-error-message">{error}</div>
       </Container>
     );
   }
 
   return (
-  <>
-  <NavBar/>
-    <Container className="my-5">
-      <h2 className="mb-4">My Received Orders</h2>
-      
-      {orders.length === 0 ? (
-        <div className="alert alert-info">You don't have any orders yet.</div>
-      ) : (
-        <>
-          <p>Showing {orders.length} orders for {sellerEmail}</p>
+    <>
+      <NavBar />
+      <div className="seller-orders-main-container">
+        <ToastContainer position="top-end" className="p-3 seller-orders-toast-container">
+          <Toast 
+            onClose={() => setToast({ ...toast, show: false })} 
+            show={toast.show} 
+            delay={3000} 
+            autohide
+            bg={toast.variant}
+            className="seller-orders-toast"
+          >
+            <Toast.Header>
+              <strong className="me-auto">Order Update</strong>
+            </Toast.Header>
+            <Toast.Body className={toast.variant === 'danger' ? 'text-white' : ''}>
+              {toast.message}
+            </Toast.Body>
+          </Toast>
+        </ToastContainer>
+
+        <Container className="seller-orders-container">
+          <h2 className="seller-orders-title">My Received Orders</h2>
           
-          {orders.map(order => (
-            <Card key={order._id} className="mb-4 shadow-sm">
-              <Card.Header className="d-flex justify-content-between align-items-center">
-                <div>
-                  <strong>Order ID:</strong> {order._id}
-                </div>
-                <Badge bg={getStatusBadgeVariant(order.orderStatus)}>
-                  {order.orderStatus}
-                </Badge>
-              </Card.Header>
+          {orders.length === 0 ? (
+            <div className="seller-orders-empty-message">
+              You don't have any orders yet.
+            </div>
+          ) : (
+            <>
+              <p className="seller-orders-count">Showing {orders.length} orders for {sellerEmail}</p>
               
-              <Card.Body>
-                <Row>
-                  <Col md={3}>
-                    {order.itemDetails.image && (
-                      <img 
-                        src={`http://localhost:9000${order.itemDetails.image}`}
-                        alt={order.itemDetails.title}
-                        className="img-fluid rounded" 
-                        style={{ maxHeight: '120px', objectFit: 'contain' }}
-                      />
-                    )}
-                  </Col>
-                  
-                  <Col md={5}>
-                    <h5>{order.itemDetails.title}</h5>
-                    <p className="mb-1">
-                      <strong>Price:</strong> ${order.itemDetails.price.toFixed(2)}
-                    </p>
-                    <p className="mb-1">
-                      <strong>Quantity:</strong> {order.itemDetails.quantity}
-                    </p>
-                    <p className="mb-1">
-                      <strong>Total:</strong> ${order.totalAmount.toFixed(2)}
-                    </p>
-                    <p className="mb-1">
-                      <strong>Ordered On:</strong> {formatDate(order.orderDate)}
-                    </p>
-                  </Col>
-                  
-                  <Col md={4}>
-                    <h6>Buyer Information</h6>
-                    <p className="mb-1">
-                      <strong>Name:</strong> {order.shippingDetails.fullName}
-                    </p>
-                    <p className="mb-1">
-                      <strong>Email:</strong> {order.userEmail}
-                    </p>
-                    <p className="mb-1">
-                      <strong>Phone:</strong> {order.shippingDetails.phone}
-                    </p>
-                    <p className="mb-1">
-                      <strong>Address:</strong> {order.shippingDetails.address}, {order.shippingDetails.city}, {order.shippingDetails.zipCode}
-                    </p>
-                  </Col>
-                </Row>
-                
-                <div className="mt-3">
-                  <h6>Update Order Status</h6>
-                  <div className="d-flex gap-2">
-                    <Button 
-                      size="sm" 
-                      variant="outline-info"
-                      onClick={() => updateOrderStatus(order._id, 'Processing')}
-                      disabled={order.orderStatus !== 'Pending'}
-                    >
-                      Mark Processing
-                    </Button>
-                    <Button 
-                      size="sm" 
-                      variant="outline-primary"
-                      onClick={() => updateOrderStatus(order._id, 'Shipped')}
-                      disabled={order.orderStatus !== 'Processing'}
-                    >
-                      Mark Shipped
-                    </Button>
-                    <Button 
-                      size="sm" 
-                      variant="outline-success"
-                      onClick={() => updateOrderStatus(order._id, 'Delivered')}
-                      disabled={order.orderStatus !== 'Shipped'}
-                    >
-                      Mark Delivered
-                    </Button>
-                    <Button 
-                      size="sm" 
-                      variant="outline-danger"
-                      onClick={() => updateOrderStatus(order._id, 'Cancelled')}
-                      disabled={order.orderStatus === 'Delivered' || order.orderStatus === 'Cancelled'}
-                    >
-                      Cancel Order
-                    </Button>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
-          ))}
-        </>
-      )}
-    </Container>
-    <Footer/>
+              <div className="seller-orders-list">
+                {orders.map(order => (
+                  <Card key={order._id} className="seller-orders-card">
+                    <Card.Header className="seller-orders-card-header">
+                      <div className="seller-orders-id">
+                        <strong>Order ID:</strong> {order._id}
+                      </div>
+                      <Badge bg={getStatusBadgeVariant(order.orderStatus)} className="seller-orders-status-badge">
+                        {order.orderStatus}
+                      </Badge>
+                    </Card.Header>
+                    
+                    <Card.Body className="seller-orders-card-body">
+                      <Row>
+                        <Col md={3} className="seller-orders-image-container">
+                          {order.itemDetails.image && (
+                            <img 
+                              src={`http://localhost:9000${order.itemDetails.image}`}
+                              alt={order.itemDetails.title}
+                              className="seller-orders-product-image" 
+                            />
+                          )}
+                        </Col>
+                        
+                        <Col md={5} className="seller-orders-details">
+                          <h5 className="seller-orders-product-title">{order.itemDetails.title}</h5>
+                          <p className="seller-orders-detail-item">
+                            <strong>Price:</strong> ${order.itemDetails.price.toFixed(2)}
+                          </p>
+                          <p className="seller-orders-detail-item">
+                            <strong>Quantity:</strong> {order.itemDetails.quantity}
+                          </p>
+                          <p className="seller-orders-detail-item">
+                            <strong>Total:</strong> ${order.totalAmount.toFixed(2)}
+                          </p>
+                          <p className="seller-orders-detail-item">
+                            <strong>Ordered On:</strong> {formatDate(order.orderDate)}
+                          </p>
+                        </Col>
+                        
+                        <Col md={4} className="seller-orders-buyer-info">
+                          <h6 className="seller-orders-section-title">Buyer Information</h6>
+                          <p className="seller-orders-detail-item">
+                            <strong>Name:</strong> {order.shippingDetails.fullName}
+                          </p>
+                          <p className="seller-orders-detail-item">
+                            <strong>Email:</strong> {order.userEmail}
+                          </p>
+                          <p className="seller-orders-detail-item">
+                            <strong>Phone:</strong> {order.shippingDetails.phone}
+                          </p>
+                          <p className="seller-orders-detail-item">
+                            <strong>Address:</strong> {order.shippingDetails.address}, {order.shippingDetails.city}, {order.shippingDetails.zipCode}
+                          </p>
+                        </Col>
+                      </Row>
+                      
+                      <div className="seller-orders-actions">
+                        <h6 className="seller-orders-section-title">Update Order Status</h6>
+                        <div className="seller-orders-button-group">
+                          <Button 
+                            className="seller-orders-action-btn"
+                            variant="outline-info"
+                            onClick={() => updateOrderStatus(order._id, 'Processing')}
+                            disabled={order.orderStatus !== 'Pending'}
+                          >
+                            Mark Processing
+                          </Button>
+                          <Button 
+                            className="seller-orders-action-btn"
+                            variant="outline-primary"
+                            onClick={() => updateOrderStatus(order._id, 'Shipped')}
+                            disabled={order.orderStatus !== 'Processing'}
+                          >
+                            Mark Shipped
+                          </Button>
+                          <Button 
+                            className="seller-orders-action-btn"
+                            variant="outline-success"
+                            onClick={() => updateOrderStatus(order._id, 'Delivered')}
+                            disabled={order.orderStatus !== 'Shipped'}
+                          >
+                            Mark Delivered
+                          </Button>
+                          <Button 
+                            className="seller-orders-action-btn"
+                            variant="outline-danger"
+                            onClick={() => updateOrderStatus(order._id, 'Cancelled')}
+                            disabled={order.orderStatus === 'Delivered' || order.orderStatus === 'Cancelled'}
+                          >
+                            Cancel Order
+                          </Button>
+                        </div>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                ))}
+              </div>
+            </>
+          )}
+        </Container>
+      </div>
+      <Footer />
     </>
   );
 };

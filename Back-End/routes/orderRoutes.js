@@ -8,4 +8,5 @@ router.get('/seller', orderController.getOrdersBySeller);
 router.put('/:orderId/status', orderController.updateOrderStatus);
 router.put('/api/orders/:orderId/status', orderController.updateOrderStatus);
 
+
 module.exports = router;

@@ -59,7 +59,7 @@ function App() {
         <Route path="/add-items" element={<SellerProtectedRoute><AddItems /></SellerProtectedRoute>} />
         <Route path="/seller-notifications" element={<SellerProtectedRoute><SellerNotifications /></SellerProtectedRoute>} />
         <Route path="/my-products" element={<SellerProtectedRoute><MyProducts /></SellerProtectedRoute>} />
-        <Route path="my-orders" element={<SellerProtectedRoute><MyOrders/></SellerProtectedRoute>}/>
+        <Route path="/seller-orders" element={<SellerProtectedRoute><MyOrders/></SellerProtectedRoute>}/>
         <Route path="/admin-notifications" element={<AdminProtectedRoute><AdminNotificationPage/></AdminProtectedRoute >} />
         <Route path="/admin-dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
         <Route path="/seller-requests" element={<AdminProtectedRoute><SellerRequests /></AdminProtectedRoute>} />
