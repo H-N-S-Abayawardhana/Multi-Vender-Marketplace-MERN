@@ -138,9 +138,51 @@ const UserItemList = () => {
   };
 
   const handleAddToCart = (item) => {
-    // TODO: Implement cart functionality with selected quantity
+    // Get the selected quantity for this item
     const quantity = itemQuantities[item._id] || 1;
-    console.log('Added to cart:', item, 'Quantity:', quantity);
+    
+    // Create cart item with necessary details
+    const cartItem = {
+      _id: item._id,
+      title: item.title,
+      price: item.price,
+      image: item.images && item.images.length > 0 ? `http://localhost:9000${item.images[0]}` : null,
+      quantity: quantity,
+      maxQuantity: item.quantity, // Store max available quantity
+      selectedQuantity: quantity,
+      shippingCost: item.shippingDetails.cost,
+      seller: item.seller || 'Unknown', // Add seller info if available
+      category: item.category
+    };
+    
+    // Get current cart from localStorage
+    let cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+    
+    // Check if item already exists in cart
+    const existingItemIndex = cart.findIndex(cartItem => cartItem._id === item._id);
+    
+    if (existingItemIndex !== -1) {
+      // Update quantity if item exists
+      const newQuantity = cart[existingItemIndex].selectedQuantity + quantity;
+      // Make sure not to exceed available stock
+      cart[existingItemIndex].selectedQuantity = Math.min(newQuantity, item.quantity);
+      
+      // Show feedback
+      alert(`Updated quantity in cart. You now have ${cart[existingItemIndex].selectedQuantity} of this item.`);
+    } else {
+      // Add new item
+      cart.push(cartItem);
+      
+      // Show feedback
+      alert(`${item.title} added to cart successfully!`);
+    }
+    
+    // Save updated cart to localStorage
+    localStorage.setItem('shoppingCart', JSON.stringify(cart));
+    
+    // Trigger a custom event that Cart.js can listen for
+    const cartUpdateEvent = new CustomEvent('cartUpdated');
+    window.dispatchEvent(cartUpdateEvent);
   };
 
   const handleBuyNow = (item) => {

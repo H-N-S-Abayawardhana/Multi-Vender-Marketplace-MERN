@@ -104,64 +104,6 @@ const SignInPopup = ({ onClose, onSignInSuccess }) => {
     }
   };
 
-  // return (
-  //   <div className="signin-popup-overlay">
-  //     <div className="signin-popup">
-  //       <div className="signin-popup-header">
-  //         <h2>Sign In</h2>
-  //         <button className="signin-close-btn" onClick={onClose}>
-  //           <X size={20} />
-  //         </button>
-  //       </div>
-        
-  //       {error && <div className="signin-error">{error}</div>}
-        
-  //       <form onSubmit={handleSubmit} className="signin-form">
-  //         <div className="signin-form-group">
-  //           <label htmlFor="email">
-  //             <User size={16} />
-  //             <span>Email</span>
-  //           </label>
-  //           <input
-  //             type="email"
-  //             id="email"
-  //             value={email}
-  //             onChange={(e) => setEmail(e.target.value)}
-  //             placeholder="Enter your email"
-  //             disabled={loading}
-  //           />
-  //         </div>
-          
-  //         <div className="signin-form-group">
-  //           <label htmlFor="password">
-  //             <Lock size={16} />
-  //             <span>Password</span>
-  //           </label>
-  //           <input
-  //             type="password"
-  //             id="password"
-  //             value={password}
-  //             onChange={(e) => setPassword(e.target.value)}
-  //             placeholder="Enter your password"
-  //             disabled={loading}
-  //           />
-  //         </div>
-          
-  //         <button 
-  //           type="submit" 
-  //           className="signin-submit-btn"
-  //           disabled={loading}
-  //         >
-  //           {loading ? 'Signing in...' : 'Sign In'}
-  //         </button>
-  //       </form>
-        
-  //       <div className="signin-footer">
-  //         <p>Don't have an account? <Link to="/signup" onClick={onClose}>Sign Up</Link></p>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
 };
 
 const Home = () => {
@@ -304,8 +246,43 @@ const Home = () => {
     event.preventDefault();
     event.stopPropagation();
     
-    // TODO: Implement cart functionality with selected quantity
     const quantity = itemQuantities[item._id] || 1;
+    
+    // Format item for cart
+    const cartItem = {
+      _id: item._id,
+      title: item.title,
+      price: item.price,
+      images: item.images,
+      selectedQuantity: quantity,
+      maxQuantity: item.quantity,
+      shippingDetails: item.shippingDetails
+    };
+    
+    // Get existing cart
+    const existingCart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+    
+    // Check if item already exists in cart
+    const existingItemIndex = existingCart.findIndex(cartItem => cartItem._id === item._id);
+    
+    if (existingItemIndex >= 0) {
+      // Update quantity if item already exists
+      existingCart[existingItemIndex].selectedQuantity += quantity;
+      // Ensure we don't exceed available quantity
+      if (existingCart[existingItemIndex].selectedQuantity > item.quantity) {
+        existingCart[existingItemIndex].selectedQuantity = item.quantity;
+      }
+    } else {
+      // Add new item to cart
+      existingCart.push(cartItem);
+    }
+    
+    // Save updated cart to localStorage
+    localStorage.setItem('shoppingCart', JSON.stringify(existingCart));
+    
+    // Dispatch event to notify other components of cart update
+    window.dispatchEvent(new Event('cartUpdated'));
+    
     toast.success(`Added ${quantity} ${quantity > 1 ? 'items' : 'item'} to cart`);
   };
 
@@ -711,17 +688,10 @@ const Home = () => {
           />
         )}
         
-        {/* Sign-in Popup */}
-        {showSignIn && (
-          <SignInPopup
-            onClose={handleSignInClose}
-            onSignInSuccess={handleSignInSuccess}
-          />
-        )}
-        
+
         {/* Toast notifications container */}
         <ToastContainer 
-          position="top-right"
+          position="top-center"
           autoClose={3000}
           hideProgressBar={false}
           newestOnTop

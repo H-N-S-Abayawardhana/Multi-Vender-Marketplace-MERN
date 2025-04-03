@@ -24,6 +24,7 @@ import AdminNotificationPage from './Pages/admin/AdminNotificationPage';
 import AdminDashboard from './Pages/admin/AdminDashboard';
 import SellerRequests from './Pages/admin/SellerRequests';
 import AllStores from './Pages/admin/AllStores';
+import Cart from './Pages/Cart';
 
 
 // { BuyerProtectedRoute, SellerProtectedRoute, AdminProtectedRoute } from './components/ProtectedRoutes';
@@ -47,6 +48,7 @@ function App() {
         <Route path="/become-seller" element={<BecomeSeller />} />
         <Route path="/shop-now" element={<ShopNowPage />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/cart" element={<Cart/>} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/seller-dashboard" element={<SellerProtectedRoute><SellerDashboard /></SellerProtectedRoute>} />
         <Route path="/add-store" element={<SellerProtectedRoute><AddStore /></SellerProtectedRoute>} />

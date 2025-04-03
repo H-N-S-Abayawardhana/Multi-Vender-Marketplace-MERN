@@ -12,6 +12,7 @@ const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
+  const [cartItemCount, setCartItemCount] = useState(0);
   const isLoggedIn = !!localStorage.getItem('token');
   const userEmail = localStorage.getItem('email');
 
@@ -29,6 +30,25 @@ const NavBar = () => {
     
     return () => {
       window.removeEventListener('error', handleResizeError, true);
+    };
+  }, []);
+
+  // Get cart count from localStorage
+  useEffect(() => {
+    const updateCartCount = () => {
+      const savedCart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+      setCartItemCount(savedCart.length);
+    };
+
+    // Initial load
+    updateCartCount();
+
+    // Listen for cart updates from other components
+    window.addEventListener('cartUpdated', updateCartCount);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('cartUpdated', updateCartCount);
     };
   }, []);
 
@@ -62,13 +82,8 @@ const NavBar = () => {
 
   const handleCartClick = (e) => {
     e.preventDefault();
-    Swal.fire({
-      title: 'Shopping Cart',
-      text: 'Your shopping cart is empty!',
-      icon: 'info',
-      confirmButtonColor: '#3085d6',
-      confirmButtonText: 'Continue Shopping'
-    });
+    // Navigate to cart page instead of showing alert
+    navigate('/cart');
   };
 
   const handleNotificationClick = (e) => {
@@ -243,7 +258,7 @@ const NavBar = () => {
           <div className="user-navbar-actions">
             <button className="user-navbar-icon-btn" onClick={handleCartClick}>
               <FaShoppingCart />
-              <span className="user-navbar-badge">0</span>
+              <span className="user-navbar-badge">{cartItemCount}</span>
             </button>
 
             <button className="user-navbar-icon-btn" onClick={handleNotificationClick}>
