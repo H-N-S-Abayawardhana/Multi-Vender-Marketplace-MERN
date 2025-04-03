@@ -41,7 +41,10 @@ const MyOrders = () => {
     try {
       // Implement order status update functionality here
       // This would be a PUT request to update the order status
-      // await axios.put(`/api/orders/${orderId}/status`, { status: newStatus });
+      await axios.put(`http://localhost:9000/api/orders/${orderId}/status`, { status: newStatus });
+
+      const response = await axios.get(`http://localhost:9000/api/orders/seller?email=${sellerEmail}`);
+      setOrders(response.data);
       
       // For now, we'll just update the UI optimistically
       setOrders(orders.map(order => 
