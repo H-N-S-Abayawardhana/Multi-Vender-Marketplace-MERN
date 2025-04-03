@@ -103,8 +103,12 @@ const SignInPopup = ({ onClose, onSignInSuccess }) => {
       setLoading(false);
     }
   };
+<<<<<<< HEAD
 
 };
+=======
+ };
+>>>>>>> a35cfc7eb39f42823969bf6ff40681faf31bea65
 
 const Home = () => {
   const navigate = useNavigate();
@@ -291,7 +295,7 @@ const Home = () => {
     event.preventDefault();
     event.stopPropagation();
     
-    // Allow all users to proceed with checkout
+    // Allow all users to proceed with checkout (removed login check)
     const quantity = itemQuantities[item._id] || 1;
     const itemWithQuantity = {
       ...item,
@@ -301,16 +305,6 @@ const Home = () => {
     };
     setSelectedItem(itemWithQuantity);
     setShowCheckout(true);
-  };
-
-  const handleSignInSuccess = () => {
-    setShowSignIn(false);
-    setIsLoggedIn(true);
-    
-    if (selectedItem) {
-      // Proceed with checkout after successful sign-in
-      setShowCheckout(true);
-    }
   };
 
   const toggleWishlist = (itemId, event) => {
@@ -688,7 +682,12 @@ const Home = () => {
           />
         )}
         
+<<<<<<< HEAD
 
+=======
+       
+        
+>>>>>>> a35cfc7eb39f42823969bf6ff40681faf31bea65
         {/* Toast notifications container */}
         <ToastContainer 
           position="top-center"

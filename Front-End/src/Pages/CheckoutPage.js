@@ -83,6 +83,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
     const newErrors = {};
     if (!formData.fullName) newErrors.fullName = 'Full name is required';
     if (!formData.email) newErrors.email = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is not valid';
     if (!formData.phone) newErrors.phone = 'Phone number is required';
     if (!formData.address) newErrors.address = 'Address is required';
     if (!formData.city) newErrors.city = 'City is required';
@@ -95,8 +96,16 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
   const validatePayment = () => {
     const newErrors = {};
     if (!formData.cardNumber) newErrors.cardNumber = 'Card number is required';
+    else if (!/^\d{16}$/.test(formData.cardNumber.replace(/\s/g, ''))) 
+      newErrors.cardNumber = 'Card number must be 16 digits';
+    
     if (!formData.cardExpiry) newErrors.cardExpiry = 'Expiry date is required';
+    else if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(formData.cardExpiry)) 
+      newErrors.cardExpiry = 'Expiry must be in MM/YY format';
+    
     if (!formData.cvv) newErrors.cvv = 'CVV is required';
+    else if (!/^\d{3,4}$/.test(formData.cvv)) 
+      newErrors.cvv = 'CVV must be 3 or 4 digits';
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -104,10 +113,45 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    // Special handling for card number (add spaces)
+    if (name === 'cardNumber') {
+      // Remove non-digits
+      const digits = value.replace(/\D/g, '');
+      // Limit to 16 digits
+      const truncated = digits.slice(0, 16);
+      // Format with spaces
+      const formatted = truncated.replace(/(\d{4})/g, '$1 ').trim();
+      
+      setFormData(prev => ({
+        ...prev,
+        [name]: formatted
+      }));
+    }
+    // Special handling for expiry date (auto add slash)
+    else if (name === 'cardExpiry') {
+      const digits = value.replace(/\D/g, '');
+      let formatted = '';
+      
+      if (digits.length <= 2) {
+        formatted = digits;
+      } else {
+        formatted = digits.slice(0, 2) + '/' + digits.slice(2, 4);
+      }
+      
+      setFormData(prev => ({
+        ...prev,
+        [name]: formatted
+      }));
+    }
+    // Regular handling for other fields
+    else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+    
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -128,12 +172,17 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
         try {
           setIsSubmitting(true);
           
+<<<<<<< HEAD
           const userEmail = localStorage.getItem('email');
           if (!userEmail) {
             toast.error('You must be logged in to place an order');
             navigate('/login');
             return;
           }
+=======
+          // Remove login requirement
+          const userEmail = formData.email;
+>>>>>>> a35cfc7eb39f42823969bf6ff40681faf31bea65
           
           // Handle different checkout paths
           if (isDirectPurchase) {
@@ -249,6 +298,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
   return (
     <div className={onClose ? "checkout-overlay" : "checkout-page"}>
       <div className="checkout-container">
+<<<<<<< HEAD
         <div className="checkout-navigation">
           <button className="checkout-back" onClick={handleBack}>
             <ArrowLeft size={24} />
@@ -264,6 +314,14 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
             </button>
           )}
         </div>
+=======
+      <div className="checkout-navigation">
+            <button className="checkout-back" onClick={onClose}>
+              <ArrowLeft size={24} />
+              Back
+            </button>
+          </div>
+>>>>>>> a35cfc7eb39f42823969bf6ff40681faf31bea65
 
         <div className="checkout-header">
           <h2>Checkout</h2>
@@ -281,6 +339,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
 
         <div className="checkout-content">
           <div className="checkout-item-summary">
+<<<<<<< HEAD
             {isDirectPurchase ? (
               // Single item purchase
               <>
@@ -296,6 +355,29 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
                       borderRadius: '8px'
                     }}
                   />
+=======
+            <div className="checkout-image-container">
+              <img 
+                src={`http://localhost:9000${item.images[0]}`} 
+                alt={item.title} 
+                className="checkout-item-image"
+                style={{
+                  width: '100px',
+                  height: '100px',
+                  objectFit: 'cover',
+                  borderRadius: '8px'
+                }}
+              />
+            </div>
+            <div className="checkout-item-details">
+              <h3>{item.title}</h3>
+              <p className="checkout-item-price">LKR {item.price.toFixed(2)} × {quantity}</p>
+              
+              <div className="checkout-price-breakdown">
+                <div className="checkout-price-row">
+                  <span>Item Subtotal:</span>
+                  <span>LKR {subtotal.toFixed(2)}</span>
+>>>>>>> a35cfc7eb39f42823969bf6ff40681faf31bea65
                 </div>
                 <div className="checkout-item-details">
                   <h3>{item.title}</h3>
@@ -437,6 +519,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
                     onChange={handleInputChange}
                     placeholder="1234 5678 9012 3456"
                     className={errors.cardNumber ? 'error' : ''}
+                    maxLength={19} // 16 digits + 3 spaces
                   />
                   {errors.cardNumber && <span className="checkout-error">{errors.cardNumber}</span>}
                 </div>
@@ -451,6 +534,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
                       onChange={handleInputChange}
                       placeholder="MM/YY"
                       className={errors.cardExpiry ? 'error' : ''}
+                      maxLength={5} // MM/YY format
                     />
                     {errors.cardExpiry && <span className="checkout-error">{errors.cardExpiry}</span>}
                   </div>
@@ -458,12 +542,13 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
                   <div className="checkout-form-group">
                     <label>CVV</label>
                     <input
-                      type="text"
+                      type="password"
                       name="cvv"
                       value={formData.cvv}
                       onChange={handleInputChange}
                       placeholder="123"
                       className={errors.cvv ? 'error' : ''}
+                      maxLength={4}
                     />
                     {errors.cvv && <span className="checkout-error">{errors.cvv}</span>}
                   </div>
