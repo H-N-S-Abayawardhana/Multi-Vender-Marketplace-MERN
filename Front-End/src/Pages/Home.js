@@ -103,66 +103,7 @@ const SignInPopup = ({ onClose, onSignInSuccess }) => {
       setLoading(false);
     }
   };
-
-  // return (
-  //   <div className="signin-popup-overlay">
-  //     <div className="signin-popup">
-  //       <div className="signin-popup-header">
-  //         <h2>Sign In</h2>
-  //         <button className="signin-close-btn" onClick={onClose}>
-  //           <X size={20} />
-  //         </button>
-  //       </div>
-        
-  //       {error && <div className="signin-error">{error}</div>}
-        
-  //       <form onSubmit={handleSubmit} className="signin-form">
-  //         <div className="signin-form-group">
-  //           <label htmlFor="email">
-  //             <User size={16} />
-  //             <span>Email</span>
-  //           </label>
-  //           <input
-  //             type="email"
-  //             id="email"
-  //             value={email}
-  //             onChange={(e) => setEmail(e.target.value)}
-  //             placeholder="Enter your email"
-  //             disabled={loading}
-  //           />
-  //         </div>
-          
-  //         <div className="signin-form-group">
-  //           <label htmlFor="password">
-  //             <Lock size={16} />
-  //             <span>Password</span>
-  //           </label>
-  //           <input
-  //             type="password"
-  //             id="password"
-  //             value={password}
-  //             onChange={(e) => setPassword(e.target.value)}
-  //             placeholder="Enter your password"
-  //             disabled={loading}
-  //           />
-  //         </div>
-          
-  //         <button 
-  //           type="submit" 
-  //           className="signin-submit-btn"
-  //           disabled={loading}
-  //         >
-  //           {loading ? 'Signing in...' : 'Sign In'}
-  //         </button>
-  //       </form>
-        
-  //       <div className="signin-footer">
-  //         <p>Don't have an account? <Link to="/signup" onClick={onClose}>Sign Up</Link></p>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
-};
+ };
 
 const Home = () => {
   const navigate = useNavigate();
@@ -314,7 +255,7 @@ const Home = () => {
     event.preventDefault();
     event.stopPropagation();
     
-    // Allow all users to proceed with checkout
+    // Allow all users to proceed with checkout (removed login check)
     const quantity = itemQuantities[item._id] || 1;
     const itemWithQuantity = {
       ...item,
@@ -324,16 +265,6 @@ const Home = () => {
     };
     setSelectedItem(itemWithQuantity);
     setShowCheckout(true);
-  };
-
-  const handleSignInSuccess = () => {
-    setShowSignIn(false);
-    setIsLoggedIn(true);
-    
-    if (selectedItem) {
-      // Proceed with checkout after successful sign-in
-      setShowCheckout(true);
-    }
   };
 
   const toggleWishlist = (itemId, event) => {
@@ -711,17 +642,11 @@ const Home = () => {
           />
         )}
         
-        {/* Sign-in Popup */}
-        {showSignIn && (
-          <SignInPopup
-            onClose={handleSignInClose}
-            onSignInSuccess={handleSignInSuccess}
-          />
-        )}
+       
         
         {/* Toast notifications container */}
         <ToastContainer 
-          position="top-right"
+          position="top-center"
           autoClose={3000}
           hideProgressBar={false}
           newestOnTop
