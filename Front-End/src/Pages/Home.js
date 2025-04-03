@@ -103,12 +103,10 @@ const SignInPopup = ({ onClose, onSignInSuccess }) => {
       setLoading(false);
     }
   };
-<<<<<<< HEAD
 
 };
-=======
- };
->>>>>>> a35cfc7eb39f42823969bf6ff40681faf31bea65
+
+
 
 const Home = () => {
   const navigate = useNavigate();
@@ -682,12 +680,7 @@ const Home = () => {
           />
         )}
         
-<<<<<<< HEAD
 
-=======
-       
-        
->>>>>>> a35cfc7eb39f42823969bf6ff40681faf31bea65
         {/* Toast notifications container */}
         <ToastContainer 
           position="top-center"
