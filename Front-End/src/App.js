@@ -25,9 +25,10 @@ import AdminDashboard from './Pages/admin/AdminDashboard';
 import SellerRequests from './Pages/admin/SellerRequests';
 import AllStores from './Pages/admin/AllStores';
 import Cart from './Pages/Cart';
+import MyOrders from './Pages/seller/myorders';
 
 
-// { BuyerProtectedRoute, SellerProtectedRoute, AdminProtectedRoute } from './components/ProtectedRoutes';
+
 import BuyerProtectedRoute from './Routes/BuyerProtectedRoute';
 import SellerProtectedRoute from './Routes/SellerProtectedRoute';
 import AdminProtectedRoute from './Routes/AdminProtectedRoute';
@@ -58,6 +59,7 @@ function App() {
         <Route path="/add-items" element={<SellerProtectedRoute><AddItems /></SellerProtectedRoute>} />
         <Route path="/seller-notifications" element={<SellerProtectedRoute><SellerNotifications /></SellerProtectedRoute>} />
         <Route path="/my-products" element={<SellerProtectedRoute><MyProducts /></SellerProtectedRoute>} />
+        <Route path="my-orders" element={<SellerProtectedRoute><MyOrders/></SellerProtectedRoute>}/>
         <Route path="/admin-notifications" element={<AdminProtectedRoute><AdminNotificationPage/></AdminProtectedRoute >} />
         <Route path="/admin-dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
         <Route path="/seller-requests" element={<AdminProtectedRoute><SellerRequests /></AdminProtectedRoute>} />

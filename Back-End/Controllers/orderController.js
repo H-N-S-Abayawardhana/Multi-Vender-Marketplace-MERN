@@ -60,7 +60,46 @@ const orderController = {
     } catch (error) {
       res.status(500).json({ message: 'Error fetching orders', error: error.message });
     }
+  },
+
+  
+// Add this method to your orderController.js
+updateOrderStatus: async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+    
+    // Validate the status is one of the allowed values
+    const validStatuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Invalid order status' });
+    }
+    
+    // Find the order and update its status
+    const order = await Order.findById(orderId);
+    
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+    
+    // Optional: Check if the seller is authorized to update this order
+    // if (order.sellerEmail !== req.query.email) {
+    //   return res.status(403).json({ message: 'Unauthorized to update this order' });
+    // }
+    
+    order.orderStatus = status;
+    await order.save();
+    
+    res.json({ message: 'Order status updated successfully', order });
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    res.status(500).json({ message: 'Error updating order status', error: error.message });
   }
+}
+
+
+  
 };
+
 
 module.exports = orderController;
