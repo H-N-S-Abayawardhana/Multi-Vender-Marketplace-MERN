@@ -25,6 +25,7 @@ import AdminDashboard from './Pages/admin/AdminDashboard';
 import SellerRequests from './Pages/admin/SellerRequests';
 import AllStores from './Pages/admin/AllStores';
 import Cart from './Pages/Cart';
+import Cartcheckout from './Pages/CartCheckout';
 import MyOrders from './Pages/seller/myorders';
 
 
@@ -50,6 +51,7 @@ function App() {
         <Route path="/shop-now" element={<ShopNowPage />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/cart" element={<Cart/>} />
+        <Route path="/cartcheckout" element={<Cartcheckout />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/seller-dashboard" element={<SellerProtectedRoute><SellerDashboard /></SellerProtectedRoute>} />
         <Route path="/add-store" element={<SellerProtectedRoute><AddStore /></SellerProtectedRoute>} />

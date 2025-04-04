@@ -125,7 +125,7 @@ const Cart = () => {
     }
     
     // Navigate to checkout page
-    navigate('/checkout');
+    navigate('/cartcheckout');
   };
 
   if (isLoading) {

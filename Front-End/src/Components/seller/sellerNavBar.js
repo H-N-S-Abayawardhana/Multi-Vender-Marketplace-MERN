@@ -179,9 +179,9 @@ const SellerNavBar = () => {
             <li className="nav-item mx-3">
               <Link 
                 className="nav-link" 
-                to="/my-orders"
+                to="/seller-orders"
               >
-                <span className={isActive('/my-orders') ? 'active-nav-item' : ''}>
+                <span className={isActive('/seller-orders') ? 'active-nav-item' : ''}>
                   Orders
                 </span>
               </Link>
