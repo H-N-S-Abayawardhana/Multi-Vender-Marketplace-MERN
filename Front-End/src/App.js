@@ -28,6 +28,7 @@ import Cart from './Pages/Cart';
 import Cartcheckout from './Pages/CartCheckout';
 import MyOrders from './Pages/seller/myorders';
 import SellerAnalytics from './Pages/seller/SellerAnalytics';
+import ItemDetail from './Pages/ItemDetail';
 
 
 
@@ -50,6 +51,7 @@ function App() {
         <Route path="/user-profile" element={<BuyerProtectedRoute><UserProfile /></BuyerProtectedRoute>} />
         <Route path="/become-seller" element={<BecomeSeller />} />
         <Route path="/shop-now" element={<ShopNowPage />} />
+        <Route path="/item/:itemId" element={<ItemDetail />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/cart" element={<Cart/>} />
         <Route path="/cartcheckout" element={<Cartcheckout />} />
@@ -69,6 +71,7 @@ function App() {
         <Route path="/seller-requests" element={<AdminProtectedRoute><SellerRequests /></AdminProtectedRoute>} />
         <Route path="/admin-profile" element={<AdminProtectedRoute><SellerProfile /></AdminProtectedRoute>} />
         <Route path="/all-stores" element={<AdminProtectedRoute><AllStores /></AdminProtectedRoute>} />
+       
       </Routes>
       </div>
     </Router>
