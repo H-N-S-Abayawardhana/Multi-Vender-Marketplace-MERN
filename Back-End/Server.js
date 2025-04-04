@@ -13,6 +13,7 @@ const adminRoutes = require('./routes/adminRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const sellnotiRoutes = require('./routes/sellnotiRoutes');
+const AnaliticRoutes = require('./routes/analyticsRoutes');
 
 
 
@@ -42,6 +43,7 @@ app.use('/api/admin',adminRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api', sellnotiRoutes);
+app.use('/api/analytics', AnaliticRoutes);
 // app.use('/uploads', express.static('uploads')); 
 
 // app.use('/uploads', express.static('uploads'));

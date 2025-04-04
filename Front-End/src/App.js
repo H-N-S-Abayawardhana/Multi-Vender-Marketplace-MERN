@@ -27,6 +27,7 @@ import AllStores from './Pages/admin/AllStores';
 import Cart from './Pages/Cart';
 import Cartcheckout from './Pages/CartCheckout';
 import MyOrders from './Pages/seller/myorders';
+import SellerAnalytics from './Pages/seller/SellerAnalytics';
 
 
 
@@ -62,6 +63,7 @@ function App() {
         <Route path="/seller-notifications" element={<SellerProtectedRoute><SellerNotifications /></SellerProtectedRoute>} />
         <Route path="/my-products" element={<SellerProtectedRoute><MyProducts /></SellerProtectedRoute>} />
         <Route path="/seller-orders" element={<SellerProtectedRoute><MyOrders/></SellerProtectedRoute>}/>
+        <Route path='/seller-analytics' element={<SellerProtectedRoute><SellerAnalytics/></SellerProtectedRoute>}/>
         <Route path="/admin-notifications" element={<AdminProtectedRoute><AdminNotificationPage/></AdminProtectedRoute >} />
         <Route path="/admin-dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
         <Route path="/seller-requests" element={<AdminProtectedRoute><SellerRequests /></AdminProtectedRoute>} />
