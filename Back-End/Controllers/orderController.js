@@ -42,6 +42,30 @@ const orderController = {
     }
   },
 
+  // Get orders for a specific user
+getUserOrders : async (req, res) => {
+  try {
+    const { email } = req.params;
+    
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'User email is required' });
+    }
+
+    const orders = await Order.find({ userEmail: email })
+      .populate('itemId')
+      .sort({ orderDate: -1 });
+    
+    if (!orders.length) {
+      return res.status(200).json({ success: true, orders: [], message: 'No orders found for this user' });
+    }
+
+    return res.status(200).json({ success: true, orders });
+  } catch (error) {
+    console.error('Error fetching user orders:', error);
+    return res.status(500).json({ success: false, message: 'Failed to fetch orders', error: error.message });
+  }
+},
+
   //Update the status of an order (by seller)
   updateOrderStatus: async (req, res) => {
     try {
