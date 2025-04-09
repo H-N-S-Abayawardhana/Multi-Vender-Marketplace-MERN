@@ -20,7 +20,7 @@ const Categories = () => {
   };
 
   const categories = [
-    { name: 'Electronics', emoji: '🔌' },
+    { name: 'Computer', emoji: '🔌' },
     { name: 'Clothing', emoji: '👕' },
     { name: 'Home', emoji: '🏠' },
     { name: 'Books', emoji: '📚' },

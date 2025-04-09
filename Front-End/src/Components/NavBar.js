@@ -282,7 +282,7 @@ const NavBar = () => {
                   <Link className="user-navbar-dropdown-item" to="/user-profile">
                     My Profile
                   </Link>
-                  <Link className="user-navbar-dropdown-item" to="/orders">
+                  <Link className="user-navbar-dropdown-item" to="/my-ordered-items">
                     My Orders
                   </Link>
                   <Link className="user-navbar-dropdown-item" to="/wishlist">
