@@ -6,7 +6,10 @@ const {
     loginUser, 
     logoutUser, 
     getUserProfile,
-    updateProfile
+    updateProfile,
+    forgotPassword,
+    resendOTP,
+    resetPassword
 } = require('../Controllers/userController');
 
 // Auth routes
@@ -17,5 +20,14 @@ router.post('/logout', logoutUser);
 // Change this line to use the imported function directly
 router.get('/profile', getUserProfile);  
 router.put('/profile', updateProfile);
+
+// Route to initiate forgot password process
+router.post('/forgot-password', forgotPassword);
+
+// Route to resend OTP
+router.post('/resend-otp', resendOTP);
+
+// Route to reset password with OTP verification
+router.post('/reset-password', resetPassword);
 
 module.exports = router;

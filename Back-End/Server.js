@@ -18,6 +18,7 @@ const reviewRoutes = require('./routes/reviewRoutes');
 
 
 
+
 const app = express();
 
 //  Correct CORS Configuration
@@ -46,6 +47,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api', sellnotiRoutes);
 app.use('/api/analytics', AnaliticRoutes);
 app.use('/api/reviews', reviewRoutes);
+
 // app.use('/uploads', express.static('uploads')); 
 
 // app.use('/uploads', express.static('uploads'));

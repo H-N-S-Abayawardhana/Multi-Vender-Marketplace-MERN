@@ -29,7 +29,9 @@ import Cartcheckout from './Pages/CartCheckout';
 import MyOrders from './Pages/seller/myorders';
 import SellerAnalytics from './Pages/seller/SellerAnalytics';
 import ItemDetail from './Pages/ItemDetail';
-import MyOrderedItems from './Pages/MyOrderItems'
+import MyOrderedItems from './Pages/MyOrderItems';
+import ForgotPassword from './Pages/ForgotPassword';
+
 
 
 
@@ -57,6 +59,7 @@ function App() {
         <Route path="/cart" element={<Cart/>} />
         <Route path="/cartcheckout" element={<Cartcheckout />} />
         <Route path="/categories" element={<Categories />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/seller-dashboard" element={<SellerProtectedRoute><SellerDashboard /></SellerProtectedRoute>} />
         <Route path="/add-store" element={<SellerProtectedRoute><AddStore /></SellerProtectedRoute>} />
         <Route path="/stores" element={<SellerProtectedRoute><StoreList /></SellerProtectedRoute>} />
