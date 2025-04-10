@@ -144,7 +144,7 @@ const Home = () => {
           axios.get('http://localhost:9000/api/items/new-arrivals'),
           axios.get('http://localhost:9000/api/items/by-categories', {
             params: {
-              categories: ['Electronics', 'Clothing', 'Home', 'Beauty', 'Sports'],
+              categories: ['Computers', 'Clothing', 'Beauty'],
               limit: 4
             }
           })
@@ -293,13 +293,17 @@ const Home = () => {
     event.preventDefault();
     event.stopPropagation();
     
-    // Allow all users to proceed with checkout (removed login check)
+    // Get the user's registered email from localStorage if available
+    const userEmail = localStorage.getItem('email') || null;
+    
     const quantity = itemQuantities[item._id] || 1;
     const itemWithQuantity = {
       ...item,
       selectedQuantity: quantity,
       // Calculate total price based on selected quantity
-      totalPrice: item.price * quantity
+      totalPrice: item.price * quantity,
+      // Include user's registered email if available
+      userEmail: userEmail
     };
     setSelectedItem(itemWithQuantity);
     setShowCheckout(true);

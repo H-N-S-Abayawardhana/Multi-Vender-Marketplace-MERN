@@ -1,5 +1,6 @@
 const Order = require('../Models/Order');
 const Item = require('../Models/Item');
+const { sendOrderStatusUpdateEmail } = require('../utils/emailService');
 
 const orderController = {
   createOrder: async (req, res) => {
@@ -43,34 +44,34 @@ const orderController = {
   },
 
   // Get orders for a specific user
-getUserOrders : async (req, res) => {
-  try {
-    const { email } = req.params;
-    
-    if (!email) {
-      return res.status(400).json({ success: false, message: 'User email is required' });
-    }
+  getUserOrders: async (req, res) => {
+    try {
+      const { email } = req.params;
+      
+      if (!email) {
+        return res.status(400).json({ success: false, message: 'User email is required' });
+      }
 
-    const orders = await Order.find({ userEmail: email })
-      .populate('itemId')
-      .sort({ orderDate: -1 });
-    
-    if (!orders.length) {
-      return res.status(200).json({ success: true, orders: [], message: 'No orders found for this user' });
-    }
+      const orders = await Order.find({ userEmail: email })
+        .populate('itemId')
+        .sort({ orderDate: -1 });
+      
+      if (!orders.length) {
+        return res.status(200).json({ success: true, orders: [], message: 'No orders found for this user' });
+      }
 
-    return res.status(200).json({ success: true, orders });
-  } catch (error) {
-    console.error('Error fetching user orders:', error);
-    return res.status(500).json({ success: false, message: 'Failed to fetch orders', error: error.message });
-  }
-},
+      return res.status(200).json({ success: true, orders });
+    } catch (error) {
+      console.error('Error fetching user orders:', error);
+      return res.status(500).json({ success: false, message: 'Failed to fetch orders', error: error.message });
+    }
+  },
 
   //Update the status of an order (by seller)
   updateOrderStatus: async (req, res) => {
     try {
       const { orderId } = req.params;
-      const { status } = req.body;
+      const { status, sendNotification, buyerEmail, itemTitle, sellerEmail } = req.body;
       
       // Validate the status is one of the allowed values
       const validStatuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
@@ -93,13 +94,28 @@ getUserOrders : async (req, res) => {
       order.orderStatus = status;
       await order.save();
       
+      // Send email notification if requested
+      if (sendNotification && buyerEmail) {
+        // If itemTitle wasn't provided in request but we have the order, use the order's item title
+        const emailItemTitle = itemTitle || (order.itemDetails && order.itemDetails.title) || 'your order';
+        // If sellerEmail wasn't provided in request but we have the order, use the order's seller email
+        const emailSellerEmail = sellerEmail || order.sellerEmail;
+        
+        await sendOrderStatusUpdateEmail(
+          buyerEmail,
+          orderId,
+          status,
+          emailItemTitle,
+          emailSellerEmail
+        );
+      }
+      
       res.json({ message: 'Order status updated successfully', order });
     } catch (error) {
       console.error('Error updating order status:', error);
       res.status(500).json({ message: 'Error updating order status', error: error.message });
     }
   },
-  
 
   getOrdersByUser: async (req, res) => {
     try {
@@ -119,46 +135,7 @@ getUserOrders : async (req, res) => {
     } catch (error) {
       res.status(500).json({ message: 'Error fetching orders', error: error.message });
     }
-  },
-
-  
-// Add this method to your orderController.js
-updateOrderStatus: async (req, res) => {
-  try {
-    const { orderId } = req.params;
-    const { status } = req.body;
-    
-    // Validate the status is one of the allowed values
-    const validStatuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
-    if (!validStatuses.includes(status)) {
-      return res.status(400).json({ message: 'Invalid order status' });
-    }
-    
-    // Find the order and update its status
-    const order = await Order.findById(orderId);
-    
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-    
-    // Optional: Check if the seller is authorized to update this order
-    // if (order.sellerEmail !== req.query.email) {
-    //   return res.status(403).json({ message: 'Unauthorized to update this order' });
-    // }
-    
-    order.orderStatus = status;
-    await order.save();
-    
-    res.json({ message: 'Order status updated successfully', order });
-  } catch (error) {
-    console.error('Error updating order status:', error);
-    res.status(500).json({ message: 'Error updating order status', error: error.message });
   }
-}
-
-
-  
 };
-
 
 module.exports = orderController;
