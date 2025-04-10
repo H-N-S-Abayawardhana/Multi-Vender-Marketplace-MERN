@@ -34,10 +34,10 @@ const DashboardSquares = () => {
         {
             title: "Customers",
             icon: <Users className="dashboard-icon" />,
-            path: "/customers",
-            description: "View customer information (Coming Soon)",
+            path: "/seller-customer-list",
+            description: "View customer information",
             bgClass: "customers",
-            disabled: true
+            disabled: false
         },
         {
             title: "Messages",

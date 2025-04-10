@@ -1,5 +1,6 @@
 const User = require('../Models/userModel');
 const SessionLog = require('../Models/sessionLogModel');
+const Store = require('../Models/Store');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
@@ -530,6 +531,193 @@ const forgotPassword = async (req, res) => {
       res.status(500).json({ message: 'Server error. Please try again later.' });
     }
   };
+// @desc    Get all sellers with store information
+// @route   GET /api/users/sellers
+// @access  Private/Admin
+const getAllSellers = async (req, res) => {
+    try {
+      // Find all users with userLevel = 2 (sellers)
+      const sellers = await User.find({ userLevel: 2 });
+      
+      // Array to store seller data with store information
+      const sellerData = [];
+      
+      // For each seller, check if they have a store
+      for (const seller of sellers) {
+        // Check if the seller has a store using their email
+        const store = await Store.findOne({ email: seller.email });
+        
+        // Add seller data with store information
+        sellerData.push({
+          _id: seller._id,
+          name: seller.name,
+          email: seller.email,
+          mobile: seller.mobile,
+          lastLogin: seller.lastLogin,
+          isActive: seller.isActive,
+          createdAt: seller.createdAt,
+          hasStore: Boolean(store),
+          storeId: store ? store.storeId : null,
+          storeName: store ? store.storeName : null
+        });
+      }
+      
+      res.status(200).json({
+        success: true,
+        count: sellerData.length,
+        data: sellerData
+      });
+    } catch (error) {
+      console.error('Error fetching sellers:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error fetching sellers',
+        error: process.env.NODE_ENV === 'development' ? error.message : 'Server error'
+      });
+    }
+  };
+  
+  // @desc    Remove a seller
+  // @route   DELETE /api/users/sellers/:id
+  // @access  Private/Admin
+  const removeSeller = async (req, res) => {
+    try {
+      const seller = await User.findById(req.params.id);
+      
+      // Check if seller exists
+      if (!seller) {
+        return res.status(404).json({
+          success: false,
+          message: `Seller not found with id of ${req.params.id}`
+        });
+      }
+      
+      // Check if user is actually a seller
+      if (seller.userLevel !== 2) {
+        return res.status(400).json({
+          success: false,
+          message: `User with id ${req.params.id} is not a seller`
+        });
+      }
+      
+      // Check if seller has a store
+      const store = await Store.findOne({ email: seller.email });
+      
+      // Remove store if exists
+      if (store) {
+        await Store.findByIdAndDelete(store._id);
+      }
+      
+      // Remove seller
+      await User.findByIdAndDelete(req.params.id);
+      
+      res.status(200).json({
+        success: true,
+        data: {}
+      });
+    } catch (error) {
+      console.error('Error removing seller:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error removing seller',
+        error: process.env.NODE_ENV === 'development' ? error.message : 'Server error'
+      });
+    }
+  };
+
+// @desc    Get all customers (users with userLevel = 3)
+// @route   GET /api/users/customers
+// @access  Private (Admin and Seller)
+const getAllCustomers = async (req, res) => {
+    try {
+        const customers = await User.find({ userLevel: 3, isActive: true })
+            .select('name email mobile lastLogin createdAt')
+            .sort({ createdAt: -1 });
+        
+        res.status(200).json({
+            success: true,
+            count: customers.length,
+            data: customers
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching customers',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Get customer details by ID
+// @route   GET /api/users/customers/:id
+// @access  Private (Admin and Seller)
+const getCustomerById = async (req, res) => {
+    try {
+        const customer = await User.findOne({ 
+            _id: req.params.id,
+            userLevel: 3
+        });
+        
+        if (!customer) {
+            return res.status(404).json({
+                success: false,
+                message: 'Customer not found'
+            });
+        }
+        
+        res.status(200).json({
+            success: true,
+            data: customer
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching customer details',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Update customer active status
+// @route   PATCH /api/users/customers/:id/status
+// @access  Private (Admin only)
+const updateCustomerStatus = async (req, res) => {
+    try {
+        const { isActive } = req.body;
+        
+        if (isActive === undefined) {
+            return res.status(400).json({
+                success: false,
+                message: 'isActive status is required'
+            });
+        }
+        
+        const customer = await User.findOneAndUpdate(
+            { _id: req.params.id, userLevel: 3 },
+            { isActive },
+            { new: true, runValidators: true }
+        );
+        
+        if (!customer) {
+            return res.status(404).json({
+                success: false,
+                message: 'Customer not found'
+            });
+        }
+        
+        res.status(200).json({
+            success: true,
+            message: `Customer status ${isActive ? 'activated' : 'deactivated'} successfully`,
+            data: customer
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error updating customer status',
+            error: error.message
+        });
+    }
+};
  
 
 
@@ -542,5 +730,10 @@ module.exports = {
     forgotPassword,
     resendOTP,
     resetPassword,
+    getAllSellers,
+    removeSeller,
+    getAllCustomers,
+    getCustomerById,
+    updateCustomerStatus,
     USER_LEVELS
 };

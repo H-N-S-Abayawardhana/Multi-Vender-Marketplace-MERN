@@ -31,6 +31,10 @@ import SellerAnalytics from './Pages/seller/SellerAnalytics';
 import ItemDetail from './Pages/ItemDetail';
 import MyOrderedItems from './Pages/MyOrderItems';
 import ForgotPassword from './Pages/ForgotPassword';
+import AllSellers from './Pages/admin/AllSellers';
+import AnalyzeSellers from './Pages/admin/AnalyzeSellers';
+import CustomersList from './Pages/admin/CustomerList';
+import SellerCustomersList from './Pages/seller/SellerCustomerList';
 
 
 
@@ -74,9 +78,12 @@ function App() {
         <Route path="/admin-notifications" element={<AdminProtectedRoute><AdminNotificationPage/></AdminProtectedRoute >} />
         <Route path="/admin-dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
         <Route path="/seller-requests" element={<AdminProtectedRoute><SellerRequests /></AdminProtectedRoute>} />
-        <Route path="/admin-profile" element={<AdminProtectedRoute><SellerProfile /></AdminProtectedRoute>} />
+        <Route path="/admin-profile" element={<AdminProtectedRoute><AdminProfile /></AdminProtectedRoute>} />
         <Route path="/all-stores" element={<AdminProtectedRoute><AllStores /></AdminProtectedRoute>} />
-       
+        <Route path="/all-sellers" element={<AdminProtectedRoute><AllSellers /></AdminProtectedRoute>} />
+        <Route path="/analyze-sellers" element={<AdminProtectedRoute><AnalyzeSellers /></AdminProtectedRoute>} />       
+        <Route path="/customer-list" element={<AdminProtectedRoute><CustomersList /></AdminProtectedRoute>} />
+        <Route path="/seller-customer-list" element={<SellerProtectedRoute><SellerCustomersList /></SellerProtectedRoute>} />
       </Routes>
       </div>
     </Router>
