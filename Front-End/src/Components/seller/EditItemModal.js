@@ -1,26 +1,84 @@
-// EditItemModal.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../css/seller/editItemModal.css';
 
 const EditItemModal = ({ item, onClose, onSave }) => {
+  // Ensure nested objects are properly initialized
   const [formData, setFormData] = useState({
     ...item,
     price: item.price.toString(),
     quantity: item.quantity.toString(),
+    startingBid: item.startingBid ? item.startingBid.toString() : '',
+    dimensions: item.dimensions || {
+      length: '',
+      width: '',
+      height: '',
+      weight: ''
+    },
+    shippingDetails: item.shippingDetails || {
+      method: 'Standard',
+      cost: '',
+      handlingTime: '',
+      internationalShipping: false
+    },
+    returnPolicy: item.returnPolicy || {
+      acceptsReturns: false,
+      returnPeriod: 30,
+      conditions: ''
+    },
+    paymentMethods: item.paymentMethods || ['PayPal', 'Credit Card']
   });
+  
   const [images, setImages] = useState([]);
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    const { name, value, type, checked } = e.target;
+    
+    // Handle checkbox inputs
+    if (type === 'checkbox') {
+      if (name.includes('.')) {
+        const [parent, child] = name.split('.');
+        setFormData(prev => ({
+          ...prev,
+          [parent]: {
+            ...prev[parent],
+            [child]: checked
+          }
+        }));
+      } else {
+        setFormData(prev => ({
+          ...prev,
+          [name]: checked
+        }));
+      }
+      return;
+    }
+    
+    // Handle nested properties
+    if (name.includes('.')) {
+      const [parent, child] = name.split('.');
+      setFormData(prev => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [child]: value
+        }
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handleImageChange = (e) => {
+    if (e.target.files.length > 3) {
+      setErrors({...errors, images: 'Maximum 3 images allowed'});
+      return;
+    }
     setImages([...e.target.files]);
+    setErrors({...errors, images: null});
   };
 
   const validateForm = () => {
@@ -46,8 +104,12 @@ const EditItemModal = ({ item, onClose, onSave }) => {
       newErrors.quantity = 'A valid quantity is required';
     }
 
-    if (formData.listingType === 'Auction' && (!formData.startingBid || formData.startingBid <= 0)) {
+    if (formData.listingType === 'Auction' && (!formData.startingBid || parseFloat(formData.startingBid) <= 0)) {
       newErrors.startingBid = 'A valid starting bid is required for auctions';
+    }
+
+    if (formData.shippingDetails && !formData.shippingDetails.cost) {
+      newErrors['shippingDetails.cost'] = 'Shipping cost is required';
     }
 
     setErrors(newErrors);
@@ -58,9 +120,10 @@ const EditItemModal = ({ item, onClose, onSave }) => {
     e.preventDefault();
     
     if (validateForm()) {
-      // Prepare data for submission
+      // Prepare data for submission - keep original item ID
       const updatedItem = {
         ...formData,
+        _id: item._id,
         price: parseFloat(formData.price),
         quantity: parseInt(formData.quantity),
         startingBid: formData.startingBid ? parseFloat(formData.startingBid) : undefined,
@@ -102,15 +165,24 @@ const EditItemModal = ({ item, onClose, onSave }) => {
               className={errors.category ? 'input-error' : ''}
             >
               <option value="">Select a category</option>
-              <option value="Electronics">Electronics</option>
+              <option value="Computer">Computers</option>
               <option value="Clothing">Clothing</option>
-              <option value="Home & Garden">Home & Garden</option>
-              <option value="Toys & Games">Toys & Games</option>
-              <option value="Sports & Outdoors">Sports & Outdoors</option>
-              <option value="Books & Media">Books & Media</option>
-              <option value="Health & Beauty">Health & Beauty</option>
+              <option value="Home">Home</option>
+              <option value="Books">Books</option>
+              <option value="Toys">Toys & Games</option>
+              <option value="Beauty">Beauty</option>
               <option value="Automotive">Automotive</option>
-              <option value="Other">Other</option>
+              <option value="Garden">Garden</option>
+              <option value="Health">Health</option>
+              <option value="Pet Supplies">Pet Supplies</option>
+              <option value="Office Products">Office Products</option>
+              <option value="Music">Music</option>
+              <option value="Movies">Movies</option>
+              <option value="Food">Food</option>
+              <option value="Art">Art</option>
+              <option value="Collectibles">Collectibles</option>
+              <option value="Jewelry">Jewelry</option>
+              <option value="Tools">Tools</option>
             </select>
             {errors.category && <span className="error-message">{errors.category}</span>}
           </div>
@@ -205,26 +277,91 @@ const EditItemModal = ({ item, onClose, onSave }) => {
             </div>
           )}
 
-          <div className="form-group">
-            <label htmlFor="brand">Brand (Optional)</label>
-            <input
-              type="text"
-              id="brand"
-              name="brand"
-              value={formData.brand || ''}
-              onChange={handleChange}
-            />
+          <div className="form-row">
+            <div className="form-group half">
+              <label htmlFor="brand">Brand (Optional)</label>
+              <input
+                type="text"
+                id="brand"
+                name="brand"
+                value={formData.brand || ''}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="form-group half">
+              <label htmlFor="model">Model (Optional)</label>
+              <input
+                type="text"
+                id="model"
+                name="model"
+                value={formData.model || ''}
+                onChange={handleChange}
+              />
+            </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="model">Model (Optional)</label>
-            <input
-              type="text"
-              id="model"
-              name="model"
-              value={formData.model || ''}
-              onChange={handleChange}
-            />
+          {/* Shipping Details */}
+          <div className="form-section">
+            <h3>Shipping Details</h3>
+            
+            <div className="form-row">
+              <div className="form-group half">
+                <label htmlFor="shippingMethod">Shipping Method</label>
+                <select
+                  id="shippingMethod"
+                  name="shippingDetails.method"
+                  value={formData.shippingDetails?.method || 'Standard'}
+                  onChange={handleChange}
+                >
+                  <option value="Standard">Standard</option>
+                  <option value="Express">Express</option>
+                  <option value="Priority">Priority</option>
+                </select>
+              </div>
+              
+              <div className="form-group half">
+                <label htmlFor="shippingCost">Shipping Cost (LKR)</label>
+                <input
+                  type="number"
+                  id="shippingCost"
+                  name="shippingDetails.cost"
+                  min="0"
+                  step="0.01"
+                  value={formData.shippingDetails?.cost || ''}
+                  onChange={handleChange}
+                  className={errors['shippingDetails.cost'] ? 'input-error' : ''}
+                />
+                {errors['shippingDetails.cost'] && 
+                  <span className="error-message">{errors['shippingDetails.cost']}</span>}
+              </div>
+            </div>
+            
+            <div className="form-row">
+              <div className="form-group half">
+                <label htmlFor="handlingTime">Handling Time (days)</label>
+                <input
+                  type="number"
+                  id="handlingTime"
+                  name="shippingDetails.handlingTime"
+                  min="1"
+                  value={formData.shippingDetails?.handlingTime || ''}
+                  onChange={handleChange}
+                />
+              </div>
+              
+              <div className="form-group half checkbox-group">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="shippingDetails.internationalShipping"
+                    checked={formData.shippingDetails?.internationalShipping || false}
+                    onChange={handleChange}
+                  />
+                  International Shipping Available
+                </label>
+              </div>
+            </div>
           </div>
 
           <div className="form-group">
@@ -253,8 +390,10 @@ const EditItemModal = ({ item, onClose, onSave }) => {
               onChange={handleImageChange}
               multiple
               accept="image/*"
+              className={errors.images ? 'input-error' : ''}
             />
-            <small>Select multiple files to upload more than one image</small>
+            {errors.images && <span className="error-message">{errors.images}</span>}
+            <small>Select multiple files to upload more than one image (max 3)</small>
           </div>
 
           <div className="edit-modal-actions">

@@ -40,16 +40,40 @@ const ItemList = () => {
     try {
       const formData = new FormData();
       
-      // Add all item data to formData
-      Object.keys(updatedItem).forEach(key => {
-        if (key !== 'images' && key !== '_id') {
-          if (typeof updatedItem[key] === 'object' && updatedItem[key] !== null) {
-            formData.append(key, JSON.stringify(updatedItem[key]));
-          } else {
-            formData.append(key, updatedItem[key]);
-          }
-        }
-      });
+      // Add basic fields
+      formData.append('title', updatedItem.title);
+      formData.append('category', updatedItem.category);
+      formData.append('condition', updatedItem.condition);
+      formData.append('description', updatedItem.description || '');
+      formData.append('price', updatedItem.price);
+      formData.append('quantity', updatedItem.quantity);
+      formData.append('listingType', updatedItem.listingType);
+      formData.append('brand', updatedItem.brand || '');
+      formData.append('model', updatedItem.model || '');
+      formData.append('color', updatedItem.color || '');
+      formData.append('material', updatedItem.material || '');
+      
+      // Add starting bid if auction
+      if (updatedItem.listingType === 'Auction') {
+        formData.append('startingBid', updatedItem.startingBid || 0);
+      }
+      
+      // Add nested objects as JSON strings
+      if (updatedItem.dimensions) {
+        formData.append('dimensions', JSON.stringify(updatedItem.dimensions));
+      }
+      
+      if (updatedItem.shippingDetails) {
+        formData.append('shippingDetails', JSON.stringify(updatedItem.shippingDetails));
+      }
+      
+      if (updatedItem.returnPolicy) {
+        formData.append('returnPolicy', JSON.stringify(updatedItem.returnPolicy));
+      }
+      
+      if (updatedItem.paymentMethods) {
+        formData.append('paymentMethods', JSON.stringify(updatedItem.paymentMethods));
+      }
       
       // Add new images if any
       if (itemImages && itemImages.length > 0) {
@@ -57,8 +81,8 @@ const ItemList = () => {
           formData.append('images', itemImages[i]);
         }
       }
-
-      await axios.put(
+  
+      const response = await axios.put(
         `http://localhost:9000/api/items/${updatedItem._id}?email=${sellerEmail}`,
         formData,
         {
@@ -67,12 +91,15 @@ const ItemList = () => {
           },
         }
       );
-
-      setShowEditModal(false);
-      await fetchItems(); // Refresh the items list
+  
+      // Check if response contains the updated item
+      if (response.data) {
+        setShowEditModal(false);
+        await fetchItems(); // Refresh the items list
+      }
     } catch (err) {
-      console.error('Failed to update item:', err);
-      alert('Failed to update item. Please try again.');
+      console.error('Failed to update item:', err.response?.data || err.message);
+      alert('Failed to update item: ' + (err.response?.data?.message || 'Please try again.'));
     }
   };
 

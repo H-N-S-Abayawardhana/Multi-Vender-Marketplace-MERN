@@ -230,80 +230,93 @@ const itemController = {
 
   // Update an item
   updateItem: async (req, res) => {
-    upload(req, res, async (err) => {
-      if (err) {
-        return res.status(400).json({ error: err.message });
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+
+    try {
+      const { id } = req.params;
+      const updateData = req.body;
+      const sellerEmail = req.query.email;
+
+      // Verify the item belongs to the seller
+      const item = await Item.findById(id);
+      if (!item) {
+        return res.status(404).json({ message: 'Item not found' });
       }
 
-      try {
-        const { id } = req.params;
-        const updateData = req.body;
-        const sellerEmail = req.query.email;
+      if (item.email !== sellerEmail) {
+        return res.status(403).json({ message: 'You do not have permission to update this item' });
+      }
 
-        // Verify the item belongs to the seller
-        const item = await Item.findById(id);
-        if (!item) {
-          return res.status(404).json({ message: 'Item not found' });
-        }
+      // Convert price and quantity strings to numbers
+      if (updateData.price) {
+        updateData.price = parseFloat(updateData.price);
+      }
+      
+      if (updateData.quantity) {
+        updateData.quantity = parseInt(updateData.quantity);
+      }
+      
+      if (updateData.startingBid) {
+        updateData.startingBid = parseFloat(updateData.startingBid);
+      }
 
-        if (item.email !== sellerEmail) {
-          return res.status(403).json({ message: 'You do not have permission to update this item' });
-        }
-
-        // Parse JSON strings back to objects if they exist
-        if (updateData.dimensions) {
-          updateData.dimensions = typeof updateData.dimensions === 'string' 
-            ? JSON.parse(updateData.dimensions) 
-            : updateData.dimensions;
-        }
-        
-        if (updateData.shippingDetails) {
-          updateData.shippingDetails = typeof updateData.shippingDetails === 'string'
-            ? JSON.parse(updateData.shippingDetails)
-            : updateData.shippingDetails;
-        }
-        
-        if (updateData.returnPolicy) {
-          updateData.returnPolicy = typeof updateData.returnPolicy === 'string'
-            ? JSON.parse(updateData.returnPolicy)
-            : updateData.returnPolicy;
-        }
-        
-        if (updateData.paymentMethods) {
-          updateData.paymentMethods = typeof updateData.paymentMethods === 'string'
-            ? JSON.parse(updateData.paymentMethods)
-            : updateData.paymentMethods;
-        }
-
-        // Handle image uploads if included in the update
-        if (req.files && req.files.length > 0) {
-          // Remove old images from the server
-          if (item.images && item.images.length > 0) {
-            item.images.forEach(imagePath => {
-              const fullPath = path.join(__dirname, '..', imagePath);
-              if (fs.existsSync(fullPath)) {
-                fs.unlinkSync(fullPath);
-              }
-            });
+      // Parse JSON strings back to objects if they exist
+      const objectFields = ['dimensions', 'shippingDetails', 'returnPolicy', 'paymentMethods'];
+      objectFields.forEach(field => {
+        if (updateData[field]) {
+          try {
+            updateData[field] = typeof updateData[field] === 'string' 
+              ? JSON.parse(updateData[field]) 
+              : updateData[field];
+          } catch (e) {
+            console.error(`Error parsing ${field}:`, e);
+            // Keep the original value if parsing fails
+            updateData[field] = item[field];
           }
+        }
+      });
 
-          // Add new image paths to the update data
-          updateData.images = req.files.map(file => `/uploads/${file.filename}`);
+      // Handle image uploads if included in the update
+      if (req.files && req.files.length > 0) {
+        // Remove old images from the server
+        if (item.images && item.images.length > 0) {
+          item.images.forEach(imagePath => {
+            const fullPath = path.join(__dirname, '..', imagePath);
+            if (fs.existsSync(fullPath)) {
+              fs.unlinkSync(fullPath);
+            }
+          });
         }
 
-        const updatedItem = await Item.findByIdAndUpdate(
-          id,
-          updateData,
-          { new: true, runValidators: true }
-        );
-
-        return res.status(200).json(updatedItem);
-      } catch (error) {
-        console.error('Update item error:', error);
-        return res.status(500).json({ message: 'Failed to update item', error: error.message });
+        // Add new image paths to the update data
+        updateData.images = req.files.map(file => `/uploads/${file.filename}`);
       }
-    });
-  },
+
+      console.log('Update data being applied:', updateData);
+
+      const updatedItem = await Item.findByIdAndUpdate(
+        id,
+        updateData,
+        { new: true, runValidators: true }
+      );
+
+      return res.status(200).json(updatedItem);
+    } catch (error) {
+      console.error('Update item error:', error);
+      return res.status(500).json({ 
+        message: 'Failed to update item', 
+        error: error.message,
+        details: error.errors ? Object.keys(error.errors).map(key => ({
+          field: key,
+          message: error.errors[key].message
+        })) : undefined
+      });
+    }
+  });
+},
 
   // Delete an item
   deleteItem: async (req, res) => {
