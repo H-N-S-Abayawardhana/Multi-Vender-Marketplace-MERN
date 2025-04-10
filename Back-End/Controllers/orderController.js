@@ -1,6 +1,6 @@
 const Order = require('../Models/Order');
 const Item = require('../Models/Item');
-const { sendOrderStatusUpdateEmail } = require('../utils/emailService');
+const { sendOrderStatusUpdateEmail, sendOrderConfirmationEmail } = require('../utils/emailService');
 
 const orderController = {
   createOrder: async (req, res) => {
@@ -135,7 +135,36 @@ const orderController = {
     } catch (error) {
       res.status(500).json({ message: 'Error fetching orders', error: error.message });
     }
+  },
+
+  sendConfirmation : async (req, res) => {
+    try {
+      const orderData = req.body;
+      
+      // Send the confirmation email
+      const emailSent = await sendOrderConfirmationEmail(orderData);
+      
+      if (emailSent) {
+        return res.status(200).json({
+          success: true,
+          message: 'Order confirmation email sent successfully'
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          message: 'Failed to send order confirmation email'
+        });
+      }
+    } catch (error) {
+      console.error('Error sending confirmation email:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Error sending confirmation email',
+        error: error.message
+      });
+    }
   }
+  
 };
 
 module.exports = orderController;

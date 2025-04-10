@@ -156,7 +156,21 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
           
           const response = await axios.post('http://localhost:9000/api/orders/create', orderData);
           console.log('Order created:', response.data);
+          
+          // Send confirmation email
+          try {
+            await axios.post('http://localhost:9000/api/orders/send-confirmation', {
+              ...orderData,
+              orderId: response.data.orderId || response.data._id
+            });
+            console.log('Order confirmation email sent');
+          } catch (emailError) {
+            console.error('Failed to send confirmation email:', emailError);
+            // Continue with checkout even if email fails
+          }
+          
           onSubmit(formData);
+          toast.success('Order placed successfully! A confirmation email has been sent to your email address.');
           
         } catch (error) {
           console.error('Error placing order:', error);
@@ -367,6 +381,7 @@ const CheckoutPage = ({ item, onClose, onSubmit }) => {
           </form>
         </div>
       </div>
+      <ToastContainer position="top-center" autoClose={5000} />
     </div>
   );
 };

@@ -188,7 +188,21 @@ const CartCheckout = () => {
         };
         
         // Using axios instead of fetch for better error handling
-        return await axios.post('http://localhost:9000/api/orders/create', orderData);
+        const response = await axios.post('http://localhost:9000/api/orders/create', orderData);
+        
+        // Send confirmation email for each order
+        try {
+          await axios.post('http://localhost:9000/api/orders/send-confirmation', {
+            ...orderData,
+            orderId: response.data.orderId || response.data._id
+          });
+          console.log('Order confirmation email sent for item:', item.title);
+        } catch (emailError) {
+          console.error('Failed to send confirmation email:', emailError);
+          // Continue with checkout even if email fails
+        }
+        
+        return response;
       });
       
       // Wait for all orders to be processed
@@ -198,7 +212,7 @@ const CartCheckout = () => {
       localStorage.removeItem('shoppingCart');
       
       // Show success message
-      toast.success('Payment successful! Your order has been placed.', toastConfig);
+      toast.success('Payment successful! Your order has been placed. Check your email for confirmation.', toastConfig);
       
       // Dispatch event to update cart count in navbar
       window.dispatchEvent(new Event('cartUpdated'));
