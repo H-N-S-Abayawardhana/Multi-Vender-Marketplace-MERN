@@ -8,5 +8,7 @@ router.get('/seller', orderController.getOrdersBySeller);
 router.put('/:orderId/status', orderController.updateOrderStatus);
 router.put('/api/orders/:orderId/status', orderController.updateOrderStatus);
 router.get('/user/:email', orderController.getUserOrders);
+router.post('/send-confirmation', orderController.sendConfirmation);
+
 
 module.exports = router;

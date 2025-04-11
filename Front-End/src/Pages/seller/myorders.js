@@ -52,18 +52,20 @@ const MyOrders = () => {
   };
 
   // Function to update order status
-  const updateOrderStatus = async (orderId, newStatus) => {
+  const updateOrderStatus = async (orderId, newStatus, order) => {
     try {
-      // API request to update the order status
-      await axios.put(`http://localhost:9000/api/orders/${orderId}/status`, { status: newStatus });
+      // API request to update the order status with email notification data
+      await axios.put(`http://localhost:9000/api/orders/${orderId}/status`, {
+        status: newStatus,
+        sendNotification: true,
+        buyerEmail: order.userEmail,
+        itemTitle: order.itemDetails.title,
+        sellerEmail: sellerEmail
+      });
 
+      // Refresh the orders list
       const response = await axios.get(`http://localhost:9000/api/orders/seller?email=${sellerEmail}`);
       setOrders(response.data);
-      
-      // For now, we'll just update the UI optimistically
-      setOrders(orders.map(order => 
-        order._id === orderId ? {...order, orderStatus: newStatus} : order
-      ));
       
       // Show success toast notification
       showToast(`Order status updated to ${newStatus} successfully!`);
@@ -205,7 +207,7 @@ const MyOrders = () => {
                           <Button 
                             className="seller-orders-action-btn"
                             variant="outline-info"
-                            onClick={() => updateOrderStatus(order._id, 'Processing')}
+                            onClick={() => updateOrderStatus(order._id, 'Processing', order)}
                             disabled={order.orderStatus !== 'Pending'}
                           >
                             Mark Processing
@@ -213,7 +215,7 @@ const MyOrders = () => {
                           <Button 
                             className="seller-orders-action-btn"
                             variant="outline-primary"
-                            onClick={() => updateOrderStatus(order._id, 'Shipped')}
+                            onClick={() => updateOrderStatus(order._id, 'Shipped', order)}
                             disabled={order.orderStatus !== 'Processing'}
                           >
                             Mark Shipped
@@ -221,7 +223,7 @@ const MyOrders = () => {
                           <Button 
                             className="seller-orders-action-btn"
                             variant="outline-success"
-                            onClick={() => updateOrderStatus(order._id, 'Delivered')}
+                            onClick={() => updateOrderStatus(order._id, 'Delivered', order)}
                             disabled={order.orderStatus !== 'Shipped'}
                           >
                             Mark Delivered
@@ -229,7 +231,7 @@ const MyOrders = () => {
                           <Button 
                             className="seller-orders-action-btn"
                             variant="outline-danger"
-                            onClick={() => updateOrderStatus(order._id, 'Cancelled')}
+                            onClick={() => updateOrderStatus(order._id, 'Cancelled', order)}
                             disabled={order.orderStatus === 'Delivered' || order.orderStatus === 'Cancelled'}
                           >
                             Cancel Order

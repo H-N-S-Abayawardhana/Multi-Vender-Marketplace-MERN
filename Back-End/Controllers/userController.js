@@ -1,9 +1,12 @@
 const User = require('../Models/userModel');
 const SessionLog = require('../Models/sessionLogModel');
+const Store = require('../Models/Store');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 
-// Use environment variable for JWT secret
+// Environment variable for JWT secret
 const JWT_SECRET = process.env.JWT_SECRET || "EDCVFRTGBNHY"; 
 
 // User Levels
@@ -13,7 +16,7 @@ const USER_LEVELS = {
     BUYER: 3
 };
 
-// Enhanced input validation helper
+
 const validateInput = ({ name, email, password, mobile, confirmPassword }) => {
     const errors = {};
     
@@ -52,6 +55,44 @@ const validateInput = ({ name, email, password, mobile, confirmPassword }) => {
         isValid: Object.keys(errors).length === 0,
         errors
     };
+};
+
+
+// Configure nodemailer
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USERNAME,
+    pass: process.env.EMAIL_PASSWORD
+  }
+});
+
+// Generate a 6-digit OTP
+const generateOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
+// Send OTP email
+const sendOTPEmail = async (email, otp) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USERNAME,
+    to: email,
+    subject: 'Password Reset OTP',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #4a90e2;">Password Reset Request</h2>
+        <p>We received a request to reset your password. Please use the following One-Time Password (OTP) to complete the process:</p>
+        <div style="background-color: #f5f5f5; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; margin: 20px 0;">
+          ${otp}
+        </div>
+        <p>This OTP will expire in 10 minutes.</p>
+        <p>If you didn't request this password reset, please ignore this email or contact support if you have concerns.</p>
+        <p style="margin-top: 30px; font-size: 12px; color: #888;">This is an automated email. Please do not reply to this message.</p>
+      </div>
+    `
+  };
+
+  return await transporter.sendMail(mailOptions);
 };
 
 const getUserProfile = async (req, res) => {
@@ -174,7 +215,7 @@ const getUserProfile = async (req, res) => {
         }
     };
 
-// 📌 Register a new user
+// Register a new user
 const registerUser = async (req, res) => {
     try {
         const { name, email, password, mobile, confirmPassword } = req.body;
@@ -260,7 +301,7 @@ const registerUser = async (req, res) => {
     }
 };
 
-// 📌 Login user function 
+// Login user function 
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -388,11 +429,304 @@ const logoutUser = async (req, res) => {
     }
 };
 
+const forgotPassword = async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: 'Email is required' });
+      }
+  
+      const user = await User.findOne({ email: email.toLowerCase() });
+  
+      if (!user) {
+        return res.status(200).json({ message: 'If your email is registered, you will receive an OTP shortly' });
+      }
+  
+      const otp = generateOTP();
+      const hashedOTP = await bcrypt.hash(otp, 10);
+  
+      const expiry = new Date();
+      expiry.setMinutes(expiry.getMinutes() + 10);
+  
+      user.resetPasswordToken = hashedOTP;
+      user.resetPasswordExpires = expiry;
+      await user.save();
+  
+      await sendOTPEmail(user.email, otp);
+  
+      res.status(200).json({ message: 'OTP sent to your email address' });
+    } catch (error) {
+      console.error('Forgot password error:', error);
+      res.status(500).json({ message: 'Server error. Please try again later.' });
+    }
+  };
+  
+  const resendOTP = async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: 'Email is required' });
+      }
+  
+      const user = await User.findOne({ email: email.toLowerCase() });
+  
+      if (!user) {
+        return res.status(200).json({ message: 'If your email is registered, you will receive an OTP shortly' });
+      }
+  
+      const otp = generateOTP();
+      const hashedOTP = await bcrypt.hash(otp, 10);
+  
+      const expiry = new Date();
+      expiry.setMinutes(expiry.getMinutes() + 10);
+  
+      user.resetPasswordToken = hashedOTP;
+      user.resetPasswordExpires = expiry;
+      await user.save();
+  
+      await sendOTPEmail(user.email, otp);
+  
+      res.status(200).json({ message: 'New OTP sent to your email address' });
+    } catch (error) {
+      console.error('Resend OTP error:', error);
+      res.status(500).json({ message: 'Server error. Please try again later.' });
+    }
+  };
+  
+  const resetPassword = async (req, res) => {
+    try {
+      const { email, otp, newPassword } = req.body;
+  
+      if (!email || !otp || !newPassword) {
+        return res.status(400).json({ message: 'Email, OTP, and new password are required' });
+      }
+  
+      const user = await User.findOne({
+        email: email.toLowerCase(),
+        resetPasswordExpires: { $gt: Date.now() }
+      });
+  
+      if (!user) {
+        return res.status(400).json({ message: 'Password reset request is invalid or has expired' });
+      }
+  
+      const isOTPValid = await bcrypt.compare(otp, user.resetPasswordToken);
+  
+      if (!isOTPValid) {
+        return res.status(400).json({ message: 'Invalid OTP' });
+      }
+  
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+  
+      user.password = hashedPassword;
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpires = undefined;
+      await user.save();
+  
+      res.status(200).json({ message: 'Password has been reset successfully' });
+    } catch (error) {
+      console.error('Reset password error:', error);
+      res.status(500).json({ message: 'Server error. Please try again later.' });
+    }
+  };
+
+  // Display all the sellers for Admin
+
+const getAllSellers = async (req, res) => {
+    try {
+      // Find all users with userLevel = 2 (sellers)
+      const sellers = await User.find({ userLevel: 2 });
+      
+      // Array to store seller data with store information
+      const sellerData = [];
+      
+      // For each seller, check if they have a store
+      for (const seller of sellers) {
+        // Check if the seller has a store using their email
+        const store = await Store.findOne({ email: seller.email });
+        
+        // Add seller data with store information
+        sellerData.push({
+          _id: seller._id,
+          name: seller.name,
+          email: seller.email,
+          mobile: seller.mobile,
+          lastLogin: seller.lastLogin,
+          isActive: seller.isActive,
+          createdAt: seller.createdAt,
+          hasStore: Boolean(store),
+          storeId: store ? store.storeId : null,
+          storeName: store ? store.storeName : null
+        });
+      }
+      
+      res.status(200).json({
+        success: true,
+        count: sellerData.length,
+        data: sellerData
+      });
+    } catch (error) {
+      console.error('Error fetching sellers:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error fetching sellers',
+        error: process.env.NODE_ENV === 'development' ? error.message : 'Server error'
+      });
+    }
+  };
+  
+// Remove sellers by admin
+  const removeSeller = async (req, res) => {
+    try {
+      const seller = await User.findById(req.params.id);
+      
+      // Check if seller exists
+      if (!seller) {
+        return res.status(404).json({
+          success: false,
+          message: `Seller not found with id of ${req.params.id}`
+        });
+      }
+      
+      // Check if user is actually a seller
+      if (seller.userLevel !== 2) {
+        return res.status(400).json({
+          success: false,
+          message: `User with id ${req.params.id} is not a seller`
+        });
+      }
+      
+      // Check if seller has a store
+      const store = await Store.findOne({ email: seller.email });
+      
+      // Remove store if exists
+      if (store) {
+        await Store.findByIdAndDelete(store._id);
+      }
+      
+      // Remove seller
+      await User.findByIdAndDelete(req.params.id);
+      
+      res.status(200).json({
+        success: true,
+        data: {}
+      });
+    } catch (error) {
+      console.error('Error removing seller:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error removing seller',
+        error: process.env.NODE_ENV === 'development' ? error.message : 'Server error'
+      });
+    }
+  };
+
+
+  // Get All customers
+const getAllCustomers = async (req, res) => {
+    try {
+        const customers = await User.find({ userLevel: 3, isActive: true })
+            .select('name email mobile lastLogin createdAt')
+            .sort({ createdAt: -1 });
+        
+        res.status(200).json({
+            success: true,
+            count: customers.length,
+            data: customers
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching customers',
+            error: error.message
+        });
+    }
+};
+
+//Get customer by ID
+const getCustomerById = async (req, res) => {
+    try {
+        const customer = await User.findOne({ 
+            _id: req.params.id,
+            userLevel: 3
+        });
+        
+        if (!customer) {
+            return res.status(404).json({
+                success: false,
+                message: 'Customer not found'
+            });
+        }
+        
+        res.status(200).json({
+            success: true,
+            data: customer
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching customer details',
+            error: error.message
+        });
+    }
+};
+
+//Update customer status
+const updateCustomerStatus = async (req, res) => {
+    try {
+        const { isActive } = req.body;
+        
+        if (isActive === undefined) {
+            return res.status(400).json({
+                success: false,
+                message: 'isActive status is required'
+            });
+        }
+        
+        const customer = await User.findOneAndUpdate(
+            { _id: req.params.id, userLevel: 3 },
+            { isActive },
+            { new: true, runValidators: true }
+        );
+        
+        if (!customer) {
+            return res.status(404).json({
+                success: false,
+                message: 'Customer not found'
+            });
+        }
+        
+        res.status(200).json({
+            success: true,
+            message: `Customer status ${isActive ? 'activated' : 'deactivated'} successfully`,
+            data: customer
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error updating customer status',
+            error: error.message
+        });
+    }
+};
+ 
+
+
 module.exports = {
     getUserProfile,
     updateProfile,
     registerUser,
     loginUser,
     logoutUser,
+    forgotPassword,
+    resendOTP,
+    resetPassword,
+    getAllSellers,
+    removeSeller,
+    getAllCustomers,
+    getCustomerById,
+    updateCustomerStatus,
     USER_LEVELS
 };

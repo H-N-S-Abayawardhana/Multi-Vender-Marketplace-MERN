@@ -1,4 +1,3 @@
-// Controllers/adminController.js
 const Seller = require('../Models/Seller');
 const User = require('../Models/userModel');
 const { createNotification } = require('./sellnotiController');
@@ -84,7 +83,7 @@ const adminController = {
                 // Create notification for approved seller
                 const notificationResult = await createNotification(
                     email,
-                    'Your seller request has been approved'
+                    'Congratulations ! Your seller request has been approved'
                 );
                 console.log('Notification creation result:', notificationResult); // Debug log
             }

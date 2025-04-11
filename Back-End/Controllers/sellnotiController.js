@@ -38,7 +38,7 @@ exports.markAsRead = async (req, res) => {
         const updatedNotification = await SellerNotification.findByIdAndUpdate(
             notificationId, 
             { isRead: true },
-            { new: true } // Return the updated document
+            { new: true }
         );
         
         if (!updatedNotification) {
