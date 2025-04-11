@@ -1,4 +1,3 @@
-// controllers/wishlistController.js
 const Wishlist = require('../Models/Wishlist');
 const Item = require('../Models/Item'); 
 

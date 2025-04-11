@@ -19,7 +19,7 @@ const orderController = {
       // Create the order
       const orderData = {
         ...req.body,
-        sellerEmail: item.email, // Add seller's email
+        sellerEmail: item.email, 
         orderStatus: 'Pending',
         orderDate: new Date()
       };
@@ -86,10 +86,6 @@ const orderController = {
         return res.status(404).json({ message: 'Order not found' });
       }
       
-      // Optional: Check if the seller is authorized to update this order
-      // if (order.sellerEmail !== req.query.email) {
-      //   return res.status(403).json({ message: 'Unauthorized to update this order' });
-      // }
       
       order.orderStatus = status;
       await order.save();

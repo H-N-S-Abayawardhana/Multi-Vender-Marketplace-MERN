@@ -1,14 +1,13 @@
-// controllers/itemController.js
 const Item = require('../Models/Item');
 const Store = require('../Models/Store'); 
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs'); // Added missing fs import
+const fs = require('fs');
 
 // Configure multer for image upload
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, 'uploads/');  // Upload directory without 'public/'
+    cb(null, 'uploads/');  
   },
   filename: function(req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname);
@@ -228,7 +227,7 @@ const itemController = {
     }
   },
 
-  // Update an item
+  // Update an item by seller
   updateItem: async (req, res) => {
   upload(req, res, async (err) => {
     if (err) {
@@ -318,7 +317,7 @@ const itemController = {
   });
 },
 
-  // Delete an item
+  // Delete an item by seller
   deleteItem: async (req, res) => {
     try {
       const { id } = req.params;

@@ -1,4 +1,3 @@
-// middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 const User = require('../Models/userModel');
 
@@ -26,7 +25,7 @@ const isAdmin = async (req, res, next) => {
             });
         }
 
-        // Check if user is admin (assuming userLevel 1 is admin)
+        // Check if user is admin
         if (user.userLevel !== 1) {
             return res.status(403).json({
                 success: false,

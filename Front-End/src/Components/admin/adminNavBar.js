@@ -10,7 +10,7 @@ const AdminNavBar = () => {
   const location = useLocation();
   const [unreadCount, setUnreadCount] = useState(0);
 
-  // Improved ResizeObserver error handler with broader catch pattern
+ 
   useEffect(() => {
     const handleResizeError = function(e) {
       if (e && e.message && (
@@ -43,7 +43,7 @@ const AdminNavBar = () => {
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
-      // Don't update state on error to maintain previous valid count
+      
     }
   };
 
@@ -53,7 +53,7 @@ const AdminNavBar = () => {
     fetchUnreadCount();
     
     // Set up polling interval with more realistic timing
-    const interval = setInterval(fetchUnreadCount, 60000); // Check every minute instead of 30s
+    const interval = setInterval(fetchUnreadCount, 60000); 
     
     // Cleanup interval on unmount
     return () => {

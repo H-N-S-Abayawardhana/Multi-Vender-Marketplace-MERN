@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../../css/seller/editItemModal.css';
 
 const EditItemModal = ({ item, onClose, onSave }) => {
-  // Ensure nested objects are properly initialized
+
   const [formData, setFormData] = useState({
     ...item,
     price: item.price.toString(),
@@ -120,7 +120,7 @@ const EditItemModal = ({ item, onClose, onSave }) => {
     e.preventDefault();
     
     if (validateForm()) {
-      // Prepare data for submission - keep original item ID
+      
       const updatedItem = {
         ...formData,
         _id: item._id,

@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
-// Use environment variable for JWT secret
+// Environment variable for JWT secret
 const JWT_SECRET = process.env.JWT_SECRET || "EDCVFRTGBNHY"; 
 
 // User Levels
@@ -16,7 +16,7 @@ const USER_LEVELS = {
     BUYER: 3
 };
 
-// Enhanced input validation helper
+
 const validateInput = ({ name, email, password, mobile, confirmPassword }) => {
     const errors = {};
     
@@ -215,7 +215,7 @@ const getUserProfile = async (req, res) => {
         }
     };
 
-// 📌 Register a new user
+// Register a new user
 const registerUser = async (req, res) => {
     try {
         const { name, email, password, mobile, confirmPassword } = req.body;
@@ -301,7 +301,7 @@ const registerUser = async (req, res) => {
     }
 };
 
-// 📌 Login user function 
+// Login user function 
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -531,9 +531,9 @@ const forgotPassword = async (req, res) => {
       res.status(500).json({ message: 'Server error. Please try again later.' });
     }
   };
-// @desc    Get all sellers with store information
-// @route   GET /api/users/sellers
-// @access  Private/Admin
+
+  // Display all the sellers for Admin
+
 const getAllSellers = async (req, res) => {
     try {
       // Find all users with userLevel = 2 (sellers)
@@ -577,9 +577,7 @@ const getAllSellers = async (req, res) => {
     }
   };
   
-  // @desc    Remove a seller
-  // @route   DELETE /api/users/sellers/:id
-  // @access  Private/Admin
+// Remove sellers by admin
   const removeSeller = async (req, res) => {
     try {
       const seller = await User.findById(req.params.id);
@@ -625,9 +623,8 @@ const getAllSellers = async (req, res) => {
     }
   };
 
-// @desc    Get all customers (users with userLevel = 3)
-// @route   GET /api/users/customers
-// @access  Private (Admin and Seller)
+
+  // Get All customers
 const getAllCustomers = async (req, res) => {
     try {
         const customers = await User.find({ userLevel: 3, isActive: true })
@@ -648,9 +645,7 @@ const getAllCustomers = async (req, res) => {
     }
 };
 
-// @desc    Get customer details by ID
-// @route   GET /api/users/customers/:id
-// @access  Private (Admin and Seller)
+//Get customer by ID
 const getCustomerById = async (req, res) => {
     try {
         const customer = await User.findOne({ 
@@ -678,9 +673,7 @@ const getCustomerById = async (req, res) => {
     }
 };
 
-// @desc    Update customer active status
-// @route   PATCH /api/users/customers/:id/status
-// @access  Private (Admin only)
+//Update customer status
 const updateCustomerStatus = async (req, res) => {
     try {
         const { isActive } = req.body;

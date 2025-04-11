@@ -1,4 +1,3 @@
-// controllers/ForgotPasswordController.js
 const User = require('../Models/userModel');
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
