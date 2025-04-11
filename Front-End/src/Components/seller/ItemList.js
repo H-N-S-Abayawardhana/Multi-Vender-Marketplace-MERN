@@ -144,7 +144,7 @@ const ItemList = () => {
                 <img 
                   src={`http://localhost:9000${item.images[0]}`} 
                   alt={item.title} 
-                  className="user-itemlist-image"
+                  className="itemlist-image"
                 />
               )}
             </div>
