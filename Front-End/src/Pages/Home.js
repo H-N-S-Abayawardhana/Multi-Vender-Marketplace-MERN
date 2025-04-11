@@ -126,19 +126,15 @@ const Home = () => {
 
   useEffect(() => {
     // Check if user is logged in
-    const token = localStorage.getItem('token');
     const email = localStorage.getItem('email');
-    setIsLoggedIn(!!(token && email));
-
+    setIsLoggedIn(!!email);
+  
     const fetchHomeData = async () => {
       try {
         setLoading(true);
-        const [
-          featuredResponse,
-          trendingResponse,
-          newArrivalsResponse,
-          categoryResponse
-        ] = await Promise.all([
+        
+        // Create array of API calls
+        const apiCalls = [
           axios.get('http://localhost:9000/api/items/featured'),
           axios.get('http://localhost:9000/api/items/trending'),
           axios.get('http://localhost:9000/api/items/new-arrivals'),
@@ -148,13 +144,36 @@ const Home = () => {
               limit: 4
             }
           })
-        ]);
-
+        ];
+        
+        // Add wishlist API call if user is logged in
+        if (email) {
+          apiCalls.push(
+            axios.get('http://localhost:9000/api/wishlist', {
+              params: { email }
+            })
+          );
+        }
+  
+        const responses = await Promise.all(apiCalls);
+        
+        const featuredResponse = responses[0];
+        const trendingResponse = responses[1];
+        const newArrivalsResponse = responses[2];
+        const categoryResponse = responses[3];
+        
         const featured = featuredResponse.data;
         const trending = trendingResponse.data;
         const newArrivalsData = newArrivalsResponse.data;
         const categoryData = categoryResponse.data;
-
+        
+        // Extract wishlist item IDs if available
+        let wishlistData = [];
+        if (email && responses.length > 4) {
+          const wishlistResponse = responses[4];
+          wishlistData = wishlistResponse.data.map(item => item.itemId);
+        }
+  
         // Initialize quantities for all items
         const initialQuantities = {};
         [...featured, ...trending, ...newArrivalsData].forEach(item => {
@@ -165,12 +184,13 @@ const Home = () => {
         Object.values(categoryData).flat().forEach(item => {
           initialQuantities[item._id] = 1;
         });
-
+  
         setFeaturedItems(featured);
         setTrendingItems(trending);
         setNewArrivals(newArrivalsData);
         setCategoryItems(categoryData);
         setItemQuantities(initialQuantities);
+        setWishlist(wishlistData);
         
         // Simulate network delay for smoother transitions
         setTimeout(() => {
@@ -182,14 +202,8 @@ const Home = () => {
         setLoading(false);
       }
     };
-
+  
     fetchHomeData();
-    
-    // Load saved wishlist from localStorage
-    const savedWishlist = localStorage.getItem('wishlist');
-    if (savedWishlist) {
-      setWishlist(JSON.parse(savedWishlist));
-    }
   }, []);
 
   useEffect(() => {
@@ -199,10 +213,6 @@ const Home = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Save wishlist to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('wishlist', JSON.stringify(wishlist));
-  }, [wishlist]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % banners.length);
@@ -309,21 +319,44 @@ const Home = () => {
     setShowCheckout(true);
   };
 
-  const toggleWishlist = (itemId, event) => {
+  const toggleWishlist = async (itemId, event) => {
     if (event) {
       event.preventDefault();
       event.stopPropagation();
     }
     
-    setWishlist(prev => {
-      if (prev.includes(itemId)) {
+    // Check if user is logged in
+    const userEmail = localStorage.getItem('email');
+    
+    if (!userEmail) {
+      toast.error('Please sign in to use wishlist feature');
+      setShowSignIn(true);
+      return;
+    }
+    
+    try {
+      const isItemWishlisted = wishlist.includes(itemId);
+      
+      if (isItemWishlisted) {
+        // Remove from wishlist
+        await axios.delete(`http://localhost:9000/api/wishlist/${itemId}?email=${encodeURIComponent(userEmail)}`);
+        
+        setWishlist(prev => prev.filter(id => id !== itemId));
         toast.info('Removed from wishlist');
-        return prev.filter(id => id !== itemId);
       } else {
+        // Add to wishlist
+        await axios.post('http://localhost:9000/api/wishlist', {
+          itemId,
+          email: userEmail
+        });
+        
+        setWishlist(prev => [...prev, itemId]);
         toast.success('Added to wishlist');
-        return [...prev, itemId];
       }
-    });
+    } catch (error) {
+      console.error('Wishlist operation failed:', error);
+      toast.error('Failed to update wishlist. Please try again.');
+    }
   };
 
   const handleCheckoutClose = () => {

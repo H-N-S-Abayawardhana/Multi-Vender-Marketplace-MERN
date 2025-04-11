@@ -16,6 +16,7 @@ const sellnotiRoutes = require('./routes/sellnotiRoutes');
 const AnaliticRoutes = require('./routes/analyticsRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const SelleranalyzeRoutes = require('./routes/analyzeRoutes');
+const WishlistRoutes = require('./routes/wishlistRoutes');
 
 
 
@@ -48,6 +49,7 @@ app.use('/api', sellnotiRoutes);
 app.use('/api/analytics', AnaliticRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/analyze', SelleranalyzeRoutes);
+app.use('/api/wishlist', WishlistRoutes);
 // app.use('/uploads', express.static('uploads')); 
 
 // app.use('/uploads', express.static('uploads'));
