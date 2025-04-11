@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../css/ForgotPassword.css'
+import NavBar from '../components/NavBar';
+import Footer from '../components/Footer';
 
 const ForgotPassword = () => {
   // Form states
@@ -167,6 +169,8 @@ const ForgotPassword = () => {
   };
   
   return (
+    <>
+    <NavBar/>
     <div className="forgot-password-container">
       <div className="forgot-password-card">
         <h2 className="forgot-password-title">Reset Password</h2>
@@ -292,6 +296,8 @@ const ForgotPassword = () => {
         )}
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 
