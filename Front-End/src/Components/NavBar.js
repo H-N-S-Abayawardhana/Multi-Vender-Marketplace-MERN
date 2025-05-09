@@ -12,10 +12,11 @@ const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
+  const [cartItemCount, setCartItemCount] = useState(0);
   const isLoggedIn = !!localStorage.getItem('token');
   const userEmail = localStorage.getItem('email');
 
-  // Add a ResizeObserver error handler to fix the Windows laptop issue
+
   useEffect(() => {
     const handleResizeError = function(e) {
       if (e.message === 'ResizeObserver loop completed with undelivered notifications.' || 
@@ -29,6 +30,25 @@ const NavBar = () => {
     
     return () => {
       window.removeEventListener('error', handleResizeError, true);
+    };
+  }, []);
+
+  // Get cart count from localStorage
+  useEffect(() => {
+    const updateCartCount = () => {
+      const savedCart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+      setCartItemCount(savedCart.length);
+    };
+
+    // Initial load
+    updateCartCount();
+
+    // Listen for cart updates from other components
+    window.addEventListener('cartUpdated', updateCartCount);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('cartUpdated', updateCartCount);
     };
   }, []);
 
@@ -62,13 +82,8 @@ const NavBar = () => {
 
   const handleCartClick = (e) => {
     e.preventDefault();
-    Swal.fire({
-      title: 'Shopping Cart',
-      text: 'Your shopping cart is empty!',
-      icon: 'info',
-      confirmButtonColor: '#3085d6',
-      confirmButtonText: 'Continue Shopping'
-    });
+    // Navigate to cart page
+    navigate('/cart');
   };
 
   const handleNotificationClick = (e) => {
@@ -84,7 +99,7 @@ const NavBar = () => {
 
   const handleLogout = async () => {
     try {
-      // Close dropdown menu if open
+      
       const dropdown = document.getElementById('profileDropdown');
       if (dropdown && dropdown.classList.contains('user-navbar-dropdown-show')) {
         dropdown.classList.remove('user-navbar-dropdown-show');
@@ -92,12 +107,11 @@ const NavBar = () => {
       
       const sessionId = localStorage.getItem('sessionId');
       
-      // First clear localStorage before making API call
-      // This ensures UI updates immediately even if server call takes time
+
       const tempSessionId = sessionId; // Save ID before clearing
       localStorage.clear();
       
-      // Show logout success message before navigation
+
       Swal.fire({
         title: 'Logged Out!',
         text: 'You have been successfully logged out',
@@ -110,7 +124,7 @@ const NavBar = () => {
         }
       });
       
-      // Make API call in background without waiting for it
+      
       fetch('http://localhost:9000/api/auth/logout', {
         method: 'POST',
         headers: {
@@ -243,7 +257,7 @@ const NavBar = () => {
           <div className="user-navbar-actions">
             <button className="user-navbar-icon-btn" onClick={handleCartClick}>
               <FaShoppingCart />
-              <span className="user-navbar-badge">0</span>
+              <span className="user-navbar-badge">{cartItemCount}</span>
             </button>
 
             <button className="user-navbar-icon-btn" onClick={handleNotificationClick}>
@@ -267,7 +281,7 @@ const NavBar = () => {
                   <Link className="user-navbar-dropdown-item" to="/user-profile">
                     My Profile
                   </Link>
-                  <Link className="user-navbar-dropdown-item" to="/orders">
+                  <Link className="user-navbar-dropdown-item" to="/my-ordered-items">
                     My Orders
                   </Link>
                   <Link className="user-navbar-dropdown-item" to="/wishlist">

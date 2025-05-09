@@ -34,10 +34,10 @@ const DashboardSquares = () => {
         {
             title: "Customers",
             icon: <Users className="dashboard-icon" />,
-            path: "/customers",
-            description: "View customer information (Coming Soon)",
+            path: "/seller-customer-list",
+            description: "View customer information",
             bgClass: "customers",
-            disabled: true
+            disabled: false
         },
         {
             title: "Messages",
@@ -48,12 +48,12 @@ const DashboardSquares = () => {
             disabled: true
         },
         {
-            title: "Analytics",
+            title: "My Analytics",
             icon: <LineChart className="dashboard-icon" />,
-            path: "/analytics",
-            description: "Track your performance (Coming Soon)",
+            path: "/seller-analytics",
+            description: "Track My performance",
             bgClass: "analytics",
-            disabled: true
+            disabled: false
         }
     ];
     

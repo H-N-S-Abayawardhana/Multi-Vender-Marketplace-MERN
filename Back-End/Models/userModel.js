@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         default: 3,  // Default is BUYER
         enum: {
-            values: [1, 2, 3],  // 1:ADMIN, 2:SELLER, 3:BUYER
+            values: [1, 2, 3],  
             message: 'Invalid user level'
         }
     },
@@ -80,10 +80,10 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-// Add index for email lookup optimization
+//index for email lookup optimization
 userSchema.index({ email: 1 });
 
-// Add index for mobile lookup optimization
+//index for mobile lookup optimization
 userSchema.index({ mobile: 1 });
 
 // Virtual for user's full profile URL

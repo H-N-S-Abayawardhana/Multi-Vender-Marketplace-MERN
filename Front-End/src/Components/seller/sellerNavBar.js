@@ -10,9 +10,9 @@ const SellerNavBar = () => {
   const location = useLocation();
   const [unreadCount, setUnreadCount] = useState(0);
 
-  // Improved ResizeObserver error handler
+ 
   useEffect(() => {
-    // This function prevents ResizeObserver errors from being shown in the console
+    
     const handleResizeError = (event) => {
       if (event && event.message && event.message.includes('ResizeObserver')) {
         event.stopPropagation();
@@ -21,10 +21,10 @@ const SellerNavBar = () => {
       }
     };
     
-    // Add error event listener with capture phase to catch the error early
+   
     window.addEventListener('error', handleResizeError, { capture: true });
     
-    // Cleanup on unmount
+    
     return () => {
       window.removeEventListener('error', handleResizeError, { capture: true });
     };
@@ -43,7 +43,7 @@ const SellerNavBar = () => {
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
-      // Keep existing count on error
+      
     }
   };
 
@@ -85,7 +85,7 @@ const SellerNavBar = () => {
         confirmButtonColor: '#E35D00',
         timer: 1500,
         willClose: () => {
-          // Only navigate once
+          
           if (isLoggingOut) {
             isLoggingOut = false;
             navigate('/', { replace: true });
@@ -179,9 +179,9 @@ const SellerNavBar = () => {
             <li className="nav-item mx-3">
               <Link 
                 className="nav-link" 
-                to="/my-orders"
+                to="/seller-orders"
               >
-                <span className={isActive('/my-orders') ? 'active-nav-item' : ''}>
+                <span className={isActive('/seller-orders') ? 'active-nav-item' : ''}>
                   Orders
                 </span>
               </Link>

@@ -1,0 +1,229 @@
+/* Main Container Styles */
+.seller-orders-main-container {
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    padding: 20px 0;
+  }
+  
+  .seller-orders-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .seller-orders-title {
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+    border-bottom: 2px solid #E35D00;
+    padding-bottom: 10px;
+  }
+  
+  .seller-orders-count {
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  /* Loading and Error Styles */
+  .seller-orders-loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+  }
+  
+  .seller-orders-spinner {
+    color: #E35D00;
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  .seller-orders-error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+  }
+  
+  .seller-orders-error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+  }
+  
+  .seller-orders-empty-message {
+    background-color: #FFF1E7;
+    color: #E35D00;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+  }
+  
+  /* Card Styles */
+  .seller-orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .seller-orders-card {
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+  }
+  
+  .seller-orders-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    background-color: #FFF1E7;
+  }
+  
+  .seller-orders-card-header {
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .seller-orders-id {
+    font-size: 0.9em;
+    color: #555;
+  }
+  
+  .seller-orders-status-badge {
+    font-size: 0.8em;
+    padding: 6px 12px;
+  }
+  
+  .seller-orders-card-body {
+    padding: 20px;
+  }
+  
+  /* Product Image Styles */
+  .seller-orders-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .seller-orders-product-image {
+    max-height: 120px;
+    object-fit: contain;
+    border-radius: 5px;
+    transition: transform 0.3s;
+  }
+  
+  .seller-orders-product-image:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Product Details Styles */
+  .seller-orders-details {
+    border-right: 1px solid #eee;
+  }
+  
+  .seller-orders-product-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .seller-orders-detail-item {
+    margin-bottom: 8px;
+    font-size: 0.95em;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+  }
+  
+  .seller-orders-detail-item strong {
+    color: #555;
+    min-width: 100px;
+  }
+  
+  /* Buyer Info Styles */
+  .seller-orders-section-title {
+    color: #E35D00;
+    font-weight: 600;
+    margin-bottom: 12px;
+    border-bottom: 1px dashed #ddd;
+    padding-bottom: 5px;
+  }
+  
+  /* Action Buttons Styles */
+  .seller-orders-actions {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+  }
+  
+  .seller-orders-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .seller-orders-action-btn {
+    transition: all 0.2s;
+    font-size: 0.85em;
+    border-radius: 4px;
+  }
+  
+  .seller-orders-action-btn:not(:disabled):hover {
+    background-color: #E35D00;
+    color: white;
+    border-color: #E35D00;
+  }
+  
+  /* Toast Notification Styles */
+  .seller-orders-toast-container {
+    z-index: 9999;
+  }
+  
+  .seller-orders-toast {
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    background-color: #FFF1E7;
+    border-left: 4px solid #E35D00;
+  }
+  
+  .seller-orders-toast .toast-header {
+    background-color: #FFF1E7;
+    color: #E35D00;
+    border-bottom: 1px solid rgba(227, 93, 0, 0.2);
+  }
+  
+  .seller-orders-toast .toast-body {
+    padding: 12px;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .seller-orders-card-body {
+      padding: 15px;
+    }
+    
+    .seller-orders-details,
+    .seller-orders-buyer-info {
+      border-right: none;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+    
+    .seller-orders-button-group {
+      flex-direction: column;
+    }
+    
+    .seller-orders-action-btn {
+      width: 100%;
+    }
+  }

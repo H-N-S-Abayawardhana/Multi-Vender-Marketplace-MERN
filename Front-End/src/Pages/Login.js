@@ -5,7 +5,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEnvelope, FaLock, FaSignInAlt } from 'react-icons/fa';
 import '../css/login.css';
-
+import NavBar from '../components/NavBar';
+import Footer from '../components/Footer';
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [isLoading, setIsLoading] = useState(false);
@@ -149,6 +150,8 @@ const Login = () => {
     };
 
     return (
+        <>
+        <NavBar/>
         <div className="login-page-container">
             <ToastContainer 
                 position="top-center"
@@ -238,6 +241,8 @@ const Login = () => {
                 </div>
             </div>
         </div>
+        <Footer/>
+        </>
     );
 };
 
