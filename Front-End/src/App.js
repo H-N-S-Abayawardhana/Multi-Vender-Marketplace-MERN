@@ -15,6 +15,7 @@ import SellerProfile from './Pages/UserProfile';
 import AdminProfile from './Pages/UserProfile';
 import BecomeSeller from './Pages/BecomeSeller';
 import ShopNowPage from './Pages/shopnow';
+import WishlistPage from './Pages/WishlistPage';
 import SellerDashboard from './Pages/seller/SellerDashboard';
 import AddStore from './Pages/seller/AddStore';
 import AddItems from './Pages/seller/AddItems';
@@ -24,9 +25,21 @@ import AdminNotificationPage from './Pages/admin/AdminNotificationPage';
 import AdminDashboard from './Pages/admin/AdminDashboard';
 import SellerRequests from './Pages/admin/SellerRequests';
 import AllStores from './Pages/admin/AllStores';
+import Cart from './Pages/Cart';
+import Cartcheckout from './Pages/CartCheckout';
+import MyOrders from './Pages/seller/myorders';
+import SellerAnalytics from './Pages/seller/SellerAnalytics';
+import ItemDetail from './Pages/ItemDetail';
+import MyOrderedItems from './Pages/MyOrderItems';
+import ForgotPassword from './Pages/ForgotPassword';
+import AllSellers from './Pages/admin/AllSellers';
+import AnalyzeSellers from './Pages/admin/AnalyzeSellers';
+import CustomersList from './Pages/admin/CustomerList';
+import SellerCustomersList from './Pages/seller/SellerCustomerList';
 
 
-// { BuyerProtectedRoute, SellerProtectedRoute, AdminProtectedRoute } from './components/ProtectedRoutes';
+
+
 import BuyerProtectedRoute from './Routes/BuyerProtectedRoute';
 import SellerProtectedRoute from './Routes/SellerProtectedRoute';
 import AdminProtectedRoute from './Routes/AdminProtectedRoute';
@@ -46,8 +59,13 @@ function App() {
         <Route path="/user-profile" element={<BuyerProtectedRoute><UserProfile /></BuyerProtectedRoute>} />
         <Route path="/become-seller" element={<BecomeSeller />} />
         <Route path="/shop-now" element={<ShopNowPage />} />
+        <Route path="/item/:itemId" element={<ItemDetail />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/cart" element={<Cart/>} />
+        <Route path="/cartcheckout" element={<Cartcheckout />} />
         <Route path="/categories" element={<Categories />} />
+        <Route path="/wishlist" element={<BuyerProtectedRoute><WishlistPage /></BuyerProtectedRoute>} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/seller-dashboard" element={<SellerProtectedRoute><SellerDashboard /></SellerProtectedRoute>} />
         <Route path="/add-store" element={<SellerProtectedRoute><AddStore /></SellerProtectedRoute>} />
         <Route path="/stores" element={<SellerProtectedRoute><StoreList /></SellerProtectedRoute>} />
@@ -56,11 +74,18 @@ function App() {
         <Route path="/add-items" element={<SellerProtectedRoute><AddItems /></SellerProtectedRoute>} />
         <Route path="/seller-notifications" element={<SellerProtectedRoute><SellerNotifications /></SellerProtectedRoute>} />
         <Route path="/my-products" element={<SellerProtectedRoute><MyProducts /></SellerProtectedRoute>} />
+        <Route path="/seller-orders" element={<SellerProtectedRoute><MyOrders/></SellerProtectedRoute>}/>
+        <Route path='/seller-analytics' element={<SellerProtectedRoute><SellerAnalytics/></SellerProtectedRoute>}/>
+        <Route path="/my-ordered-items" element={<MyOrderedItems/>}/>
         <Route path="/admin-notifications" element={<AdminProtectedRoute><AdminNotificationPage/></AdminProtectedRoute >} />
         <Route path="/admin-dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
         <Route path="/seller-requests" element={<AdminProtectedRoute><SellerRequests /></AdminProtectedRoute>} />
-        <Route path="/admin-profile" element={<AdminProtectedRoute><SellerProfile /></AdminProtectedRoute>} />
+        <Route path="/admin-profile" element={<AdminProtectedRoute><AdminProfile /></AdminProtectedRoute>} />
         <Route path="/all-stores" element={<AdminProtectedRoute><AllStores /></AdminProtectedRoute>} />
+        <Route path="/all-sellers" element={<AdminProtectedRoute><AllSellers /></AdminProtectedRoute>} />
+        <Route path="/analyze-sellers" element={<AdminProtectedRoute><AnalyzeSellers /></AdminProtectedRoute>} />       
+        <Route path="/customer-list" element={<AdminProtectedRoute><CustomersList /></AdminProtectedRoute>} />
+        <Route path="/seller-customer-list" element={<SellerProtectedRoute><SellerCustomersList /></SellerProtectedRoute>} />
       </Routes>
       </div>
     </Router>

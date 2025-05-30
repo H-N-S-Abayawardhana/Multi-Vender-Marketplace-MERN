@@ -1,13 +1,13 @@
-// controllers/itemController.js
 const Item = require('../Models/Item');
 const Store = require('../Models/Store'); 
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 // Configure multer for image upload
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, 'uploads/');  // Upload directory without 'public/'
+    cb(null, 'uploads/');  
   },
   filename: function(req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname);
@@ -164,72 +164,195 @@ const itemController = {
     }
   },
 
-// Example for getNewArrivals
-getNewArrivals: async (req, res) => {
-  try {
-    // Get most recently added items
-    const newArrivals = await Item.find({})
-      .sort({ createdAt: -1 })
-      .limit(4);
-    
-    res.status(200).json(newArrivals);
-  } catch (error) {
-    console.error('Error fetching new arrivals:', error);
-    res.status(500).json({ 
-      message: 'Error fetching new arrivals',
-      error: error.message 
-    });
-  }
+  // Get new arrivals
+  getNewArrivals: async (req, res) => {
+    try {
+      // Get most recently added items
+      const newArrivals = await Item.find({})
+        .sort({ createdAt: -1 })
+        .limit(4);
+      
+      res.status(200).json(newArrivals);
+    } catch (error) {
+      console.error('Error fetching new arrivals:', error);
+      res.status(500).json({ 
+        message: 'Error fetching new arrivals',
+        error: error.message 
+      });
+    }
+  },
+
+  getItemsByCategories: async (req, res) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit) : 4;
+      let categories = req.query.categories;
+      
+      // Parse categories properly
+      if (!categories) {
+        return res.status(400).json({ message: 'Categories parameter is required' });
+      }
+
+      let categoryArray;
+      if (Array.isArray(categories)) {
+        categoryArray = categories;
+      } else if (typeof categories === 'string') {
+        try {
+          categoryArray = JSON.parse(categories);
+        } catch (e) {
+          categoryArray = categories.includes(',') ? categories.split(',') : [categories];
+        }
+      } else {
+        return res.status(400).json({ message: 'Invalid categories parameter format' });
+      }
+      
+      // Create an object to store items by category
+      const itemsByCategory = {};
+      
+      // Process each category
+      for (const category of categoryArray) {
+        const items = await Item.find({ category })
+          .sort({ createdAt: -1 })
+          .limit(limit);
+        
+        itemsByCategory[category] = items;
+      }
+      
+      res.status(200).json(itemsByCategory);
+    } catch (error) {
+      console.error('Error fetching items by categories:', error);
+      res.status(500).json({ 
+        message: 'Error fetching items by categories',
+        error: error.message 
+      });
+    }
+  },
+
+  // Update an item by seller
+  updateItem: async (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+
+    try {
+      const { id } = req.params;
+      const updateData = req.body;
+      const sellerEmail = req.query.email;
+
+      // Verify the item belongs to the seller
+      const item = await Item.findById(id);
+      if (!item) {
+        return res.status(404).json({ message: 'Item not found' });
+      }
+
+      if (item.email !== sellerEmail) {
+        return res.status(403).json({ message: 'You do not have permission to update this item' });
+      }
+
+      // Convert price and quantity strings to numbers
+      if (updateData.price) {
+        updateData.price = parseFloat(updateData.price);
+      }
+      
+      if (updateData.quantity) {
+        updateData.quantity = parseInt(updateData.quantity);
+      }
+      
+      if (updateData.startingBid) {
+        updateData.startingBid = parseFloat(updateData.startingBid);
+      }
+
+      // Parse JSON strings back to objects if they exist
+      const objectFields = ['dimensions', 'shippingDetails', 'returnPolicy', 'paymentMethods'];
+      objectFields.forEach(field => {
+        if (updateData[field]) {
+          try {
+            updateData[field] = typeof updateData[field] === 'string' 
+              ? JSON.parse(updateData[field]) 
+              : updateData[field];
+          } catch (e) {
+            console.error(`Error parsing ${field}:`, e);
+            // Keep the original value if parsing fails
+            updateData[field] = item[field];
+          }
+        }
+      });
+
+      // Handle image uploads if included in the update
+      if (req.files && req.files.length > 0) {
+        // Remove old images from the server
+        if (item.images && item.images.length > 0) {
+          item.images.forEach(imagePath => {
+            const fullPath = path.join(__dirname, '..', imagePath);
+            if (fs.existsSync(fullPath)) {
+              fs.unlinkSync(fullPath);
+            }
+          });
+        }
+
+        // Add new image paths to the update data
+        updateData.images = req.files.map(file => `/uploads/${file.filename}`);
+      }
+
+      console.log('Update data being applied:', updateData);
+
+      const updatedItem = await Item.findByIdAndUpdate(
+        id,
+        updateData,
+        { new: true, runValidators: true }
+      );
+
+      return res.status(200).json(updatedItem);
+    } catch (error) {
+      console.error('Update item error:', error);
+      return res.status(500).json({ 
+        message: 'Failed to update item', 
+        error: error.message,
+        details: error.errors ? Object.keys(error.errors).map(key => ({
+          field: key,
+          message: error.errors[key].message
+        })) : undefined
+      });
+    }
+  });
 },
 
-getItemsByCategories: async (req, res) => {
-  try {
-    const limit = req.query.limit ? parseInt(req.query.limit) : 4;
-    let categories = req.query.categories;
-    
-    // Parse categories properly
-    if (!categories) {
-      return res.status(400).json({ message: 'Categories parameter is required' });
-    }
+  // Delete an item by seller
+  deleteItem: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const sellerEmail = req.query.email;
 
-    
-    let categoryArray;
-    if (Array.isArray(categories)) {
-      categoryArray = categories;
-    } else if (typeof categories === 'string') {
-      try {
-        
-        categoryArray = JSON.parse(categories);
-      } catch (e) {
-        
-        categoryArray = categories.includes(',') ? categories.split(',') : [categories];
+      // Find the item
+      const item = await Item.findById(id);
+      if (!item) {
+        return res.status(404).json({ message: 'Item not found' });
       }
-    } else {
-      return res.status(400).json({ message: 'Invalid categories parameter format' });
+
+      // Verify the item belongs to the seller
+      if (item.email !== sellerEmail) {
+        return res.status(403).json({ message: 'You do not have permission to delete this item' });
+      }
+
+      // Delete images from the server
+      if (item.images && item.images.length > 0) {
+        item.images.forEach(imagePath => {
+          const fullPath = path.join(__dirname, '..', imagePath);
+          if (fs.existsSync(fullPath)) {
+            fs.unlinkSync(fullPath);
+          }
+        });
+      }
+
+      // Delete the item from the database
+      await Item.findByIdAndDelete(id);
+
+      return res.status(200).json({ message: 'Item deleted successfully' });
+    } catch (error) {
+      console.error('Delete item error:', error);
+      return res.status(500).json({ message: 'Failed to delete item', error: error.message });
     }
-    
-    // Create an object to store items by category
-    const itemsByCategory = {};
-    
-    // Process each category
-    for (const category of categoryArray) {
-      const items = await Item.find({ category })
-        .sort({ createdAt: -1 })
-        .limit(limit);
-      
-      itemsByCategory[category] = items;
-    }
-    
-    res.status(200).json(itemsByCategory);
-  } catch (error) {
-    console.error('Error fetching items by categories:', error);
-    res.status(500).json({ 
-      message: 'Error fetching items by categories',
-      error: error.message 
-    });
   }
-}
-  
 };
 
 module.exports = itemController;

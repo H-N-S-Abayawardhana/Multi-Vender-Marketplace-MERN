@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 
 // Function to generate store ID

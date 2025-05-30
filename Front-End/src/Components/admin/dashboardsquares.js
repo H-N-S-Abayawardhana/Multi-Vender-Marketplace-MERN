@@ -24,20 +24,20 @@ const DashboardSquares = () => {
             disabled: false
         },
         {
-            title: "Manage Users",
+            title: "Admininstrate Sellers",
             icon: <UserCog className="dashboard-icon" />,
-            path: "/manage-users",
-            description: "User account administration (Coming Soon)",
+            path: "/all-sellers",
+            description: "Seller account administration ",
             bgClass: "manage-users",
-            disabled: true
+            disabled: false
         },
         {
             title: "Customers",
             icon: <ShieldCheck className="dashboard-icon" />,
-            path: "/customers",
-            description: "Customer support and oversight (Coming Soon)",
+            path: "/customer-list",
+            description: "Customer support and oversight",
             bgClass: "customers",
-            disabled: true
+            disabled: false
         },
         {
             title: "Messages",
@@ -48,12 +48,12 @@ const DashboardSquares = () => {
             disabled: true
         },
         {
-            title: "Analytics",
+            title: "Analyze Performance",
             icon: <LineChart className="dashboard-icon" />,
-            path: "/analytics",
-            description: "Platform performance metrics (Coming Soon)",
+            path: "/analyze-sellers",
+            description: "Platform performance metrics",
             bgClass: "analytics",
-            disabled: true
+            disabled: false
         }
     ];
 

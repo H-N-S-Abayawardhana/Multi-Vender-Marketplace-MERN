@@ -5,6 +5,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { FaEye, FaEyeSlash, FaUser, FaEnvelope, FaMobile, FaLock, FaCheck } from 'react-icons/fa';
 import '../css/register.css';
+import NavBar from '../components/NavBar';
+import Footer from '../components/Footer';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -239,6 +241,8 @@ const Register = () => {
     };
 
     return (
+        <>
+        <NavBar/>
         <div className="register-page-container">
             <ToastContainer 
                 position="top-center"
@@ -437,6 +441,8 @@ const Register = () => {
                 </div>
             </div>     
         </div>
+        <Footer/>
+        </>
     );
 };
 

@@ -1,4 +1,3 @@
-// models/Order.js
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
@@ -48,7 +47,7 @@ const orderSchema = new mongoose.Schema({
     }
   },
   paymentDetails: {
-    cardNumber: String, // Last 4 digits only
+    cardNumber: String, // Display Last 4 digits only
     cardExpiry: String
   },
   orderStatus: {

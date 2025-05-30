@@ -1,4 +1,3 @@
-// Models/sellnotiModel.js
 const mongoose = require('mongoose');
 
 const sellnotiSchema = new mongoose.Schema({

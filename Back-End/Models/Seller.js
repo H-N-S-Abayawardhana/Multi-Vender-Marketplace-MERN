@@ -1,4 +1,3 @@
-// models/Seller.js
 const mongoose = require('mongoose');
 
 const sellerSchema = new mongoose.Schema({
