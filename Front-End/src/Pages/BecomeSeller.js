@@ -41,7 +41,7 @@ const BecomeSeller = () => {
     };
 
     const [formData, setFormData] = useState({
-        // User Registration Information (for non-logged in users)
+        // User Registration Information
         fullName: '',
         email: '',
         mobileNumber: '',
@@ -170,7 +170,7 @@ const BecomeSeller = () => {
             let userResponse;
             let userEmail = email;
             
-            // If user is not logged in, register them first
+            // If user is not logged in, register users first
             if (!isLoggedIn) {
                 userResponse = await fetch('http://localhost:9000/api/users/register', {
                     method: 'POST',
